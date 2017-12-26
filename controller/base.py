@@ -4,9 +4,15 @@ class Base:
     MODEL = None
     __slots__ = ['_model']
 
-    def __init__(self):
+    def __init__(self, model=None, **kwargs):
         assert self.MODEL
-        self._model = self.MODEL()
+        if model:
+            assert isinstance(model, self.MODEL)
+            self._model = model
+        else:
+            self._model = self.MODEL()
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     def __setattr__(self, key, value):
         if key in ('_model', 'MODEL'):
@@ -21,11 +27,18 @@ class Base:
 
     @classmethod
     def all(cls):
-        return cls.MODEL.all()
+        return [cls(model=model) for model in cls.MODEL.all()]
 
     @classmethod
     def find(cls, **kwargs):
-        return cls.MODEL.find(**kwargs)
+        return [cls(model=model) for model in cls.MODEL.find(**kwargs)]
 
-    def load_from_model(self, model):
-        self._model = model
+    def copy(self, **kwargs):
+        d = {
+            key: value
+            for key, value
+            in self._model.__dict__.items()
+            if key.lower() == key and not key.startswith('_') and not key.endswith('id')
+        }
+        d.update(kwargs)
+        return self.__class__(**d)

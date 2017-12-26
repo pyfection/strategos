@@ -14,7 +14,6 @@ class Base(object):
         return cls.__name__.lower()
 
     def __init__(self, *args, **kwargs):
-        print('hello')
         db.session.add(self)
 
     @classmethod

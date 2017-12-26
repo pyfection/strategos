@@ -12,7 +12,7 @@ start like this:
 """
 
 
-db.load_game('strategos_test.sg')
+db.load_game('strategos_test')
 world = World()
 p1 = Actor(name="John")
 p2 = Actor(name="Jane")

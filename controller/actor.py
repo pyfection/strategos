@@ -7,6 +7,10 @@ from model.actor import Actor as ActorModel
 class Actor(Base):
     MODEL = ActorModel
 
-    def __init__(self, name):
-        super().__init__()
-        self.name = name
+    def do_turn(self):
+        raise NotImplementedError("Actor is a base class")
+
+
+class AI(Actor):
+    def do_turn(self):
+        pass

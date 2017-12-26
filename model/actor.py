@@ -7,5 +7,6 @@ from model.base import Base
 
 
 class Actor(Base):
-    name = Column(String)
-    tiles = relationship("Tile")
+    name = Column(String, nullable=False)
+    owned_tiles = relationship("Tile", foreign_keys="Tile.owner_id")
+    perceived_tiles = relationship("Tile", foreign_keys="Tile.perceiver_id")
