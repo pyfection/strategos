@@ -11,3 +11,4 @@ class Tile(Base):
     y = Column(Float)
     owner_id = Column(Integer, ForeignKey('actor.id'))
     owner = relationship("Actor", back_populates="tiles")
+    units = Column(Integer, default=0)

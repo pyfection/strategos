@@ -20,3 +20,4 @@ class World(Base):
         for tile in undistributed:
             for actor in actors:
                 tile.owner = actor
+                tile.units = 1
