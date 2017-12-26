@@ -37,7 +37,7 @@ class Database:
             os.remove(f'saves/{save_name}.gs')
         except:
             pass
-        self.engine = create_engine(f'sqlite:///saves/{save_name}.gs', echo=True)
+        self.engine = create_engine(f'sqlite:///saves/{save_name}.gs', echo=False)
         Base.metadata.create_all(self.engine)
         Session = sessionmaker(bind=self.engine)
         self.session = Session()

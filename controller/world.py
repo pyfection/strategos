@@ -1,5 +1,6 @@
 
 
+from model.base import db
 from controller.base import Base
 from controller.actor import Actor
 from controller.tile import Tile
@@ -8,6 +9,10 @@ from model.world import World as WorldModel
 
 class World(Base):
     MODEL = WorldModel
+
+    def __init__(self, game_name, **kwargs):
+        db.load_game(game_name)
+        super(World, self).__init__(**kwargs)
 
     def generate_terrain(self, width=10, height=10):
         for x in range(width):
