@@ -22,8 +22,9 @@ class World(Base):
     def distribute_tiles(self):
         actors = Actor.all()
         undistributed = Tile.find(owner=None, perceiver=None)
-        for tile in undistributed:
+        while undistributed:
             for actor in actors:
+                tile = undistributed.pop(0)
                 tile.owner = actor
                 tile.units = 1
                 tile.copy(perceiver=actor)
