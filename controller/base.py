@@ -23,7 +23,6 @@ class Base:
         try:
             return object.__getattribute__(self, item)
         except AttributeError:
-            if item == 'owned_tiles':
             return self.MODEL.__getattribute__(self._model, item)
 
     @classmethod
