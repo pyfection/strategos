@@ -6,8 +6,7 @@ from model.base import Base
 
 
 class World(Base):
-    pass
-    # ref = Column(Integer)
+    current_turn = Column(Integer, default=0)
     # name = Column(String)
     # unit = Column(String)
     # x = Column(Float)
