@@ -14,6 +14,18 @@ class Base:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
+    def __eq__(self, other):
+        try:
+            return self.id == other.id
+        except AttributeError:
+            return False
+
+    def __ne__(self, other):
+        try:
+            return self.id != other.id
+        except AttributeError:
+            return True
+
     def __setattr__(self, key, value):
         if key in ('_model', 'MODEL'):
             super().__setattr__(key, value)

@@ -1,9 +1,8 @@
 
 
 from controller.base import Base
-from controller.update import Update
+from controller.event import IncreaseUnits, Quit
 from model.actor import Actor as ActorModel
-from model.tile import Tile
 
 
 class Actor(Base):
@@ -22,22 +21,29 @@ class Actor(Base):
     def find(cls, **kwargs):
         return [cls.TYPES[model.type](model=model) for model in cls.MODEL.find(**kwargs)]
 
-    def update(self, callback, update):
-        for tile_update in update.tiles:
-            tile = Tile.find(perceiver=self, **tile_update['identifiers'])
-            if tile:
-                tile = tile[0]
-            else:  # most likely tile is not visible to actor
-                continue
-            for key, value in tile_update['changes'].items():
-                setattr(tile, key, value)
-
-        update = Update(self.name)
-        self.act(update, callback)
-
-    def act(self, update, callback):
-        raise NotImplementedError("Actor is a base class")
-
     @property
     def owned_tiles(self):
         return [t for t in self._model.owned_tiles if t.perceiver and t.perceiver.id == self.id]
+
+    def do_turn(self, turn):
+        self.current_turn = turn
+
+    def increase_units(self):
+        for i, tile in enumerate(self.owned_tiles):
+            if self.unplaced_units == i:
+                break
+            IncreaseUnits(
+                x=tile.x, y=tile.y,
+                amount=1,
+                causer=self,
+                turn=self.current_turn
+            )
+
+    def quit(self):
+        Quit(causer=self, turn=self.current_turn)
+
+    def on_increase_units(self, event):
+        pass
+
+    def on_quit(self, event):
+        pass

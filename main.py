@@ -1,12 +1,11 @@
 
 
 from kivy.app import App
-from kivy.uix.widget import Widget
 from kivy.clock import Clock
-
 from view.game_frame import GameFrame
+
 from controller.actor import Actor
-from controller.world import World
+from controller.actor.world import World
 from model.base import db
 
 
