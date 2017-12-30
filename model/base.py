@@ -4,7 +4,7 @@ import os
 
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 @as_declarative(constructor=None)
@@ -37,9 +37,9 @@ class Database:
             os.remove(f'saves/{save_name}.gs')
         except:
             pass
-        self.engine = create_engine(f'sqlite:///saves/{save_name}.gs', connect_args={'check_same_thread': False})
+        self.engine = create_engine(f'sqlite:///saves/{save_name}.gs')#, connect_args={'check_same_thread': False})
         Base.metadata.create_all(self.engine)
-        Session = sessionmaker(bind=self.engine)
+        Session = scoped_session(sessionmaker(bind=self.engine))
         self.session = Session()
 
 

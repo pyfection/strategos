@@ -23,11 +23,11 @@ class World(Actor):
     def generate_terrain(self, width=10, height=10):
         for x in range(width):
             for y in range(height):
-                Tile(x=x, y=y, owner=self, perceiver=self)
+                Tile(x=x, y=y, owner=None, perceiver=self)
 
     def distribute_tiles(self):
         actors = [a for a in Actor.all() if a.id != self.id]
-        undistributed = Tile.find(owner=self)
+        undistributed = Tile.find(owner=None)
         while undistributed:
             for actor in actors:
                 tile = undistributed.pop(0)
