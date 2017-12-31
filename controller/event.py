@@ -9,14 +9,20 @@ class Event(Base):
     MODEL = EventModel
     TYPES = {}
 
-    def __init__(self, turn, causer, perceiver=None, validate=True, **kwargs):
-        super().__init__(
-            type=self.__class__.__name__.lower(),
-            turn=turn,
-            causer=causer,
-            perceiver=perceiver or causer,
-            **kwargs
-        )
+    def __init__(self, model=None, turn=None, causer=None, perceiver=None, validate=True, **kwargs):
+        if model:
+            super().__init__(model=model)
+        else:
+            # print(turn, causer)
+            # print(turn is not None, bool(causer))
+            assert turn is not None and causer
+            super().__init__(
+                type=kwargs.pop('type', None) or self.__class__.__name__.lower(),
+                turn=turn,
+                causer=causer,
+                perceiver=perceiver or causer,
+                **kwargs
+            )
         if validate:
             self.validate()
 
@@ -36,47 +42,54 @@ class Event(Base):
         self.triggered = True
 
     def copy(self, **kwargs):
-        params = {
-            'causer': self.causer,
-            'perceiver':self.perceiver,
+        d = {
+            'triggered': False,
             'validate': False
         }
-        params.update(kwargs)
-        return Event(**params)
+        d.update(kwargs)
+        return super().copy(**d)
 
 
 class Attack(Event):
-    def __init__(self, x, y, **kwargs):
-        super().__init__(
-            x=x,
-            y=y,
-            **kwargs
-        )
+    def __init__(self, model=None, x=None, y=None, **kwargs):
+        if model:
+            super().__init__(model=model)
+        else:
+            assert x is not None and y is not None
+            super().__init__(
+                x=x,
+                y=y,
+                **kwargs
+            )
 
     def validate(self):
         tile = Tile.find(x=self.x, y=self.y, perceiver=self.causer)[0]
         assert self.causer != tile.owner
 
-    def copy(self, **kwargs):
-        params = {
-            'x': self.x,
-            'y': self.y,
-            'causer': self.causer,
-            'perceiver':self.perceiver,
-            'validate': False
-        }
-        params.update(kwargs)
-        return Attack(**params)
+    # def copy(self, **kwargs):
+    #     params = {
+    #         'x': self.x,
+    #         'y': self.y,
+    #         'causer': self.causer,
+    #         'perceiver':self.perceiver,
+    #         'validate': False
+    #     }
+    #     params.update(kwargs)
+    #     return Attack(**params)
 
 
 class IncreaseUnits(Event):
-    def __init__(self, x, y, amount, **kwargs):
-        super().__init__(
-            x=x,
-            y=y,
-            amount=amount,
-            **kwargs
-        )
+    def __init__(self, model=None, x=None, y=None, amount=None, **kwargs):
+        if model:
+            super().__init__(model=model)
+        else:
+            assert x is not None and y is not None and amount is not None
+            super().__init__(
+                x=x,
+                y=y,
+                amount=amount,
+                **kwargs
+            )
 
     def validate(self):
         events = Event.find(causer=self.causer, turn=self.turn)
@@ -93,17 +106,17 @@ class IncreaseUnits(Event):
         super().trigger()
         self.perceiver.on_increase_units(self)
 
-    def copy(self, **kwargs):
-        params = {
-            'x': self.x,
-            'y': self.y,
-            'amount': self.amount,
-            'causer': self.causer,
-            'perceiver':self.perceiver,
-            'validate': False
-        }
-        params.update(kwargs)
-        return Attack(**params)
+    # def copy(self, **kwargs):
+    #     params = {
+    #         'x': self.x,
+    #         'y': self.y,
+    #         'amount': self.amount,
+    #         'causer': self.causer,
+    #         'perceiver':self.perceiver,
+    #         'validate': False
+    #     }
+    #     params.update(kwargs)
+    #     return Attack(**params)
 
 
 class Quit(Event):

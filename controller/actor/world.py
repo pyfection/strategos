@@ -18,7 +18,7 @@ class World(Actor):
 
     @property
     def is_running(self):
-        return any([a for a in Actor.all() if a.id != self.id and not isinstance(a, AI)])
+        return any([a for a in Actor.all() if a != self and not isinstance(a, AI)])
 
     def generate_terrain(self, width=10, height=10):
         for x in range(width):
@@ -26,7 +26,7 @@ class World(Actor):
                 Tile(x=x, y=y, owner=None, perceiver=self)
 
     def distribute_tiles(self):
-        actors = [a for a in Actor.all() if a.id != self.id]
+        actors = [a for a in Actor.all() if a != self]
         undistributed = Tile.find(owner=None)
         while undistributed:
             for actor in actors:
@@ -59,8 +59,10 @@ class World(Actor):
             for event in Event.find(turn=self.current_turn):
                 for actor in actors:
                     if event.causer != actor:
-                        event = event.copy(perceiver=actor)
-                    event.trigger()
+                        new_event = event.copy(perceiver=actor)
+                        new_event.trigger()
+                    else:
+                        event.trigger()
 
             self.current_turn += 1
 

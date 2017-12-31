@@ -18,6 +18,9 @@ class Terminal(Actor):
             inp = input('>>> ')
             if inp == 'end':
                 run = False
+            elif inp == 'quit':
+                run = False
+                self.quit()
             elif inp in self.FORBIDDEN:
                 raise PermissionError(f"Command '{inp}' is not allowed")
             else:

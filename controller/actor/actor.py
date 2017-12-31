@@ -23,7 +23,7 @@ class Actor(Base):
 
     @property
     def owned_tiles(self):
-        return [t for t in self._model.owned_tiles if t.perceiver and t.perceiver.id == self.id]
+        return [t for t in self._model.owned_tiles if t.perceiver and t.perceiver == self]
 
     def do_turn(self, turn):
         self.current_turn = turn
