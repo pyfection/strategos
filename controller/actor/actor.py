@@ -1,7 +1,7 @@
 
 
 from controller.base import Base
-from controller.event import IncreaseUnits, Quit
+from controller.event import DistributeUnits, Quit
 from model.actor import Actor as ActorModel
 
 
@@ -28,11 +28,11 @@ class Actor(Base):
     def do_turn(self, turn):
         self.current_turn = turn
 
-    def increase_units(self):
+    def distribute_units(self):
         for i, tile in enumerate(self.owned_tiles):
             if self.unplaced_units == i:
                 break
-            IncreaseUnits(
+            DistributeUnits(
                 x=tile.x, y=tile.y,
                 amount=1,
                 causer=self,
@@ -42,7 +42,7 @@ class Actor(Base):
     def quit(self):
         Quit(causer=self, turn=self.current_turn)
 
-    def on_increase_units(self, event):
+    def on_distribute_units(self, event):
         pass
 
     def on_quit(self, event):

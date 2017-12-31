@@ -10,6 +10,11 @@ class shortcuts:
 
 class Terminal(Actor):
     FORBIDDEN = ('exit()',)
+    print("Following commands are available:")
+    print("end         # ends the turn")
+    print("quit        # quit game")
+    print("distribute  # distributes available units to owned tiles")
+
     def do_turn(self, turn):
         super().do_turn(turn)
         print('New turn', turn)
@@ -21,6 +26,8 @@ class Terminal(Actor):
             elif inp == 'quit':
                 run = False
                 self.quit()
+            elif inp == 'distribute':
+                self.distribute_units()
             elif inp in self.FORBIDDEN:
                 raise PermissionError(f"Command '{inp}' is not allowed")
             else:

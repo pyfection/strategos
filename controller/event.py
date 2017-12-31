@@ -78,7 +78,7 @@ class Attack(Event):
     #     return Attack(**params)
 
 
-class IncreaseUnits(Event):
+class DistributeUnits(Event):
     def __init__(self, model=None, x=None, y=None, amount=None, **kwargs):
         if model:
             super().__init__(model=model)
@@ -93,7 +93,7 @@ class IncreaseUnits(Event):
 
     def validate(self):
         events = Event.find(causer=self.causer, turn=self.turn)
-        total_amount = sum([e.amount for e in events if isinstance(e, IncreaseUnits)])
+        total_amount = sum([e.amount for e in events if isinstance(e, DistributeUnits)])
         assert total_amount <= self.causer.unplaced_units
         tile = Tile.find(x=self.x, y=self.y, perceiver=self.causer)[0]
         assert tile.owner == self.causer
@@ -104,7 +104,7 @@ class IncreaseUnits(Event):
         tile = Tile.find(x=self.x, y=self.y, perceiver=self.perceiver)[0]
         tile.units += self.amount
         super().trigger()
-        self.perceiver.on_increase_units(self)
+        self.perceiver.on_distribute_units(self)
 
     # def copy(self, **kwargs):
     #     params = {
@@ -131,5 +131,5 @@ class Quit(Event):
 
 
 Event.TYPES['attack'] = Attack
-Event.TYPES['increaseunits'] = IncreaseUnits
+Event.TYPES['distributeunits'] = DistributeUnits
 Event.TYPES['quit'] = Quit
