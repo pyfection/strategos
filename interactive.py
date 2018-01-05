@@ -1,8 +1,10 @@
 
 
-from controller.actor.world import World
-from controller.actor.ai import AI
-from controller.actor.terminal import Terminal
+from threading import Thread
+
+from core.world import World
+from core.actor.terminal import Terminal
+from core.event import Quit
 
 """
 start like this:
@@ -10,8 +12,10 @@ start like this:
 """
 
 
-world = World(game_name='strategos_test')
-p1 = Terminal(name="John")
-p2 = AI(name="Jane")
-world.generate_terrain()
-world.distribute_tiles()
+world = World()
+world.load_map('2playertest')
+self = Terminal(name="John")
+world.actors.append(self)
+world.distribute_settlements()
+main_thread = Thread(target=world.run)
+main_thread.start()

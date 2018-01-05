@@ -1,5 +1,8 @@
 
 
+raise NotImplementedError("This shouldn't be imported and will be removed soon")
+
+
 class Base:
     MODEL = None
     __slots__ = ['_model']

@@ -4,8 +4,8 @@ from kivy.app import App
 from kivy.clock import Clock
 from view.game_frame import GameFrame
 
-from controller.actor import Actor
-from controller.actor.world import World
+from core.actor import Actor
+from core.world import World
 from model.base import db
 
 

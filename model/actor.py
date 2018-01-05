@@ -1,17 +1,55 @@
 
 
-from sqlalchemy import Column, String, Integer, Boolean
-from sqlalchemy.orm import relationship
-
-from model.base import Base
+from model.base import Base, models, where
 
 
 class Actor(Base):
-    type = Column(String, nullable=False)
-    name = Column(String, nullable=False)
-    current_turn = Column(Integer, default=0)
-    unplaced_units = Column(Integer, default=0)
-    owned_tiles = relationship("Tile", foreign_keys="Tile.owner_id")
-    perceived_tiles = relationship("Tile", foreign_keys="Tile.perceiver_id")
-    caused_events = relationship("Event", foreign_keys="Event.causer_id")
-    perceived_events = relationship("Event", foreign_keys="Event.perceiver_id")
+    __table__ = 'actor'
+    TYPES = {}
+
+    def __init__(self, name, current_turn=0, unplaced_units=0, **kwargs):
+        assert isinstance(name, str)
+        assert isinstance(current_turn, int)
+        assert isinstance(unplaced_units, int)
+        self.name = name
+        self.current_turn = current_turn
+        self.unplaced_units = unplaced_units
+        super().__init__(**kwargs)
+
+    @property
+    def owned_tiles(self):
+        Tile = models['tile']
+        return Tile.get(where('owner_id') == self.id) or []
+
+    @property
+    def perceived_tiles(self):
+        Tile = models['tile']
+        return Tile.get(where('perceiver_id') == self.id) or []
+
+    @property
+    def caused_events(self):
+        Event = models['event']
+        return Event.get(where('causer_id') == self.id) or []
+
+    @property
+    def perceived_events(self):
+        Event = models['event']
+        return Event.get(where('perceiver_id') == self.id) or []
+
+
+class AI(Actor):
+    type = 'ai'
+
+
+class Terminal(Actor):
+    type = 'terminal'
+
+
+class World(Actor):
+    type = 'world'
+
+
+models[Actor.__table__] = Actor
+Actor.TYPES[AI.type] = AI
+Actor.TYPES[Terminal.type] = Terminal
+Actor.TYPES[World.type] = World

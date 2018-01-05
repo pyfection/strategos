@@ -1,9 +1,8 @@
 
 
-from controller.actor.world import World
-from controller.actor.ai import AI
-from controller.actor.terminal import Terminal
-
+from core.actor.ai import AI
+from core.actor.terminal import Terminal
+from core.world import World
 
 world = World(game_name='strategos_test')
 p1 = Terminal(name="John")
