@@ -11,7 +11,7 @@ from core.entity import Entity
 from core.tile import TILE_TYPES
 from core.troop import Troop
 from core.faction import Faction
-from helpers.loader import load_map, load_game
+from helpers.loader import load_map, load_game, save_game
 from helpers.convert import pos_to_coord, coord_to_pos
 
 
@@ -94,6 +94,78 @@ class World:
     def is_running(self):
         return any([a for a in self.actors if not isinstance(a, AI)])
 
+    def save(self, game_name):
+        game = {
+            'seed': self.seed,
+            'actor_entity_mapping': {
+                actor.name: actor.entity.id for actor in self.actors
+            },
+            'entities': {},
+            'tiles': {},
+            'troops': {},
+            'factions': {},
+        }
+
+        for id, entity in self.entities.items():
+            entity_dict = {
+                'name': entity.name,
+                'ruler': entity.ruler.id if entity.ruler else None,
+                'entities': {},
+                'tiles': {},
+                'troops': {},
+                'factions': {}
+            }
+            for p_id, p_entity in entity.entities.items():
+                entity_dict['entities'][p_id] = {
+                    'name': p_entity.name,
+                    'ruler': p_entity.ruler.id if p_entity.ruler else None,
+                    'entities': {},
+                    'tiles': {},
+                    'troops': {},
+                    'factions': {}
+                }
+            for p_coord, p_tile in entity.tiles.items():
+                entity_dict['tiles'][p_coord] = {
+                    'z': p_tile.z,
+                    'type': p_tile.type,
+                    'owner': p_tile.owner.id if p_tile.owner else None
+                }
+            for p_id, p_troop in entity.troops.items():
+                entity_dict['troops'][p_id] = {
+                    'name': p_troop.name,
+                    'leader': p_troop.leader.id if p_troop.leader else None,
+                    'elites': p_troop.elites,
+                    'levies': p_troop.levies
+                }
+            for p_id, p_faction in entity.factions.items():
+                entity_dict['factions'][p_id] = {
+                    'name': p_faction.name,
+                    'leader': p_faction.leader.id if p_faction.leader else None
+                }
+            game['entities'][id] = entity_dict
+
+        for coord, tile in self.tiles.items():
+            game['tiles'][coord] = {
+                'z': tile.z,
+                'type': tile.type,
+                'owner': tile.owner.id if tile.owner else None
+            }
+
+        for id, troop in self.troops.items():
+            game['troops'][id] = {
+                'name': troop.name,
+                'leader': troop.leader.id if troop.leader else None,
+                'elites': troop.elites,
+                'levies': troop.levies
+            }
+        for id, faction in self.factions.items():
+            game['factions'][id] = {
+                'name': faction.name,
+                'leader': faction.leader.id if faction.leader else None
+            }
+
+        save_game(game, game_name)
+
     def get_ais(self):
         return [a for a in self.actors if isinstance(a, AI)]
 
@@ -105,9 +177,13 @@ class World:
                 actor.entity = ai.entity
                 break
         else:
-            ai = random.choice(ais)
-            self.actors.remove(ai)
-            actor.entity = ai.entity
+            if ais:
+                ai = random.choice(ais)
+                self.actors.remove(ai)
+                actor.entity = ai.entity
+            else:
+                actor.entity = Entity()
+                self.entities[actor.entity.id] = actor.entity
         self.actors.append(actor)
 
     def load_map(self, map_name):

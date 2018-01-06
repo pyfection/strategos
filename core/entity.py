@@ -5,7 +5,7 @@ from uuid import uuid4
 
 class Entity:
     def __init__(self, id=None, name=None, ruler=None):
-        self.id = id or uuid4()
+        self.id = id or str(uuid4())
         self.name = name
         self.ruler = ruler
         self.entities = {}

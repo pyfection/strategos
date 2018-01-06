@@ -27,3 +27,9 @@ def load_game(game_name):
         content = f.read()
     return json.loads(content)
 
+
+def save_game(game, game_name):
+    path = os.path.join('saves', game_name + '.gs')
+    content = json.dumps(game)
+    with open(path, 'w') as f:
+        f.write(content)
