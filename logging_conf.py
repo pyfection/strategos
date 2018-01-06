@@ -3,6 +3,4 @@
 import logging
 
 
-logging.basicConfig()
-# InteractiveLogger = logging.getLogger('strategos.interactive')
-# InteractiveLogger.setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")

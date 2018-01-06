@@ -2,7 +2,9 @@
 
 from threading import Thread
 from uuid import uuid4
+import logging
 
+import logging_conf
 from core.actor.ai import AI
 from core.entity import Entity
 from helpers.loader import load_map
@@ -47,6 +49,7 @@ class World:
             actor.reveal_tile(tile.copy())
 
     def run(self):
+        logging.info("Started to run world")
         while self.is_running:
             threads = []
 
@@ -66,6 +69,7 @@ class World:
                 thread.join()
 
             self.current_turn += 1
+        logging.info("World is no longer running")
 
     def quit_actor(self, actor):
         self.actors.remove(actor)
