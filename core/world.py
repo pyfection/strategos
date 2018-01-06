@@ -8,6 +8,7 @@ import logging_conf
 from core.actor.ai import AI
 from core.entity import Entity
 from core.tile import TILE_TYPES
+from core.troop import Troop
 from helpers.loader import load_map, load_game
 from helpers.convert import pos_to_coord, coord_to_pos
 
@@ -17,6 +18,7 @@ class World:
         self.seed = seed
         self.tiles = {}
         self.entities = {}
+        self.troops = {}
         self.actors = []
         self.current_turn = 0
 
@@ -48,12 +50,28 @@ class World:
                 p_tile = Tile(x=x, y=y, z=p_tile_dict.get('z', 0), owner=owner)
                 entity.tiles[p_tile_coord] = p_tile
 
+            for p_troop_id, p_troop_dict in entity_dict.get('troops').items():
+                companions = p_troop_dict.pop('companions', [])
+                p_troop = Troop(id=p_troop_id, companions=companions, **p_troop_dict)
+                p_troop.leader = self.entities.get(p_troop.leader)
+                for companion_id in companions:
+                    p_troop.companions.append(self.entities[companion_id])
+                entity.troops[p_troop_id] = p_troop
+
         for tile_coord, tile_dict in game.get('tiles').items():
             x, y = coord_to_pos(tile_coord)
             owner = self.entities.get(tile_dict.get('owner'))
             Tile = TILE_TYPES[tile_dict.get('type', 'grass')]
             tile = Tile(x=x, y=y, z=tile_dict.get('z', 0), owner=owner)
             self.tiles[tile_coord] = tile
+
+        for troop_id, troop_dict in game.get('troops').items():
+            companions = troop_dict.pop('companions', [])
+            troop = Troop(id=troop_id, companions=companions, **troop_dict)
+            troop.leader = self.entities.get(troop.leader)
+            for companion_id in companions:
+                troop.companions.append(self.entities[companion_id])
+            self.troops[troop_id] = troop
 
         return self
 

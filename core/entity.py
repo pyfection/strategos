@@ -10,6 +10,7 @@ class Entity:
         self.ruler = ruler
         self.entities = {}
         self.tiles = {}
+        self.troops = {}
 
     def copy(self, **kwargs):
         d = self.__dict__.copy()
