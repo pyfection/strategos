@@ -1,0 +1,19 @@
+#:kivy 1.10.0
+
+<View>:
+    canvas:
+        Color:
+            rgb: .5, 0, 0
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    ScatterLayout:
+        id: map
+    BoxLayout:
+        id: menus
+        Label:
+            id: current_turn
+            text: "placeholder"
+        Button:
+            id: quit
+            text: "Quit"
