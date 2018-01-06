@@ -3,6 +3,7 @@
 import os
 
 from PIL import Image
+import json
 
 from core.tile import TILE_TYPES
 
@@ -18,3 +19,11 @@ def load_map(map_name):
             for TileType in TILE_TYPES.values():
                 if TileType.color == hex:
                     yield TileType(x, y)
+
+
+def load_game(game_name):
+    path = os.path.join('saves', game_name + '.gs')
+    with open(path, 'r') as f:
+        content = f.read()
+    return json.loads(content)
+

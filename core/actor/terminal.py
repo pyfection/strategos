@@ -22,6 +22,7 @@ class Terminal(Actor):
 
     def quit(self):
         self.events.append(Quit(self))
+        self.end_turn()
 
     def quit_actor(self, actor):
         print("Actor quit:", actor.name)
