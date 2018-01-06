@@ -1,6 +1,7 @@
 
 
 from core.actor.actor import Actor
+from core.event import Quit
 
 
 class Terminal(Actor):
@@ -18,6 +19,9 @@ class Terminal(Actor):
 
     def end_turn(self):
         self.run = False
+
+    def quit(self):
+        self.events.append(Quit(self))
 
     def quit_actor(self, actor):
         print("Actor quit:", actor.name)
