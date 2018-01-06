@@ -1,7 +1,8 @@
 
 
+from threading import Thread
+
 from kivy.app import App
-from kivy.clock import Clock
 
 from core.world import World
 from core.actor.visual import Visual
@@ -14,7 +15,8 @@ class GameApp(App):
         world.load_map('2playertest')
         world.add_actor(actor)
         view = actor.view
-        # Clock.schedule_interval(lambda dt: world.update(), .1)
+        t = Thread(target=world.run)
+        t.start()
         return view
 
 

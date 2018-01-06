@@ -1,5 +1,7 @@
 
 
+from kivy.app import App
+
 from core.event import Quit
 from core.actor.actor import Actor
 from .view import View
@@ -11,7 +13,7 @@ class Visual(Actor):
 
         self.run = True
         self.view = View()
-        self.view.ids.quit.bind(on_touch=lambda inst: self.quit())
+        self.view.ids.quit.bind(on_press=lambda inst: self.quit())
 
     def do_turn(self, turn, events):
         self.view.ids.current_turn.text = str(turn)
@@ -21,3 +23,5 @@ class Visual(Actor):
 
     def quit(self):
         self.events.append(Quit(self))
+        self.run = False
+        App.get_running_app().stop()

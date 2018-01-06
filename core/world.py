@@ -208,27 +208,30 @@ class World:
             actor.set_entity(entity.copy())
             actor.reveal_tile(tile.copy())
 
+    def update(self):
+        threads = []
+
+        # Collect events from actors and trigger them on the world
+        events = [event for actor in self.actors for event in actor.events]
+        for event in events:
+            event.trigger(self)
+
+        # Tell actors to update
+        for actor in self.actors:
+            t = Thread(target=actor.do_turn, kwargs={'turn': self.current_turn, 'events': events})
+            threads.append(t)
+            t.start()
+
+        # Wait for all actors to finish
+        for thread in threads:
+            thread.join()
+
+        self.current_turn += 1
+
     def run(self):
         logging.info("Started to run world")
         while self.is_running:
-            threads = []
-
-            # Collect events from actors and trigger them on the world
-            events = [event for actor in self.actors for event in actor.events]
-            for event in events:
-                event.trigger(self)
-
-            # Tell actors to update
-            for actor in self.actors:
-                t = Thread(target=actor.do_turn, kwargs={'turn': self.current_turn, 'events': events})
-                threads.append(t)
-                t.start()
-
-            # Wait for all actors to finish
-            for thread in threads:
-                thread.join()
-
-            self.current_turn += 1
+            self.update()
         logging.info("World is no longer running")
 
     def quit_actor(self, actor):
