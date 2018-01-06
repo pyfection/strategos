@@ -1,5 +1,6 @@
 
 
+import random
 from threading import Thread
 
 from core.world import World
@@ -18,7 +19,7 @@ while True:
         print("Input needs to be 'map' or 'save'")
 
 if mos == 'map':
-    world = World()
+    world = World(seed=random.randint(0, 1000))
     world.load_map('2playertest')
 elif mos == 'save':
     world = World.load_savegame('testgame')

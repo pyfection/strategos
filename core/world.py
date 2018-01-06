@@ -1,5 +1,6 @@
 
 
+import random
 from threading import Thread
 from uuid import uuid4
 import logging
@@ -21,6 +22,8 @@ class World:
         self.troops = {}
         self.actors = []
         self.current_turn = 0
+        logging.info(f"Worldseed: {seed}")
+        random.seed(seed)
 
     @classmethod
     def load_savegame(cls, game_name):
@@ -79,13 +82,20 @@ class World:
     def is_running(self):
         return any([a for a in self.actors if not isinstance(a, AI)])
 
+    def get_ais(self):
+        return [a for a in self.actors if isinstance(a, AI)]
+
     def add_actor(self, actor):
-        ais = [a for a in self.actors if isinstance(a, AI)]
+        ais = self.get_ais()
         for ai in ais:
             if ai.name == actor.name:
                 self.actors.remove(ai)
                 actor.entity = ai.entity
                 break
+        else:
+            ai = random.choice(ais)
+            self.actors.remove(ai)
+            actor.entity = ai.entity
         self.actors.append(actor)
 
     def load_map(self, map_name):
