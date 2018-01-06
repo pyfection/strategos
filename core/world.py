@@ -10,6 +10,7 @@ from core.actor.ai import AI
 from core.entity import Entity
 from core.tile import TILE_TYPES
 from core.troop import Troop
+from core.faction import Faction
 from helpers.loader import load_map, load_game
 from helpers.convert import pos_to_coord, coord_to_pos
 
@@ -20,6 +21,7 @@ class World:
         self.tiles = {}
         self.entities = {}
         self.troops = {}
+        self.factions = {}
         self.actors = []
         self.current_turn = 0
         logging.info(f"Worldseed: {seed}")
@@ -61,6 +63,11 @@ class World:
                     p_troop.companions.append(self.entities[companion_id])
                 entity.troops[p_troop_id] = p_troop
 
+            for p_faction_id, p_faction_dict in game.get('factions').items():
+                p_faction = Faction(id=p_faction_id, **p_faction_dict)
+                p_faction.leader = self.entities.get(p_faction.leader)
+                entity.factions[p_faction_id] = p_faction
+
         for tile_coord, tile_dict in game.get('tiles').items():
             x, y = coord_to_pos(tile_coord)
             owner = self.entities.get(tile_dict.get('owner'))
@@ -75,6 +82,11 @@ class World:
             for companion_id in companions:
                 troop.companions.append(self.entities[companion_id])
             self.troops[troop_id] = troop
+
+        for faction_id, faction_dict in game.get('factions').items():
+            faction = Faction(id=faction_id, **faction_dict)
+            faction.leader = self.entities.get(faction.leader)
+            self.factions[faction_id] = faction
 
         return self
 
