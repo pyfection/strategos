@@ -14,6 +14,7 @@ class GameApp(App):
         actor = Visual(name='testplayer')
         world.load_map('2playertest')
         world.add_actor(actor)
+        world.distribute_settlements()
         view = actor.view
         t = Thread(target=world.run)
         t.start()
