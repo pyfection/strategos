@@ -56,11 +56,12 @@ class World:
                 entity.tiles[p_tile_coord] = p_tile
 
             for p_troop_id, p_troop_dict in entity_dict.get('troops').items():
-                companions = p_troop_dict.pop('companions', [])
-                p_troop = Troop(id=p_troop_id, companions=companions, **p_troop_dict)
+                p_leader_id = p_troop_dict.pop('leader', None)
+                p_leader = self.entities.get(p_leader_id, None)
+                if p_leader:
+                    p_leader = p_leader.copy()
+                p_troop = Troop(id=p_troop_id, leader=p_leader, **p_troop_dict)
                 p_troop.leader = self.entities.get(p_troop.leader)
-                for companion_id in companions:
-                    p_troop.companions.append(self.entities[companion_id])
                 entity.troops[p_troop_id] = p_troop
 
             for p_faction_id, p_faction_dict in game.get('factions').items():
@@ -76,11 +77,10 @@ class World:
             self.tiles[tile_coord] = tile
 
         for troop_id, troop_dict in game.get('troops').items():
-            companions = troop_dict.pop('companions', [])
-            troop = Troop(id=troop_id, companions=companions, **troop_dict)
+            leader_id = troop_dict.pop('leader', None)
+            leader = self.entities.get(leader_id, None)
+            troop = Troop(id=troop_id, leader=leader, **troop_dict)
             troop.leader = self.entities.get(troop.leader)
-            for companion_id in companions:
-                troop.companions.append(self.entities[companion_id])
             self.troops[troop_id] = troop
 
         for faction_id, faction_dict in game.get('factions').items():

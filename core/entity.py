@@ -12,6 +12,8 @@ class Entity:
         self.tiles = {}
         self.troops = {}
         self.factions = {}
+        # set automatically:
+        self.troop = None
 
     def copy(self, **kwargs):
         d = self.__dict__.copy()

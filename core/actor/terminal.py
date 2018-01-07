@@ -22,8 +22,8 @@ class Terminal(Actor):
 
     def move(self, x, y):
         try:
-            troop_id = next(i for i, t in self.entity.troops.items() if t.leader.id == self.entity.id)
-        except StopIteration:
+            troop_id = self.entity.troop.id
+        except AttributeError:
             print("Does not lead a troop")
         else:
             self.events.append(Move(troop_id, x, y))
