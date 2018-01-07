@@ -15,8 +15,8 @@ class Tile:
         inst = self.__class__(d.pop('x'), d.pop('y'))
         for key, value in d.items():
             setattr(inst, key, value)
-        if self.owner:
-            self.owner = kwargs.get('owner') or self.owner.copy()
+        if inst.owner:
+            inst.owner = kwargs.get('owner') or self.owner.copy()
         return inst
 
 

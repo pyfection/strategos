@@ -1,5 +1,6 @@
 
 
+from builtins import exit as _exit
 import random
 from threading import Thread
 
@@ -31,6 +32,11 @@ world.add_actor(self)
 
 if mos == 'map':
     world.distribute_settlements()
+
+
+def exit():
+    self.quit()
+    _exit()
 
 
 main_thread = Thread(target=world.run)

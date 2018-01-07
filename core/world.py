@@ -56,11 +56,7 @@ class World:
                 entity.tiles[p_tile_coord] = p_tile
 
             for p_troop_id, p_troop_dict in entity_dict.get('troops').items():
-                p_leader_id = p_troop_dict.pop('leader', None)
-                p_leader = self.entities.get(p_leader_id, None)
-                if p_leader:
-                    p_leader = p_leader.copy()
-                p_troop = Troop(id=p_troop_id, leader=p_leader, **p_troop_dict)
+                p_troop = Troop(id=p_troop_id, **p_troop_dict)
                 p_troop.leader = self.entities.get(p_troop.leader)
                 entity.troops[p_troop_id] = p_troop
 
@@ -77,9 +73,7 @@ class World:
             self.tiles[tile_coord] = tile
 
         for troop_id, troop_dict in game.get('troops').items():
-            leader_id = troop_dict.pop('leader', None)
-            leader = self.entities.get(leader_id, None)
-            troop = Troop(id=troop_id, leader=leader, **troop_dict)
+            troop = Troop(id=troop_id, **troop_dict)
             troop.leader = self.entities.get(troop.leader)
             self.troops[troop_id] = troop
 
@@ -109,7 +103,8 @@ class World:
         for id, entity in self.entities.items():
             entity_dict = {
                 'name': entity.name,
-                'ruler': entity.ruler.id if entity.ruler else None,
+                'ruler': entity.ruler_id,
+                'troop': entity.troop_id,
                 'entities': {},
                 'tiles': {},
                 'troops': {},
@@ -118,7 +113,8 @@ class World:
             for p_id, p_entity in entity.entities.items():
                 entity_dict['entities'][p_id] = {
                     'name': p_entity.name,
-                    'ruler': p_entity.ruler.id if p_entity.ruler else None,
+                    'ruler': p_entity.ruler_id,
+                    'troop': p_entity.troop_id,
                     'entities': {},
                     'tiles': {},
                     'troops': {},
@@ -133,9 +129,10 @@ class World:
             for p_id, p_troop in entity.troops.items():
                 entity_dict['troops'][p_id] = {
                     'name': p_troop.name,
-                    'leader': p_troop.leader.id if p_troop.leader else None,
                     'elites': p_troop.elites,
-                    'levies': p_troop.levies
+                    'levies': p_troop.levies,
+                    'x': p_troop.x,
+                    'y': p_troop.y,
                 }
             for p_id, p_faction in entity.factions.items():
                 entity_dict['factions'][p_id] = {
@@ -154,9 +151,10 @@ class World:
         for id, troop in self.troops.items():
             game['troops'][id] = {
                 'name': troop.name,
-                'leader': troop.leader.id if troop.leader else None,
                 'elites': troop.elites,
-                'levies': troop.levies
+                'levies': troop.levies,
+                'x': troop.x,
+                'y': troop.y,
             }
         for id, faction in self.factions.items():
             game['factions'][id] = {
@@ -182,8 +180,18 @@ class World:
                 self.actors.remove(ai)
                 actor.entity = ai.entity
             else:
-                actor.entity = Entity()
-                self.entities[actor.entity.id] = actor.entity
+                entity = Entity()
+                self.entities[entity.id] = entity
+                actor.entity = entity.copy()
+        if not actor.entity.troop:
+            print(1, actor.entity, actor.entity.id)
+            troop = Troop(elites=0, levies=0)
+            self.troops[troop.id] = troop
+            actor.entity.troop_id = troop.id
+            print(2, actor.entity.troop_id)
+            actor.entity.troops[troop.id] = troop.copy()
+            print(3, actor.entity.troops)
+
         self.actors.append(actor)
 
     def load_map(self, map_name):
@@ -202,11 +210,19 @@ class World:
             except IndexError:
                 actor = AI(str(uuid4()))
                 self.actors.append(actor)
-            entity = Entity()
-            self.entities[entity.id] = entity
+            if actor.entity:
+                entity = actor.entity.copy()
+            else:
+                entity = Entity()
+            if entity.id not in self.entities:
+                self.entities[entity.id] = entity
             settlement.owner = entity
-            actor.set_entity(entity.copy())
-            actor.reveal_tile(tile.copy())
+            if not actor.entity:
+                actor.set_entity(entity.copy())
+            actor.reveal_tile(settlement.copy())
+            if actor.entity.troop:
+                actor.entity.troop.x = settlement.x
+                actor.entity.troop.y = settlement.y
 
     def update(self):
         threads = []

@@ -4,18 +4,22 @@ from uuid import uuid4
 
 
 class Troop:
-    def __init__(self, id=None, name=None, leader=None, elites=None, levies=None):
+    def __init__(self, id=None, name=None, elites=None, levies=None, x=None, y=None):
         self.id = id or str(uuid4())
         self.name = name
-        self.leader = leader
         self.elites = elites  # number
         self.levies = levies  # number
+        self.x = x
+        self.y = y
+        # set automatically:
+        self.entities = []
 
-    def __setattr__(self, key, value):
-        if key == 'leader':
-            if hasattr(self, 'leader') and self.leader:
-                self.leader.troop = None
-            if value:
-                entity = value
-                entity.troop = self
-        super().__setattr__(key, value)
+    def copy(self, **kwargs):
+        d = self.__dict__.copy()
+        d.pop('entities')
+        d.update(kwargs)
+        inst = self.__class__()
+        for key, value in d.items():
+            setattr(inst, key, value)
+        return inst
+
