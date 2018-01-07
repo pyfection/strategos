@@ -14,7 +14,9 @@ class GameApp(App):
         actor = Visual(name='testplayer')
         world.load_map('2playertest')
         world.add_actor(actor)
-        world.distribute_settlements()
+        # world.distribute_settlements()
+        for tile in world.tiles.values():
+            actor.reveal_tile(tile.copy())
         view = actor.view
         t = Thread(target=world.run)
         t.start()
