@@ -1,7 +1,7 @@
 
 
 from core.actor.actor import Actor
-from core.event import Quit
+from core.event import Quit, Move
 
 
 class Terminal(Actor):
@@ -20,9 +20,20 @@ class Terminal(Actor):
     def end_turn(self):
         self.run = False
 
+    def move(self, x, y):
+        try:
+            troop_id = next(i for i, t in self.entity.troops.items() if t.leader.id == self.entity.id)
+        except StopIteration:
+            print("Does not lead a troop")
+        else:
+            self.events.append(Move(troop_id, x, y))
+
     def quit(self):
         self.events.append(Quit(self))
         self.end_turn()
 
     def quit_actor(self, actor):
         print("Actor quit:", actor.name)
+
+    def move_troop(self, troop_id, x, y):
+        print("Moved troop", troop_id, "to", x, y)

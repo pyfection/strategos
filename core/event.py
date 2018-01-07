@@ -10,6 +10,18 @@ class Event:
         return
 
 
+class Move(Event):
+    def __init__(self, troop_id, x, y):
+        super().__init__()
+        self.troop_id = troop_id
+        self.x = x
+        self.y = y
+
+    def trigger(self, actor):
+        actor.move_troop(self.troop_id, self.x, self.y)
+
+        super().trigger(actor)
+
 class Attack(Event):
     # ToDo: whole Attack system has to be planned, this class is deprecated
     def __init__(self, source_x, source_y, target_x, target_y):
