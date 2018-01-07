@@ -23,3 +23,10 @@ tiles = {
     'grass': lambda **kwargs: tile_factory("grass.png", **kwargs),
     'settlement': lambda **kwargs: tile_factory("settlement.png", **kwargs),
 }
+troop = lambda pos, **kwargs: Image(
+    source=os.path.join(ASSET_PATH, "troop.png"),
+    size_hint=(None, None),
+    size=(32, 32),
+    pos=(pos[0] * 32, pos[1] * 32,),
+    **kwargs
+)
