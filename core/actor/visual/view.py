@@ -5,6 +5,8 @@ import os
 from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
 
+from . import assets
+
 
 class View(Widget):
     def __init__(self):
