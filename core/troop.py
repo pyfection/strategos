@@ -11,8 +11,6 @@ class Troop:
         self.levies = levies  # number
         self.x = x
         self.y = y
-        # set automatically:
-        self.entities = []
 
     def copy(self, **kwargs):
         d = self.__dict__.copy()
@@ -22,4 +20,3 @@ class Troop:
         for key, value in d.items():
             setattr(inst, key, value)
         return inst
-

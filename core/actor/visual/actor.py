@@ -15,7 +15,8 @@ class Visual(Actor):
         self.view = View()
         self.view.ids.quit.bind(on_press=lambda inst: self.quit())
 
-    def reveal_tile(self, tile):
+    def show_tile(self, tile, **distortions):
+        super().show_tile(tile, **distortions)
         self.view.add_tile(tile)
 
     def do_turn(self, turn, events):

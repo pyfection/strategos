@@ -8,81 +8,20 @@ import logging
 import logging_conf
 from core.actor.ai import AI
 from core.entity import Entity
-from core.tile import TILE_TYPES
-from core.troop import Troop
-from core.faction import Faction
-from helpers.loader import load_map, load_game, save_game
-from helpers.convert import pos_to_coord, coord_to_pos
+from core.perception import Perception
+from helpers.loader import save_game
 
 
 class World:
-    def __init__(self, seed=None):
-        self.seed = seed
-        self.tiles = {}
-        self.entities = {}
-        self.troops = {}
-        self.factions = {}
-        self.actors = []
-        self.current_turn = 0
-        logging.info(f"Worldseed: {seed}")
-        random.seed(seed)
-
-    @classmethod
-    def load_savegame(cls, game_name):
-        game = load_game(game_name)
-        self = cls(game['seed'])
-
-        for actor_name, entity_id in game.get('actor_entity_mapping').items():
-            entity = Entity(id=entity_id)
-            self.entities[entity_id] = entity
-            try:
-                actor = next(a for a in self.actors if a.name == actor_name)
-                actor.entity = entity
-            except StopIteration:
-                actor = AI(name=actor_name, entity=entity)
-                self.actors.append(actor)
-
-        for entity_id, entity_dict in game.get('entities').items():
-            entity = self.entities.get(entity_id, Entity(id=entity_id))
-            for p_entity_id, p_entity_dict in entity_dict.get('entities').items():
-                p_entity = Entity(id=entity_id, **p_entity_dict)
-                entity.entities[p_entity_id] = p_entity
-
-            for p_tile_coord, p_tile_dict in entity_dict.get('tiles').items():
-                x, y = coord_to_pos(p_tile_coord)
-                owner = entity.entities.get(p_tile_dict.get('owner'))
-                Tile = TILE_TYPES[p_tile_dict.get('type', 'grass')]
-                p_tile = Tile(x=x, y=y, z=p_tile_dict.get('z', 0), owner=owner)
-                entity.tiles[p_tile_coord] = p_tile
-
-            for p_troop_id, p_troop_dict in entity_dict.get('troops').items():
-                p_troop = Troop(id=p_troop_id, **p_troop_dict)
-                p_troop.leader = self.entities.get(p_troop.leader)
-                entity.troops[p_troop_id] = p_troop
-
-            for p_faction_id, p_faction_dict in game.get('factions').items():
-                p_faction = Faction(id=p_faction_id, **p_faction_dict)
-                p_faction.leader = self.entities.get(p_faction.leader)
-                entity.factions[p_faction_id] = p_faction
-
-        for tile_coord, tile_dict in game.get('tiles').items():
-            x, y = coord_to_pos(tile_coord)
-            owner = self.entities.get(tile_dict.get('owner'))
-            Tile = TILE_TYPES[tile_dict.get('type', 'grass')]
-            tile = Tile(x=x, y=y, z=tile_dict.get('z', 0), owner=owner)
-            self.tiles[tile_coord] = tile
-
-        for troop_id, troop_dict in game.get('troops').items():
-            troop = Troop(id=troop_id, **troop_dict)
-            troop.leader = self.entities.get(troop.leader)
-            self.troops[troop_id] = troop
-
-        for faction_id, faction_dict in game.get('factions').items():
-            faction = Faction(id=faction_id, **faction_dict)
-            faction.leader = self.entities.get(faction.leader)
-            self.factions[faction_id] = faction
-
-        return self
+    def __init__(self, setup):
+        self.seed = setup.get('seed')
+        self.actors = setup.get('actors', [])
+        self.current_turn = setup.get('current_turn', 0)
+        self.perception = Perception.load(setup)
+        logging.info(f"Worldseed: {self.seed}")
+        random.seed(self.seed)
+        self.assign_entities_to_actors()
+        self.distribute_settlements()
 
     @property
     def is_running(self):
@@ -167,62 +106,43 @@ class World:
     def get_ais(self):
         return [a for a in self.actors if isinstance(a, AI)]
 
-    def add_actor(self, actor):
-        ais = self.get_ais()
-        for ai in ais:
-            if ai.name == actor.name:
-                self.actors.remove(ai)
-                actor.entity = ai.entity
-                break
-        else:
-            if ais:
-                ai = random.choice(ais)
-                self.actors.remove(ai)
-                actor.entity = ai.entity
+    def assign_entities_to_actors(self):
+        entities = list(self.perception.entities.values())
+        for actor in self.actors:
+            try:
+                entity = random.choice(entities)
+            except IndexError:
+                perception = Perception()
+                entity = Entity(perception=perception)
+                actor.entity_id = entity.id
+                actor.perception = perception
+                actor.show_entity(entity)
+                self.perception.show_entity(entity)
             else:
-                entity = Entity()
-                self.entities[entity.id] = entity
-                actor.entity = entity.copy()
-        if not actor.entity.troop:
-            print(1, actor.entity, actor.entity.id)
-            troop = Troop(elites=0, levies=0)
-            self.troops[troop.id] = troop
-            actor.entity.troop_id = troop.id
-            print(2, actor.entity.troop_id)
-            actor.entity.troops[troop.id] = troop.copy()
-            print(3, actor.entity.troops)
-
-        self.actors.append(actor)
-
-    def load_map(self, map_name):
-        tiles = load_map(map_name)
-        for tile in tiles:
-            self.tiles[pos_to_coord(tile.x, tile.y)] = tile
+                entities.remove(entity)
+                actor.perception = entity.perception
 
     def distribute_settlements(self):
-        homeless = list(self.actors)
-        for coord, tile in self.tiles.items():
+        homeless = [a for a in self.actors if a.entity]
+        for coord, tile in self.perception.tiles.items():
             if tile.type != 'settlement':
                 continue
             settlement = tile
             try:
                 actor = homeless.pop(0)
             except IndexError:
-                actor = AI(str(uuid4()))
+                perception = Perception()
+                entity = Entity(perception=perception)
+                actor = AI(str(uuid4()), entity_id=entity.id)
+                actor.perception = perception
+                actor.show_entity(entity)
+                self.perception.show_entity(entity)
                 self.actors.append(actor)
-            if actor.entity:
-                entity = actor.entity.copy()
-            else:
-                entity = Entity()
-            if entity.id not in self.entities:
-                self.entities[entity.id] = entity
+                print(actor.perception.entities)
+            entity_id = actor.entity.id
+            entity = self.perception.entities[entity_id]
             settlement.owner = entity
-            if not actor.entity:
-                actor.set_entity(entity.copy())
-            actor.reveal_tile(settlement.copy())
-            if actor.entity.troop:
-                actor.entity.troop.x = settlement.x
-                actor.entity.troop.y = settlement.y
+            actor.show_tile(settlement, owner=actor.entity)
 
     def update(self):
         threads = []

@@ -4,20 +4,24 @@ from helpers.convert import pos_to_coord
 
 
 class Actor:
-    def __init__(self, name, entity=None):
+    def __init__(self, name, entity_id=None, perception=None):
         self.name = name  # unique identifier / player/account name
-        self.entity = entity
+        self.entity_id = entity_id
+        self.perception = perception
         self.events = []
 
-    def set_entity(self, entity):
-        self.entity = entity
-        self.reveal_entity(entity)
+    @property
+    def entity(self):
+        if self.perception:
+            return self.perception.entities.get(self.entity_id)
+        else:
+            return None
 
-    def reveal_entity(self, entity):
-        self.entity.entities[entity.id] = entity
+    def show_entity(self, entity, **distortions):
+        self.perception.show_entity(entity, **distortions)
 
-    def reveal_tile(self, tile):
-        self.entity.tiles[pos_to_coord(tile.x, tile.y)] = tile
+    def show_tile(self, tile, **distortions):
+        self.perception.show_tile(tile, **distortions)
 
     def do_turn(self, turn, events):
         self.current_turn = turn

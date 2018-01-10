@@ -6,11 +6,13 @@ from PIL import Image
 import json
 
 from core.tile import TILE_TYPES
+from helpers.convert import pos_to_coord
 
 
 def load_map(map_name):
     image = Image.open(os.path.join('maps', map_name) + '.png')
     pixels = image.load()
+    result = {}
     for x in range(image.size[0]):
         for y in range(image.size[1]):
             r, g, b = pixels[x, y]
@@ -18,7 +20,10 @@ def load_map(map_name):
 
             for TileType in TILE_TYPES.values():
                 if TileType.color == hex:
-                    yield TileType(x, y)
+                    result[pos_to_coord(x, y)] = {
+                        'type': TileType.type,
+                    }
+    return result
 
 
 def load_game(game_name):
