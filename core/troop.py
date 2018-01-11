@@ -14,7 +14,6 @@ class Troop:
 
     def copy(self, **kwargs):
         d = self.__dict__.copy()
-        d.pop('entities')
         d.update(kwargs)
         inst = self.__class__()
         for key, value in d.items():

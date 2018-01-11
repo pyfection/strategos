@@ -8,6 +8,7 @@ import logging
 import logging_conf
 from core.actor.ai import AI
 from core.entity import Entity
+from core.troop import Troop
 from core.perception import Perception
 from helpers.loader import save_game
 
@@ -22,6 +23,7 @@ class World:
         random.seed(self.seed)
         self.assign_entities_to_actors()
         self.distribute_settlements()
+        self.assign_troops_to_actors()
 
     @property
     def is_running(self):
@@ -138,11 +140,24 @@ class World:
                 actor.show_entity(entity)
                 self.perception.show_entity(entity)
                 self.actors.append(actor)
-                print(actor.perception.entities)
             entity_id = actor.entity.id
             entity = self.perception.entities[entity_id]
             settlement.owner = entity
             actor.show_tile(settlement, owner=actor.entity)
+
+    def assign_troops_to_actors(self):
+        for actor in self.actors:
+            if actor.entity.troop:
+                continue
+            visible_tiles = list(actor.perception.tiles.values())
+            try:
+                tile = random.choice(visible_tiles)
+            except IndexError:
+                raise IndexError(f"Actor {actor.name} has no visible tiles")
+            troop = Troop(name=f"{actor.entity.name}'s Host", x=tile.x, y=tile.y)
+            self.perception.troops[troop.id] = troop
+            actor.perception.show_troop(troop)
+            actor.entity.troop = actor.perception.troops[troop.id]
 
     def update(self):
         threads = []
