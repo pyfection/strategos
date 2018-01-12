@@ -19,6 +19,10 @@ class Visual(Actor):
         super().show_tile(tile, **distortions)
         self.view.add_tile(tile)
 
+    def show_troop(self, troop, **distortions):
+        super().show_troop(troop, **distortions)
+        self.view.add_troop(troop)
+
     def do_turn(self, turn, events):
         self.view.ids.current_turn.text = str(turn)
         self.run = True

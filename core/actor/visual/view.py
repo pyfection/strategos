@@ -39,3 +39,7 @@ class View(Widget):
             pos=(c_tile.x, c_tile.y),
         )
         self.ids.map.add_widget(tile)
+
+    def add_troop(self, c_troop):
+        troop = assets.Troop((c_troop.x, c_troop.y))
+        self.ids.map.add_widget(troop)

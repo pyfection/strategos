@@ -23,6 +23,9 @@ class Actor:
     def show_tile(self, tile, **distortions):
         self.perception.show_tile(tile, **distortions)
 
+    def show_troop(self, troop, **distortions):
+        self.perception.show_troop(troop, **distortions)
+
     def do_turn(self, turn, events):
         self.current_turn = turn
         for event in events:

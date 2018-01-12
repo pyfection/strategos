@@ -156,7 +156,7 @@ class World:
                 raise IndexError(f"Actor {actor.name} has no visible tiles")
             troop = Troop(name=f"{actor.entity.name}'s Host", x=tile.x, y=tile.y)
             self.perception.troops[troop.id] = troop
-            actor.perception.show_troop(troop)
+            actor.show_troop(troop)
             actor.entity.troop = actor.perception.troops[troop.id]
 
     def update(self):
