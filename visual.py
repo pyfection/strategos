@@ -20,6 +20,10 @@ class GameApp(App):
             ]
         }
         world = World(setup)
+        world.assign_entities_to_actors()
+        world.distribute_settlements()
+        world.assign_troops_to_actors()
+        world.reveal_all_tiles()
         view = actor.view
         t = Thread(target=world.run)
         t.start()

@@ -21,9 +21,6 @@ class World:
         self.perception = Perception.load(setup)
         logging.info(f"Worldseed: {self.seed}")
         random.seed(self.seed)
-        self.assign_entities_to_actors()
-        self.distribute_settlements()
-        self.assign_troops_to_actors()
 
     @property
     def is_running(self):
@@ -158,6 +155,13 @@ class World:
             self.perception.troops[troop.id] = troop
             actor.show_troop(troop)
             actor.entity.troop = actor.perception.troops[troop.id]
+
+    def reveal_all_tiles(self):
+        for actor in self.actors:
+            if not actor.entity:
+                continue
+            for tile in self.perception.tiles.values():
+                actor.show_tile(tile)
 
     def update(self):
         threads = []
