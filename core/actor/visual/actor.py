@@ -1,6 +1,7 @@
 
 
 from kivy.app import App
+from kivy.clock import Clock
 
 from core.event import Quit
 from core.actor.actor import Actor
@@ -24,6 +25,9 @@ class Visual(Actor):
         self.view.add_troop(troop)
 
     def do_turn(self, turn, events):
+        if self.entity.troop:
+            self.view.focus_center = self.entity.troop.x, self.entity.troop.y
+            self.view.center_camera()
         self.view.ids.current_turn.text = str(turn)
         self.run = True
         while self.run:

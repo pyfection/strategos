@@ -13,11 +13,13 @@ class View(Widget):
     def __init__(self):
         kv_path = os.path.join(os.path.dirname(__file__), 'view.kv')
         Builder.load_file(kv_path)
+        self.troops = {}
+        self.focus_center = (0, 0)
         super().__init__()
         self._keyboard = Window.request_keyboard(
             self._keyboard_closed, self, 'text')
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
-        self.troops = {}
+        self.bind(size=self.on_size)
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
@@ -34,6 +36,9 @@ class View(Widget):
             self.ids.map.y += 10
         return True
 
+    def on_size(self, inst, value):
+        self.center_camera()
+
     def add_tile(self, c_tile):
         Tile = assets.tiles[c_tile.type]
         tile = Tile(
@@ -48,3 +53,12 @@ class View(Widget):
         troop = assets.Troop((c_troop.x, c_troop.y))
         self.ids.map.add_widget(troop)
         self.troops[c_troop.id] = troop
+
+    def center_camera(self):
+        x, y = self.focus_center[0] * 32, self.focus_center[1] * 32
+        x, y = self.ids.map.x + x, self.ids.map.y + y
+        offsetx = x - self.center[0]
+        offsety = y - self.center[1]
+        fx = self.ids.map.center[0] - offsetx
+        fy = self.ids.map.center[1] - offsety
+        self.ids.map.center = (fx, fy)
