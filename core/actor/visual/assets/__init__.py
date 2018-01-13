@@ -6,14 +6,15 @@ from kivy.uix.image import Image
 
 
 ASSET_PATH = os.path.dirname(__file__)
+SIZE_MOD = 32
 
 
 def tile_factory(file_name, pos, **kwargs):
-    pos = pos[0] * 32, pos[1] * 32
+    pos = pos[0] * SIZE_MOD, pos[1] * SIZE_MOD
     return Image(
         source=os.path.join(ASSET_PATH, "tiles", file_name),
         size_hint=(None, None),
-        size=(32, 32),
+        size=(SIZE_MOD, SIZE_MOD),
         pos=pos,
         **kwargs
     )
@@ -26,7 +27,7 @@ tiles = {
 Troop = lambda pos, **kwargs: Image(
     source=os.path.join(ASSET_PATH, "troop.png"),
     size_hint=(None, None),
-    size=(32, 32),
-    pos=(pos[0] * 32, pos[1] * 32,),
+    size=(SIZE_MOD, SIZE_MOD),
+    pos=(pos[0] * SIZE_MOD, pos[1] * SIZE_MOD,),
     **kwargs
 )

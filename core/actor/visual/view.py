@@ -55,7 +55,7 @@ class View(Widget):
         self.troops[c_troop.id] = troop
 
     def center_camera(self):
-        x, y = self.focus_center[0] * 32, self.focus_center[1] * 32
+        x, y = self.focus_center[0] * assets.SIZE_MOD, self.focus_center[1] * assets.SIZE_MOD
         x, y = self.ids.map.x + x, self.ids.map.y + y
         offsetx = x - self.center[0]
         offsety = y - self.center[1]
