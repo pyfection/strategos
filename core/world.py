@@ -163,6 +163,13 @@ class World:
             for tile in self.perception.tiles.values():
                 actor.show_tile(tile)
 
+    def reveal_all_troops(self):
+        for actor in self.actors:
+            if not actor.entity:
+                continue
+            for troop in self.perception.troops.values():
+                actor.show_troop(troop)
+
     def update(self):
         threads = []
 

@@ -24,6 +24,7 @@ class GameApp(App):
         world.distribute_settlements()
         world.assign_troops_to_actors()
         world.reveal_all_tiles()
+        world.reveal_all_troops()
         view = actor.view
         t = Thread(target=world.run)
         t.start()
