@@ -1,7 +1,7 @@
 
 
 from kivy.app import App
-from kivy.clock import Clock
+from kivy.core.window import Window
 
 from core.event import Quit, Move
 from core.actor.actor import Actor
@@ -13,6 +13,7 @@ class Visual(Actor):
     def __init__(self, name):
         super().__init__(name)
 
+        Window.bind(on_close=lambda inst: self.quit())
         self.run = True
         self.view = View()
         self.view.ids.quit.bind(on_press=lambda inst: self.quit())
