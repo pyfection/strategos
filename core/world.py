@@ -198,7 +198,13 @@ class World:
 
     def quit_actor(self, actor):
         self.actors.remove(actor)
-        self.actors.append(AI(str(uuid4()), actor.entity))
+        replacement = AI(
+            name=str(uuid4()),
+            entity_id=actor.entity_id,
+            perception=actor.perception,
+            events=actor.events
+        )
+        self.actors.append(replacement)
 
     def move_troop(self, troop_id, x, y):
         troop = self.perception.troops[troop_id]

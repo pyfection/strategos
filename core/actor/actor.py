@@ -4,11 +4,11 @@ from helpers.convert import pos_to_coord
 
 
 class Actor:
-    def __init__(self, name, entity_id=None, perception=None):
+    def __init__(self, name, entity_id=None, perception=None, events=None):
         self.name = name  # unique identifier / player/account name
         self.entity_id = entity_id
         self.perception = perception
-        self.events = []
+        self.events = events or []
 
     @property
     def entity(self):
