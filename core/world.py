@@ -175,6 +175,8 @@ class World:
 
         # Collect events from actors and trigger them on the world
         events = [event for actor in self.actors for event in actor.events]
+        for actor in self.actors:
+            actor.events.clear()
         for event in events:
             event.trigger(self)
 
