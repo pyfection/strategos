@@ -3,9 +3,10 @@
 from kivy.app import App
 from kivy.clock import Clock
 
-from core.event import Quit
+from core.event import Quit, Move
 from core.actor.actor import Actor
 from .view import View
+from . import assets
 
 
 class Visual(Actor):
@@ -15,6 +16,8 @@ class Visual(Actor):
         self.run = True
         self.view = View()
         self.view.ids.quit.bind(on_press=lambda inst: self.quit())
+        self.view.ids.end_turn.bind(on_press=lambda inst: self.end_turn())
+        self.view.ids.map.bind(on_touch_down=lambda inst, touch: self.move(touch.pos))
 
     def show_tile(self, tile, **distortions):
         super().show_tile(tile, **distortions)
@@ -25,6 +28,8 @@ class Visual(Actor):
         self.view.add_troop(troop)
 
     def do_turn(self, turn, events):
+        for event in events:
+            event.trigger(self)
         if self.entity.troop:
             self.view.focus_center = self.entity.troop.x, self.entity.troop.y
             self.view.center_camera()
@@ -33,7 +38,24 @@ class Visual(Actor):
         while self.run:
             continue
 
+    def move(self, pos):
+        # absolute position in window
+        ax, ay = pos
+        # position on map widget
+        mx, my = ax - self.view.ids.map.x, ay - self.view.ids.map.y
+        # target position
+        tx, ty = mx / assets.SIZE_MOD, my / assets.SIZE_MOD
+        troop = self.entity.troop
+        self.events.append(Move(troop.id, tx, ty))
+
+    def end_turn(self):
+        self.run = False
+
     def quit(self):
         self.events.append(Quit(self))
         self.run = False
         App.get_running_app().stop()
+
+    def move_troop(self, troop_id, x, y):
+        super().move_troop(troop_id, x, y)
+        self.view.move_troop(troop_id, x, y)

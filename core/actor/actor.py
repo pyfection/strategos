@@ -32,7 +32,7 @@ class Actor:
             event.trigger(self)
 
     def move_troop(self, troop_id, x, y):
-        troop = self.entity.troops[troop_id]
+        troop = self.entity.troop
         troop.x, troop.y = x, y
 
     def quit_actor(self, actor):

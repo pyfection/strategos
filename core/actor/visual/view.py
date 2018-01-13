@@ -62,3 +62,8 @@ class View(Widget):
         fx = self.ids.map.center[0] - offsetx
         fy = self.ids.map.center[1] - offsety
         self.ids.map.center = (fx, fy)
+
+    def move_troop(self, troop_id, x, y):
+        troop = self.troops[troop_id]
+        pos = (x * assets.SIZE_MOD, y * assets.SIZE_MOD)
+        troop.pos = pos
