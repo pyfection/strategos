@@ -30,8 +30,38 @@ class Settlement(Tile):
     color = '#740000'
 
 
+class Forest(Tile):
+    type = 'forest'
+    color = '#1c3c16'
+
+
+class Hill(Tile):
+    type = 'hill'
+    color = '#928f34'
+
+
+class Mountain(Tile):
+    type = 'mountain'
+    color = '#586069'
+
+
+class WoodBridge(Tile):
+    type = 'wood_bridge'
+    color = '#966a44'
+
+
+class River(Tile):
+    type = 'river'
+    color = '#1886ab'
+
+
 TILE_TYPES = {
     Tile.type: Tile,
     Grass.type: Grass,
     Settlement.type: Settlement,
+    Forest.type: Forest,
+    Hill.type: Hill,
+    Mountain.type: Mountain,
+    WoodBridge.type: WoodBridge,
+    River.type: River,
 }

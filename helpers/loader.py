@@ -23,6 +23,7 @@ def load_map(map_name):
                     result[pos_to_coord(x, y)] = {
                         'type': TileType.type,
                     }
+                    break
     return result
 
 
