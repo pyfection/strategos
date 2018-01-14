@@ -7,6 +7,7 @@ from core.event import Quit, Move
 from core.actor.actor import Actor
 from .view import View
 from . import assets
+from helpers.maths import limit_distance
 
 
 class Visual(Actor):
@@ -47,7 +48,8 @@ class Visual(Actor):
         # target position
         tx, ty = mx / assets.SIZE_MOD, my / assets.SIZE_MOD
         troop = self.entity.troop
-        self.events.append(Move(troop.id, tx, ty))
+        x, y = limit_distance((troop.x, troop.y), (tx, ty), troop.speed)
+        self.events.append(Move(troop.id, x, y))
 
     def end_turn(self):
         self.run = False
