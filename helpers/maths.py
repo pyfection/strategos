@@ -3,11 +3,17 @@
 from math import hypot
 
 
-def limit_distance(start, end, limit):
+def distance(start, end):
     x1, y1 = start
     x2, y2 = end
-    dist = hypot(x2 - x1, y2 - y1)
-    percent = limit / dist
+    return hypot(x2 - x1, y2 - y1)
+
+
+def limit_distance(start, end, limit):
+    dist = distance(start, end)
+    percent = min(limit / dist, 1)
+    x1, y1 = start
+    x2, y2 = end
     return x1 + ((x2 - x1) * percent), y1 + ((y2 - y1) * percent)
 
 

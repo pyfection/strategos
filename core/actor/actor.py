@@ -1,6 +1,7 @@
 
 
-from helpers.convert import pos_to_coord
+from core.event import Move
+from helpers.maths import distance, limit_distance
 
 
 class Actor:
@@ -9,6 +10,7 @@ class Actor:
         self.entity_id = entity_id
         self.perception = perception
         self.events = events or []
+        self.walk_path = []
 
     @property
     def entity(self):
@@ -30,6 +32,22 @@ class Actor:
         self.current_turn = turn
         for event in events:
             event.trigger(self)
+
+    def end_turn(self):
+        if self.walk_path:
+            troop = self.entity.troop
+            rem = troop.speed
+            while self.walk_path and rem > 0:
+                x, y = self.walk_path[0]
+                lx, ly = limit_distance((troop.x, troop.y), (x, y), rem)
+                dist = distance((troop.x, troop.y), (lx, ly))
+                rem -= round(dist, 3)
+                if rem > 0:
+                    self.walk_path.pop(0)
+                self.events.append(Move(self.entity.troop.id, lx, ly))
+
+    def path_to(self, x, y):
+        self.walk_path.append((x, y))
 
     def move_troop(self, troop_id, x, y):
         troop = self.entity.troop
