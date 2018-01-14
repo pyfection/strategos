@@ -50,6 +50,8 @@ class View(Widget):
             self.ids.map.add_widget(troop)
 
     def add_troop(self, c_troop):
+        if c_troop.id in self.troops:
+            return
         troop = assets.Troop((c_troop.x, c_troop.y))
         self.ids.map.add_widget(troop)
         self.troops[c_troop.id] = troop

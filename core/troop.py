@@ -19,3 +19,9 @@ class Troop:
         for key, value in d.items():
             setattr(inst, key, value)
         return inst
+
+    def update(self, troop, **kwargs):
+        troop = troop.copy(**kwargs)
+        d = troop.__dict__.copy()
+        for key, value in d.items():
+            setattr(self, key, value)

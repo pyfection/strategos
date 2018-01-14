@@ -62,7 +62,12 @@ class Perception:
         self.entities[entity.id] = entity.copy(**distortions)
 
     def show_troop(self, troop, **distortions):
-        self.troops[troop.id] = troop.copy(**distortions)
+        try:
+            old_troop = self.troops[troop.id]
+        except KeyError:
+            self.troops[troop.id] = troop.copy(**distortions)
+        else:
+            old_troop.update(troop, **distortions)
 
     def show_faction(self, faction, **distortions):
         self.factions[faction.id] = faction.copy(**distortions)
