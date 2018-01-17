@@ -19,6 +19,14 @@ class Tile:
             inst.owner = kwargs.get('owner') or self.owner.copy()
         return inst
 
+    def passable(self, by):
+        """
+        check if tile is passable by "by"
+        :param by: troop or any other similar object
+        :return: bool
+        """
+        return True
+
 
 class Grass(Tile):
     type = 'grass'
@@ -53,6 +61,8 @@ class WoodBridge(Tile):
 class River(Tile):
     type = 'river'
     color = '#1886ab'
+    def passable(self, by):
+        return False
 
 
 TILE_TYPES = {
