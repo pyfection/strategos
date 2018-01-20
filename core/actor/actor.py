@@ -1,5 +1,7 @@
 
 
+from helpers import maths
+from helpers.convert import pos_to_coord
 from core.event import Move
 from helpers.maths import distance, limit_distance
 
@@ -10,6 +12,7 @@ class Actor:
         self.entity_id = entity_id
         self.perception = perception
         self.events = events or []
+        self.action = None
         self.walk_path = []
 
     @property
@@ -32,22 +35,77 @@ class Actor:
         self.current_turn = turn
         for event in events:
             event.trigger(self)
+        self.events.clear()
 
     def end_turn(self):
         if self.walk_path:
             troop = self.entity.troop
-            rem = troop.speed
-            while self.walk_path and rem > 0:
-                x, y = self.walk_path[0]
-                lx, ly = limit_distance((troop.x, troop.y), (x, y), rem)
-                dist = distance((troop.x, troop.y), (lx, ly))
-                rem -= round(dist, 3)
-                if rem > 0:
-                    self.walk_path.pop(0)
-                self.events.append(Move(self.entity.troop.id, lx, ly))
+            x, y = self.walk_path.pop(0)
+            self.action = Move(troop.id, x, y)
 
     def path_to(self, x, y):
-        self.walk_path.append((x, y))
+        def get_neighbors(x, y):
+            for a in range(-1, 2):
+                for b in range(-1, 2):
+                    if abs(a) + abs(b) != 1:
+                        continue
+                    yield x + a, y + b
+
+        troop = self.entity.troop
+        start_pos = troop.x, troop.y
+        end_pos = int(x), int(y)
+        if not self.perception.tiles[pos_to_coord(*end_pos)].passable(troop):
+            self.walk_path.clear()
+            return
+
+        open = {
+            start_pos: {
+                'parent': None,
+                'g_cost': 0,
+                'h_cost': maths.distance(end_pos, start_pos)
+            }
+        }
+        closed = {}
+
+        while True:
+            current = sorted(
+                sorted(
+                    open.items(),
+                    key=lambda t: t[1]['h_cost']
+                ),
+                key=lambda t: t[1]['h_cost'] + t[1]['g_cost']
+            )[0]
+            current = current[0]
+            closed[current] = open.pop(current)
+
+            if current == end_pos:
+                break
+
+            for pos in get_neighbors(*current):
+                g_cost = maths.distance(start_pos, pos)
+                coords = pos_to_coord(*pos)
+                if coords not in self.perception.tiles:
+                    continue
+                elif not self.perception.tiles[coords].passable(troop):
+                    continue
+                elif pos in closed:
+                    continue
+                elif pos not in open:
+                    open[pos] = {
+                        'parent': current,
+                        'g_cost': g_cost,
+                        'h_cost': maths.distance(end_pos, pos)
+                    }
+                elif g_cost < open[pos]['g_cost']:
+                    open[pos]['g_cost'] = g_cost
+                    open[pos]['parent'] = current
+
+        path = []
+        while current != start_pos:
+            path.append(current)
+            current = closed[current]['parent']
+
+        self.walk_path = path[::-1]
 
     def move_troop(self, troop_id, x, y):
         troop = self.entity.troop
