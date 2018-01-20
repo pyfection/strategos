@@ -53,7 +53,7 @@ class Visual(Actor):
         super().end_turn()
 
     def quit(self):
-        self.events.append(Quit(self))
+        self.action = Quit(self)
         self.run = False
         App.get_running_app().stop()
 
