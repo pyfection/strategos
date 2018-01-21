@@ -14,7 +14,7 @@ class GameApp(App):
     def build(self):
         actor = Visual(name='testplayer')
         setup = {
-            'tiles': load_map('2playertest'),
+            'tiles': load_map('labyrinth'),
             'actors': [
                 actor
             ]
