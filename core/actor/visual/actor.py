@@ -19,6 +19,7 @@ class Visual(Actor):
         self.run = True
         self.paused = False
         self.auto_end_turn_time = .8  # second
+        self.troop_target = None  # troop target
         self.view = View()
         self.view.ids.quit.bind(on_press=lambda inst: self.quit())
         self.view.ids.pause.bind(on_press=lambda inst: self.toggle_pause())
@@ -41,6 +42,10 @@ class Visual(Actor):
         if self.entity.troop:
             self.view.focus_center = self.entity.troop.pos
             self.view.center_camera()
+            if self.troop_target:
+                pos = self.troop_target.pos
+                self.path_to(*pos)
+
         self.view.ids.current_turn.text = str(turn)
         self.run = True
         start = time()
@@ -64,6 +69,10 @@ class Visual(Actor):
         # target position
         tx, ty = mx / assets.SIZE_MOD, my / assets.SIZE_MOD
         self.path_to(tx, ty)
+        if not self.troop_target:
+            troops = list(filter(lambda t: t.pos == (int(tx), int(ty)), self.perception.troops.values()))
+            if troops:
+                self.troop_target = troops[0]
 
     def quit(self):
         self.pre_processing.append(Quit(self))
