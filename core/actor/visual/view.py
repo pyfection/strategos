@@ -4,12 +4,16 @@ import os
 
 from kivy.core.window import Window
 from kivy.lang.builder import Builder
+from kivy.animation import Animation
 from kivy.uix.widget import Widget
 
 from . import assets
 
 
 class View(Widget):
+    MOVE_ANIM = 'in_out_cubic'
+    ANIM_DUR = .7
+
     def __init__(self):
         kv_path = os.path.join(os.path.dirname(__file__), 'view.kv')
         Builder.load_file(kv_path)
@@ -63,9 +67,12 @@ class View(Widget):
         offsety = y - self.center[1]
         fx = self.ids.map.center[0] - offsetx
         fy = self.ids.map.center[1] - offsety
-        self.ids.map.center = (fx, fy)
+        # self.ids.map.center = (fx, fy)
+        anim = Animation(x=fx, y=fy, duration=self.ANIM_DUR, t=self.MOVE_ANIM)
+        anim.start(self.ids.map)
 
     def move_troop(self, troop_id, x, y):
         troop = self.troops[troop_id]
         pos = (x * assets.SIZE_MOD, y * assets.SIZE_MOD)
-        troop.pos = pos
+        anim = Animation(x=pos[0], y=pos[1], duration=self.ANIM_DUR, t=self.MOVE_ANIM)
+        anim.start(troop)
