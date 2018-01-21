@@ -25,20 +25,6 @@ class Move(Event):
         super().trigger(actor)
 
 
-class Pursue(Event):
-    PRIO = 2
-
-    def __init__(self, pursuer_id, target_id):
-        self.pursuer_id = pursuer_id
-        self.target_id = target_id
-
-    def trigger(self, actor):
-        target = actor.perception.troops[self.target_id]
-        actor.move_troop(self.pursuer_id, target.x, target.y)
-
-        super().trigger(actor)
-
-
 class Attack(Event):
     PRIO = 3
     STRENGTH_MOD = .1
