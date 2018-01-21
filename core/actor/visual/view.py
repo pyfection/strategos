@@ -85,6 +85,14 @@ class View(Widget):
         self.target.color = [1, 1, 1, 1]
         self.ids.map.add_widget(self.target)
 
+    def move_target(self, x, y):
+        pos = (x * assets.SIZE_MOD, y * assets.SIZE_MOD)
+        self.ids.map.remove_widget(self.target)
+        self.ids.map.add_widget(self.target)
+        self.target.color = [1, 1, 1, 1]
+        anim = Animation(pos=pos, duration=self.ANIM_DUR, t=self.MOVE_ANIM)
+        anim.start(self.target)
+
     def unset_target(self):
         anim = Animation(color=[1, 1, 1, 0], duration=self.ANIM_DUR)
         anim.start(self.target)

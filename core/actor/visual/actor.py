@@ -57,9 +57,13 @@ class Visual(Actor):
     def path_to(self, x, y):
         super().path_to(x, y)
         if self.walk_path:
-            self.view.set_target(int(x), int(y))
+            if self.troop_target:
+                self.view.move_target(int(x), int(y))
+            else:
+                self.view.set_target(int(x), int(y))
         else:
             self.view.unset_target()
+            self.troop_target = None
 
     def move(self, pos):
         # absolute position in window
@@ -68,11 +72,14 @@ class Visual(Actor):
         mx, my = ax - self.view.ids.map.x, ay - self.view.ids.map.y
         # target position
         tx, ty = mx / assets.SIZE_MOD, my / assets.SIZE_MOD
-        self.path_to(tx, ty)
         if not self.troop_target:
-            troops = list(filter(lambda t: t.pos == (int(tx), int(ty)), self.perception.troops.values()))
+            troops = list(filter(
+                lambda t: t.pos == (int(tx), int(ty)) and t.id != self.entity.troop.id,
+                self.perception.troops.values()
+            ))
             if troops:
                 self.troop_target = troops[0]
+        self.path_to(tx, ty)
 
     def quit(self):
         self.pre_processing.append(Quit(self))
@@ -86,3 +93,4 @@ class Visual(Actor):
 
         if troop_id == self.entity.troop.id and not self.walk_path:
             self.view.unset_target()
+            self.troop_target = None
