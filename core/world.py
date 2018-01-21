@@ -174,15 +174,19 @@ class World:
         threads = []
 
         # Collect events from actors and trigger them on the world
+        events = sorted([event for actor in self.actors for event in actor.pre_processing], key=lambda k: k.PRIO)
         actions = sorted([actor.action for actor in self.actors if actor.action], key=lambda k: k.PRIO)
+        events += actions
+
         for actor in self.actors:
             actor.action = None
-        for action in actions:
-            action.trigger(self)
+            actor.pre_processing.clear()
+        for event in events:
+            event.trigger(self)
 
         # Tell actors to update
         for actor in self.actors:
-            t = Thread(target=actor.do_turn, kwargs={'turn': self.current_turn, 'events': actions})
+            t = Thread(target=actor.do_turn, kwargs={'turn': self.current_turn, 'events': events})
             threads.append(t)
             t.start()
 

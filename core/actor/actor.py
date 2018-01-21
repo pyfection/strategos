@@ -11,8 +11,9 @@ class Actor:
         self.name = name  # unique identifier / player/account name
         self.entity_id = entity_id
         self.perception = perception
-        self.events = events or []
-        self.action = None
+        self.events = events or []  # events coming from outside
+        self.pre_processing = []  # events caused by self
+        self.action = None  # the one action self can do per turn
         self.walk_path = []
 
     @property

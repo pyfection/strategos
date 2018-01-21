@@ -58,7 +58,7 @@ class Visual(Actor):
         self.path_to(tx, ty)
 
     def quit(self):
-        self.action = Quit(self)
+        self.pre_processing.append(Quit(self))
         self.run = False
         self.paused = False
         App.get_running_app().stop()
