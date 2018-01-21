@@ -69,6 +69,8 @@ class Actor:
         closed = {}
 
         while True:
+            if not open:
+                break
             current = sorted(
                 sorted(
                     open.items(),
