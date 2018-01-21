@@ -20,7 +20,7 @@ def load_map(map_name):
 
             for TileType in TILE_TYPES.values():
                 if TileType.color == hex:
-                    result[pos_to_coord(x, y)] = {
+                    result[pos_to_coord(x, image.size[1]-1-y)] = {
                         'type': TileType.type,
                     }
                     break
