@@ -1,5 +1,7 @@
 
 
+from time import time, sleep
+
 from kivy.app import App
 from kivy.core.window import Window
 
@@ -15,10 +17,14 @@ class Visual(Actor):
 
         Window.bind(on_close=lambda inst: self.quit())
         self.run = True
+        self.auto_end_turn_time = .8  # second
         self.view = View()
         self.view.ids.quit.bind(on_press=lambda inst: self.quit())
-        self.view.ids.end_turn.bind(on_press=lambda inst: self.end_turn())
+        self.view.ids.end_turn.bind(on_press=lambda inst: self._end_run())
         self.view.ids.map.bind(on_touch_down=lambda inst, touch: self.move(touch.pos))
+
+    def _end_run(self):
+        self.run = False
 
     def show_tile(self, tile, **distortions):
         super().show_tile(tile, **distortions)
@@ -36,8 +42,10 @@ class Visual(Actor):
             self.view.center_camera()
         self.view.ids.current_turn.text = str(turn)
         self.run = True
-        while self.run:
-            continue
+        start = time()
+        while self.run and (not self.auto_end_turn_time or time() - start < self.auto_end_turn_time):
+            sleep(.05)
+        self.end_turn()
 
     def move(self, pos):
         # absolute position in window
@@ -47,10 +55,6 @@ class Visual(Actor):
         # target position
         tx, ty = mx / assets.SIZE_MOD, my / assets.SIZE_MOD
         self.path_to(tx, ty)
-
-    def end_turn(self):
-        self.run = False
-        super().end_turn()
 
     def quit(self):
         self.action = Quit(self)
