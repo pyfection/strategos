@@ -36,3 +36,10 @@ Troop = lambda pos, **kwargs: Image(
     pos=(pos[0] * SIZE_MOD, pos[1] * SIZE_MOD,),
     **kwargs
 )
+Target = lambda pos, **kwargs: Image(
+    source=os.path.join(ASSET_PATH, "target.png"),
+    size_hint=(None, None),
+    size=(SIZE_MOD, SIZE_MOD),
+    pos=(pos[0] * SIZE_MOD, pos[1] * SIZE_MOD,),
+    **kwargs
+)

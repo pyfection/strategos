@@ -12,6 +12,10 @@ class Troop:
         self.x = x
         self.y = y
 
+    @property
+    def pos(self):
+        return (self.x, self.y)
+
     def copy(self, **kwargs):
         d = self.__dict__.copy()
         d.update(kwargs)

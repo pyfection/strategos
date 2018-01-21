@@ -20,6 +20,7 @@ class View(Widget):
         self.troops = {}
         self.focus_center = (0, 0)
         super().__init__()
+        self.target = assets.Target((0, 0))
         self._keyboard = Window.request_keyboard(
             self._keyboard_closed, self, 'text')
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
@@ -56,7 +57,7 @@ class View(Widget):
     def add_troop(self, c_troop):
         if c_troop.id in self.troops:
             return
-        troop = assets.Troop((c_troop.x, c_troop.y))
+        troop = assets.Troop(c_troop.pos)
         self.ids.map.add_widget(troop)
         self.troops[c_troop.id] = troop
 
@@ -76,3 +77,12 @@ class View(Widget):
         pos = (x * assets.SIZE_MOD, y * assets.SIZE_MOD)
         anim = Animation(x=pos[0], y=pos[1], duration=self.ANIM_DUR, t=self.MOVE_ANIM)
         anim.start(troop)
+
+    def set_target(self, x, y):
+        self.ids.map.remove_widget(self.target)
+        pos = (x * assets.SIZE_MOD, y * assets.SIZE_MOD)
+        self.target.pos = pos
+        self.ids.map.add_widget(self.target)
+
+    def unset_target(self):
+        self.ids.map.remove_widget(self.target)

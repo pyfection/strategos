@@ -39,14 +39,22 @@ class Visual(Actor):
         super().do_turn(turn, events)
 
         if self.entity.troop:
-            self.view.focus_center = self.entity.troop.x, self.entity.troop.y
+            self.view.focus_center = self.entity.troop.pos
             self.view.center_camera()
         self.view.ids.current_turn.text = str(turn)
         self.run = True
         start = time()
         while self.run and (self.paused or time() - start < self.auto_end_turn_time):
             sleep(.05)
+
+        if not self.walk_path:
+            self.view.unset_target()
+
         self.end_turn()
+
+    def path_to(self, x, y):
+        super().path_to(x, y)
+        self.view.set_target(int(x), int(y))
 
     def move(self, pos):
         # absolute position in window
