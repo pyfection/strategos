@@ -82,7 +82,10 @@ class View(Widget):
         self.ids.map.remove_widget(self.target)
         pos = (x * assets.SIZE_MOD, y * assets.SIZE_MOD)
         self.target.pos = pos
+        self.target.color = [1, 1, 1, 1]
         self.ids.map.add_widget(self.target)
 
     def unset_target(self):
-        self.ids.map.remove_widget(self.target)
+        anim = Animation(color=[1, 1, 1, 0], duration=self.ANIM_DUR)
+        anim.start(self.target)
+        anim.bind(on_complete=lambda animation, widget: self.ids.map.remove_widget(widget))

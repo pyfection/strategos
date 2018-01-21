@@ -47,14 +47,14 @@ class Visual(Actor):
         while self.run and (self.paused or time() - start < self.auto_end_turn_time):
             sleep(.05)
 
-        if not self.walk_path:
-            self.view.unset_target()
-
         self.end_turn()
 
     def path_to(self, x, y):
         super().path_to(x, y)
-        self.view.set_target(int(x), int(y))
+        if self.walk_path:
+            self.view.set_target(int(x), int(y))
+        else:
+            self.view.unset_target()
 
     def move(self, pos):
         # absolute position in window
@@ -74,3 +74,6 @@ class Visual(Actor):
     def move_troop(self, troop_id, x, y):
         super().move_troop(troop_id, x, y)
         self.view.move_troop(troop_id, x, y)
+
+        if troop_id == self.entity.troop.id and not self.walk_path:
+            self.view.unset_target()

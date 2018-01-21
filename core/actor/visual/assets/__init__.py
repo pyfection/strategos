@@ -41,5 +41,6 @@ Target = lambda pos, **kwargs: Image(
     size_hint=(None, None),
     size=(SIZE_MOD, SIZE_MOD),
     pos=(pos[0] * SIZE_MOD, pos[1] * SIZE_MOD,),
+    color=[1, 1, 1, 1],
     **kwargs
 )
