@@ -174,7 +174,7 @@ class World:
         threads = []
 
         # Collect events from actors and trigger them on the world
-        actions = [actor.action for actor in self.actors if actor.action]
+        actions = sorted([actor.action for actor in self.actors if actor.action], key=lambda k: k.PRIO)
         for actor in self.actors:
             actor.action = None
         for action in actions:

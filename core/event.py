@@ -6,11 +6,13 @@ from helpers.convert import pos_to_coord
 
 
 class Event:
+    PRIO = 0
     def trigger(self, actor):
         return
 
 
 class Move(Event):
+    PRIO = 1
     def __init__(self, troop_id, x, y):
         super().__init__()
         self.troop_id = troop_id
@@ -23,6 +25,7 @@ class Move(Event):
         super().trigger(actor)
 
 class Attack(Event):
+    PRIO = 2
     # ToDo: whole Attack system has to be planned, this class is deprecated
     def __init__(self, source_x, source_y, target_x, target_y):
         raise NotImplementedError
