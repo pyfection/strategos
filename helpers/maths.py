@@ -17,5 +17,9 @@ def limit_distance(start, end, limit):
     return x1 + ((x2 - x1) * percent), y1 + ((y2 - y1) * percent)
 
 
+def mean(*numbers):
+    return float(sum(numbers)) / max(len(numbers), 1)
+
+
 if __name__ == '__main__':
     print(limit_distance((1, 1), (10, 15), 5))
