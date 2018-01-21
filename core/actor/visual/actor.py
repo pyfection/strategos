@@ -29,8 +29,8 @@ class Visual(Actor):
         self.view.add_troop(troop)
 
     def do_turn(self, turn, events):
-        for event in events:
-            event.trigger(self)
+        super().do_turn(turn, events)
+
         if self.entity.troop:
             self.view.focus_center = self.entity.troop.x, self.entity.troop.y
             self.view.center_camera()

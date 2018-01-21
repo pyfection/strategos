@@ -108,8 +108,12 @@ class Actor:
         self.walk_path = path[::-1]
 
     def move_troop(self, troop_id, x, y):
-        troop = self.entity.troop
-        troop.x, troop.y = x, y
+        try:
+            troop = self.perception.troops[troop_id]
+        except KeyError:
+            return
+        else:
+            troop.x, troop.y = x, y
 
     def quit_actor(self, actor):
         pass
