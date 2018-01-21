@@ -2,17 +2,17 @@
 
 import random
 
-from helpers.convert import pos_to_coord
-
 
 class Event:
     PRIO = 0
+
     def trigger(self, actor):
         return
 
 
 class Move(Event):
     PRIO = 1
+
     def __init__(self, troop_id, x, y):
         super().__init__()
         self.troop_id = troop_id
@@ -24,34 +24,27 @@ class Move(Event):
 
         super().trigger(actor)
 
+
 class Attack(Event):
     PRIO = 2
-    # ToDo: whole Attack system has to be planned, this class is deprecated
-    def __init__(self, source_x, source_y, target_x, target_y):
-        raise NotImplementedError
+    STRENGTH_MOD = .1
+
+    def __init__(self, attacker_id, defender_id):
         super().__init__()
-        self.source_x = source_x
-        self.source_y = source_y
-        self.target_x = target_x
-        self.target_y = target_y
-        self.attacker_die = random.randint(1, 6)
-        self.defender_die = random.randint(1, 6)
+        self.attacker_id = attacker_id
+        self.defender_id = defender_id
+        self.effectiveness_modifier = random.randint(.5, 2)
 
     def trigger(self, actor):
-        target = actor.tiles.get(pos_to_coord(self.target_x, self.target_y))
-        source = actor.tiles.get(pos_to_coord(self.source_x, self.source_y))
+        attacker = actor.perception.troops[self.attacker_id]
+        defender = actor.perception.troops[self.defender_id]
 
-        source.units -= self.amount
-
-        if attacker > defender:
-            dif = attacker - defender
-            target.units = max(0, target.units - dif)
-        elif defender > attacker:
-            dif = defender - attacker
-            self.amount = max(0, self.amount - dif)
-        else:
-            target.units -= 1
-            self.amount -= 1
+        base = attacker.units * self.STRENGTH_MOD
+        unit_ratio = attacker.units / defender.units  # attacker to defender ratio
+        exp_ratio = attacker.experience / defender.experience
+        effect = self.effectiveness_modifier
+        kills = max(base * unit_ratio * exp_ratio * effect, 1)
+        defender.units -= min(kills, defender.units)
 
         super().trigger(actor)
 

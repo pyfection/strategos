@@ -4,11 +4,11 @@ from uuid import uuid4
 
 
 class Troop:
-    def __init__(self, id=None, name=None, elites=None, levies=None, x=None, y=None):
+    def __init__(self, id=None, name=None, units=0, experience=.1, x=None, y=None):
         self.id = id or str(uuid4())
         self.name = name
-        self.elites = elites  # number
-        self.levies = levies  # number
+        self.units = units
+        self.experience = experience
         self.x = x
         self.y = y
 

@@ -67,8 +67,8 @@ class World:
             for p_id, p_troop in entity.troops.items():
                 entity_dict['troops'][p_id] = {
                     'name': p_troop.name,
-                    'elites': p_troop.elites,
-                    'levies': p_troop.levies,
+                    'units': p_troop.units,
+                    'experience': p_troop.experience,
                     'x': p_troop.x,
                     'y': p_troop.y,
                 }
@@ -89,8 +89,8 @@ class World:
         for id, troop in self.troops.items():
             game['troops'][id] = {
                 'name': troop.name,
-                'elites': troop.elites,
-                'levies': troop.levies,
+                'units': troop.units,
+                'experience': troop.experience,
                 'x': troop.x,
                 'y': troop.y,
             }
