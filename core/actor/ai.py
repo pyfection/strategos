@@ -11,7 +11,7 @@ class AI(Actor):
 
         if not self.troop_target:
             troop = self.entity.troop
-            targets = list(filter(lambda t: t.id != troop.id, self.perception.troops.values()))
+            targets = list(filter(lambda t: t.id != troop.id and t.units, self.perception.troops.values()))
             if targets:
                 self.troop_target = random.choice(targets)
         self.end_turn()

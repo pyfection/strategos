@@ -44,7 +44,7 @@ class Attack(Event):
         exp_ratio = attacker.experience / defender.experience
         effect = self.effectiveness_modifier
         kills = round(max(base * unit_ratio * exp_ratio * effect, 1))
-        defender.units -= min(kills, defender.units)
+        actor.change_troop_unit_amount(self.defender_id, -min(kills, defender.units))
 
         super().trigger(actor)
 

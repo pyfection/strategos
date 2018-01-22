@@ -33,7 +33,8 @@ class Visual(Actor):
 
     def show_troop(self, troop, **distortions):
         super().show_troop(troop, **distortions)
-        self.view.add_troop(troop)
+        if troop.units:
+            self.view.add_troop(troop)
 
     def do_turn(self, turn, events):
         super().do_turn(turn, events)
@@ -69,7 +70,7 @@ class Visual(Actor):
         tx, ty = mx / assets.SIZE_MOD, my / assets.SIZE_MOD
         if not self.troop_target:
             troops = list(filter(
-                lambda t: t.pos == (int(tx), int(ty)) and t.id != self.entity.troop.id,
+                lambda t: t.pos == (int(tx), int(ty)) and t.id != self.entity.troop.id and t.units,
                 self.perception.troops.values()
             ))
             if troops:
@@ -89,3 +90,9 @@ class Visual(Actor):
         if troop_id == self.entity.troop.id and not self.walk_path:
             self.view.unset_target()
             self.troop_target = None
+
+    def change_troop_unit_amount(self, troop_id, amount):
+        super().change_troop_unit_amount(troop_id, amount)
+        troop = self.perception.troops[troop_id]
+        if not troop.units:
+            self.view.remove_troop(troop_id)

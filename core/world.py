@@ -11,9 +11,10 @@ from core.entity import Entity
 from core.troop import Troop
 from core.perception import Perception
 from helpers.loader import save_game
+from core.mixins import EventResponseMixin
 
 
-class World:
+class World(EventResponseMixin):
     def __init__(self, setup):
         self.seed = setup.get('seed')
         self.actors = setup.get('actors', [])
@@ -211,8 +212,3 @@ class World:
             events=actor.events
         )
         self.actors.append(replacement)
-
-    def move_troop(self, troop_id, x, y):
-        troop = self.perception.troops[troop_id]
-        troop.x = x
-        troop.y = y

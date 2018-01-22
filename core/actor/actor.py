@@ -1,11 +1,14 @@
 
 
+import math
+
 from helpers import maths
 from helpers.convert import pos_to_coord
 from core.event import Move, Attack
+from core.mixins import EventResponseMixin
 
 
-class Actor:
+class Actor(EventResponseMixin):
     def __init__(self, name, entity_id=None, perception=None, events=None):
         self.name = name  # unique identifier / player/account name
         self.entity_id = entity_id
@@ -42,7 +45,7 @@ class Actor:
         if self.troop_target:
             pos = self.troop_target.pos
             distance = maths.distance(pos, self.entity.troop.pos)
-            if round(distance) == 1:
+            if math.ceil(distance) == 1:
                 self.walk_path.clear()
                 self.action = Attack(self.entity.troop.id, self.troop_target.id)
             else:
@@ -117,14 +120,3 @@ class Actor:
             current = closed[current]['parent']
 
         self.walk_path = path[::-1]
-
-    def move_troop(self, troop_id, x, y):
-        try:
-            troop = self.perception.troops[troop_id]
-        except KeyError:
-            return
-        else:
-            troop.x, troop.y = x, y
-
-    def quit_actor(self, actor):
-        pass

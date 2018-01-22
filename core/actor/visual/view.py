@@ -55,11 +55,15 @@ class View(Widget):
             self.ids.map.add_widget(troop)
 
     def add_troop(self, c_troop):
-        if c_troop.id in self.troops:
+        if c_troop.id in self.troops or not c_troop.units:
             return
         troop = assets.Troop(c_troop.pos)
         self.ids.map.add_widget(troop)
         self.troops[c_troop.id] = troop
+
+    def remove_troop(self, troop_id):
+        troop = self.troops.pop(troop_id)
+        self.ids.map.remove_widget(troop)
 
     def center_camera(self):
         x, y = self.focus_center[0] * assets.SIZE_MOD, self.focus_center[1] * assets.SIZE_MOD
