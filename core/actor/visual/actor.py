@@ -62,6 +62,8 @@ class Visual(Actor):
             self.view.unset_target()
 
     def move(self, pos):
+        if not self.entity.troop.units:
+            return
         # absolute position in window
         ax, ay = pos
         # position on map widget
