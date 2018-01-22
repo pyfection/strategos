@@ -6,6 +6,7 @@ from kivy.core.window import Window
 from kivy.lang.builder import Builder
 from kivy.animation import Animation
 from kivy.uix.widget import Widget
+from kivy.uix.label import Label
 from kivy.clock import Clock
 
 from . import assets
@@ -67,6 +68,15 @@ class View(Widget):
     def remove_troop(self, troop_id):
         troop = self.troops.pop(troop_id)
         self.ids.map.remove_widget(troop)
+
+    def change_troop_unit_amount(self, troop_id, amount):
+        troop = self.troops[troop_id]
+        label = Label(text=str(amount), center=troop.center, font_size=25, color=[1, 0, 0, 1])
+        self.ids.map.add_widget(label)
+        new_center = troop.center[0], troop.center[1] + assets.SIZE_MOD
+        anim = Animation(center=new_center, font_size=5, color=[1, 0, 0, .5])
+        anim.start(label)
+        anim.bind(on_complete=lambda animation, widget: self.ids.map.remove_widget(widget))
 
     def center_camera(self):
         x, y = self.focus_center[0] * assets.SIZE_MOD, self.focus_center[1] * assets.SIZE_MOD

@@ -99,6 +99,7 @@ class Visual(Actor):
         super().change_troop_unit_amount(troop_id, amount)
         troop = self.perception.troops[troop_id]
 
+        self.view.change_troop_unit_amount(troop_id, amount)
         if not troop.units:
             self.view.remove_troop(troop_id)
             self.stop_troop(troop_id)
