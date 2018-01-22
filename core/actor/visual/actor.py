@@ -35,13 +35,12 @@ class Visual(Actor):
         super().show_troop(troop, **distortions)
         if troop.units:
             self.view.add_troop(troop)
+        if self.entity.troop and troop.id == self.entity.troop.id:
+            self.view.focus_center = self.entity.troop.pos
+            self.view.center_camera()
 
     def do_turn(self, turn, events):
         super().do_turn(turn, events)
-
-        if self.entity.troop:
-            self.view.focus_center = self.entity.troop.pos
-            self.view.center_camera()
 
         self.view.ids.current_turn.text = str(turn)
         self.run = True
@@ -89,9 +88,12 @@ class Visual(Actor):
         super().move_troop(troop_id, x, y)
         self.view.move_troop(troop_id, x, y)
 
-        if troop_id == self.entity.troop.id and not self.walk_path:
-            self.view.unset_target()
-            self.troop_target = None
+        if troop_id == self.entity.troop.id:
+            self.view.focus_center = self.entity.troop.pos
+            self.view.center_camera()
+            if not self.walk_path:
+                self.view.unset_target()
+                self.troop_target = None
 
     def change_troop_unit_amount(self, troop_id, amount):
         super().change_troop_unit_amount(troop_id, amount)

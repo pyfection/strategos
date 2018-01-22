@@ -6,6 +6,7 @@ from kivy.core.window import Window
 from kivy.lang.builder import Builder
 from kivy.animation import Animation
 from kivy.uix.widget import Widget
+from kivy.clock import Clock
 
 from . import assets
 
@@ -25,6 +26,7 @@ class View(Widget):
             self._keyboard_closed, self, 'text')
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
         self.bind(size=self.on_size)
+        Clock.schedule_once(lambda dt: self.center_camera())
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
