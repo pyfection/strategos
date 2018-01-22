@@ -5,7 +5,8 @@ from time import time, sleep
 from kivy.app import App
 from kivy.core.window import Window
 
-from core.event import Quit
+from helpers import maths
+from core.event import Quit, Attack
 from core.actor.actor import Actor
 from .view import View
 from . import assets
@@ -44,7 +45,12 @@ class Visual(Actor):
             self.view.center_camera()
             if self.troop_target:
                 pos = self.troop_target.pos
-                self.path_to(*pos)
+                distance = maths.distance(pos, self.entity.troop.pos)
+                if round(distance) == 1:
+                    self.walk_path.clear()
+                    self.action = Attack(self.entity.troop.id, self.troop_target.id)
+                else:
+                    self.path_to(*pos)
 
         self.view.ids.current_turn.text = str(turn)
         self.run = True
@@ -63,7 +69,6 @@ class Visual(Actor):
                 self.view.set_target(int(x), int(y))
         else:
             self.view.unset_target()
-            self.troop_target = None
 
     def move(self, pos):
         # absolute position in window

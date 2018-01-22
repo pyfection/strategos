@@ -33,7 +33,7 @@ class Attack(Event):
         super().__init__()
         self.attacker_id = attacker_id
         self.defender_id = defender_id
-        self.effectiveness_modifier = random.randint(.5, 2)
+        self.effectiveness_modifier = round(random.uniform(.5, 2), 2)
 
     def trigger(self, actor):
         attacker = actor.perception.troops[self.attacker_id]
@@ -43,7 +43,7 @@ class Attack(Event):
         unit_ratio = attacker.units / defender.units  # attacker to defender ratio
         exp_ratio = attacker.experience / defender.experience
         effect = self.effectiveness_modifier
-        kills = max(base * unit_ratio * exp_ratio * effect, 1)
+        kills = round(max(base * unit_ratio * exp_ratio * effect, 1))
         defender.units -= min(kills, defender.units)
 
         super().trigger(actor)
