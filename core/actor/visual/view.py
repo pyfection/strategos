@@ -77,7 +77,10 @@ class View(Widget):
         anim.start(self.ids.map)
 
     def move_troop(self, troop_id, x, y):
-        troop = self.troops[troop_id]
+        try:
+            troop = self.troops[troop_id]
+        except KeyError:
+            return
         pos = (x * assets.SIZE_MOD, y * assets.SIZE_MOD)
         anim = Animation(x=pos[0], y=pos[1], duration=self.ANIM_DUR, t=self.MOVE_ANIM)
         anim.start(troop)

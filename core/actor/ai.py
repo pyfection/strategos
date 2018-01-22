@@ -9,7 +9,7 @@ class AI(Actor):
     def do_turn(self, turn, events):
         super().do_turn(turn, events)
 
-        if not self.troop_target:
+        if not self.troop_target and self.entity.troop.units:
             troop = self.entity.troop
             targets = list(filter(lambda t: t.id != troop.id and t.units, self.perception.troops.values()))
             if targets:

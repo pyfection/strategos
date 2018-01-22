@@ -43,13 +43,16 @@ class Actor(EventResponseMixin):
 
     def end_turn(self):
         if self.troop_target:
-            pos = self.troop_target.pos
-            distance = maths.distance(pos, self.entity.troop.pos)
-            if math.ceil(distance) == 1:
-                self.walk_path.clear()
-                self.action = Attack(self.entity.troop.id, self.troop_target.id)
+            if not self.troop_target.units:
+                self.troop_target = None
             else:
-                self.path_to(*pos)
+                pos = self.troop_target.pos
+                distance = maths.distance(pos, self.entity.troop.pos)
+                if math.ceil(distance) == 1:
+                    self.walk_path.clear()
+                    self.action = Attack(self.entity.troop.id, self.troop_target.id)
+                else:
+                    self.path_to(*pos)
         if self.walk_path:
             troop = self.entity.troop
             x, y = self.walk_path.pop(0)
