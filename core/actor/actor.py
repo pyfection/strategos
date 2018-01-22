@@ -2,8 +2,7 @@
 
 from helpers import maths
 from helpers.convert import pos_to_coord
-from core.event import Move
-from helpers.maths import distance, limit_distance
+from core.event import Move, Attack
 
 
 class Actor:
@@ -15,6 +14,7 @@ class Actor:
         self.pre_processing = []  # events caused by self
         self.action = None  # the one action self can do per turn
         self.walk_path = []
+        self.troop_target = None  # troop target
 
     @property
     def entity(self):
@@ -39,6 +39,14 @@ class Actor:
         self.events.clear()
 
     def end_turn(self):
+        if self.troop_target:
+            pos = self.troop_target.pos
+            distance = maths.distance(pos, self.entity.troop.pos)
+            if round(distance) == 1:
+                self.walk_path.clear()
+                self.action = Attack(self.entity.troop.id, self.troop_target.id)
+            else:
+                self.path_to(*pos)
         if self.walk_path:
             troop = self.entity.troop
             x, y = self.walk_path.pop(0)

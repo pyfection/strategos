@@ -5,8 +5,7 @@ from time import time, sleep
 from kivy.app import App
 from kivy.core.window import Window
 
-from helpers import maths
-from core.event import Quit, Attack
+from core.event import Quit
 from core.actor.actor import Actor
 from .view import View
 from . import assets
@@ -20,7 +19,6 @@ class Visual(Actor):
         self.run = True
         self.paused = False
         self.auto_end_turn_time = .8  # second
-        self.troop_target = None  # troop target
         self.view = View()
         self.view.ids.quit.bind(on_press=lambda inst: self.quit())
         self.view.ids.pause.bind(on_press=lambda inst: self.toggle_pause())
@@ -43,14 +41,6 @@ class Visual(Actor):
         if self.entity.troop:
             self.view.focus_center = self.entity.troop.pos
             self.view.center_camera()
-            if self.troop_target:
-                pos = self.troop_target.pos
-                distance = maths.distance(pos, self.entity.troop.pos)
-                if round(distance) == 1:
-                    self.walk_path.clear()
-                    self.action = Attack(self.entity.troop.id, self.troop_target.id)
-                else:
-                    self.path_to(*pos)
 
         self.view.ids.current_turn.text = str(turn)
         self.run = True
