@@ -3,6 +3,7 @@
 class EventResponseMixin:
     perception = None
     troop_target = None
+    walk_path = []
 
     def quit_actor(self, actor):
         pass
@@ -14,6 +15,10 @@ class EventResponseMixin:
             return
         if troop.units:
             troop.x, troop.y = x, y
+
+    def stop_troop(self, troop_id):
+        self.troop_target = None
+        self.walk_path.clear()
 
     def change_troop_unit_amount(self, troop_id, amount):
         troop = self.perception.troops[troop_id]

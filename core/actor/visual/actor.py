@@ -91,9 +91,10 @@ class Visual(Actor):
         if troop_id == self.entity.troop.id:
             self.view.focus_center = self.entity.troop.pos
             self.view.center_camera()
-            if not self.walk_path or not self.entity.troop.units:
-                self.view.unset_target()
-                self.troop_target = None
+
+    def stop_troop(self, troop_id):
+        self.view.unset_target()
+        super().stop_troop(troop_id)
 
     def change_troop_unit_amount(self, troop_id, amount):
         super().change_troop_unit_amount(troop_id, amount)

@@ -182,8 +182,10 @@ class World(EventResponseMixin):
         for actor in self.actors:
             actor.action = None
             actor.pre_processing.clear()
-        for event in events:
-            event.trigger(self)
+        for event in events.copy():
+            success = event.trigger(self)
+            if not success:
+                events.remove(event)
 
         # Tell actors to update
         for actor in self.actors:

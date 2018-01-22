@@ -7,7 +7,7 @@ class Event:
     PRIO = 0
 
     def trigger(self, actor):
-        return
+        return True
 
 
 class Move(Event):
@@ -20,9 +20,12 @@ class Move(Event):
         self.y = y
 
     def trigger(self, actor):
+        if (self.x, self.y) in [troop.pos for troop in actor.perception.troops.values()]:
+            actor.stop_troop(self.troop_id)
+            return False
         actor.move_troop(self.troop_id, self.x, self.y)
 
-        super().trigger(actor)
+        return super().trigger(actor)
 
 
 class Attack(Event):
@@ -39,7 +42,8 @@ class Attack(Event):
         attacker = actor.perception.troops[self.attacker_id]
         defender = actor.perception.troops[self.defender_id]
         if defender.units == 0 or attacker.units == 0:
-            return
+            actor.stop_troop(self.attacker_id)
+            return False
 
         base = attacker.units * self.STRENGTH_MOD
         unit_ratio = attacker.units / defender.units  # attacker to defender ratio
@@ -48,7 +52,7 @@ class Attack(Event):
         kills = round(max(base * unit_ratio * exp_ratio * effect, 1))
         actor.change_troop_unit_amount(self.defender_id, -min(kills, defender.units))
 
-        super().trigger(actor)
+        return super().trigger(actor)
 
 
 class Quit(Event):
@@ -57,3 +61,5 @@ class Quit(Event):
 
     def trigger(self, actor):
         actor.quit_actor(self.actor)
+
+        return super().trigger(actor)
