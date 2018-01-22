@@ -2,6 +2,7 @@
 
 class EventResponseMixin:
     perception = None
+    troop_target = None
 
     def quit_actor(self, actor):
         pass
@@ -19,3 +20,5 @@ class EventResponseMixin:
         troop.units += amount
         if troop.units <= 0:
             troop.units = 0
+            if self.troop_target and troop_id == self.troop_target.id:
+                self.troop_target = None
