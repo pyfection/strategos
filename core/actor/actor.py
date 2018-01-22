@@ -69,7 +69,13 @@ class Actor(EventResponseMixin):
         troop = self.entity.troop
         start_pos = troop.x, troop.y
         end_pos = int(x), int(y)
-        if not self.perception.tiles[pos_to_coord(*end_pos)].passable(troop):
+        coord = pos_to_coord(*end_pos)
+        try:
+            tile = self.perception.tiles[coord]
+        except KeyError:
+            self.walk_path.clear()
+            return
+        if not tile.passable(troop):
             self.walk_path.clear()
             return
 
