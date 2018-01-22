@@ -58,16 +58,19 @@ class Visual(Actor):
         # position on map widget
         mx, my = ax - self.view.ids.map.x, ay - self.view.ids.map.y
         # target position
-        tx, ty = mx / assets.SIZE_MOD, my / assets.SIZE_MOD
+        tx, ty = int(mx / assets.SIZE_MOD), int(my / assets.SIZE_MOD)
+
+        if (tx, ty) == self.entity.troop.pos:
+            return
 
         super().stop_troop(self.entity.troop.id)
         troops = list(filter(
-            lambda t: t.pos == (int(tx), int(ty)) and t.id != self.entity.troop.id and t.units,
+            lambda t: t.pos == (tx, ty) and t.id != self.entity.troop.id and t.units,
             self.perception.troops.values()
         ))
         if troops:
             self.troop_target = troops[0]
-        self.view.set_target(int(tx), int(ty))
+        self.view.set_target(tx, ty)
         self.path_to(tx, ty)
 
     def quit(self):
@@ -85,6 +88,8 @@ class Visual(Actor):
         if troop_id == self.entity.troop.id:
             self.view.focus_center = self.entity.troop.pos
             self.view.center_camera()
+            if not self.walk_path and not self.troop_target:
+                self.view.unset_target()
 
     def stop_troop(self, troop_id):
         self.view.unset_target()
@@ -93,6 +98,7 @@ class Visual(Actor):
     def change_troop_unit_amount(self, troop_id, amount):
         super().change_troop_unit_amount(troop_id, amount)
         troop = self.perception.troops[troop_id]
+
         if not troop.units:
             self.view.remove_troop(troop_id)
             self.stop_troop(troop_id)
