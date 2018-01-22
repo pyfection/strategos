@@ -22,6 +22,7 @@ class View(Widget):
         self.focus_center = (0, 0)
         super().__init__()
         self.target = assets.Target((0, 0))
+        self.target_anim = None
         self._keyboard = Window.request_keyboard(
             self._keyboard_closed, self, 'text')
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
@@ -88,6 +89,8 @@ class View(Widget):
         anim.start(troop)
 
     def set_target(self, x, y):
+        if self.target_anim:
+            self.target_anim.cancel(self.target)
         self.ids.map.remove_widget(self.target)
         pos = (x * assets.SIZE_MOD, y * assets.SIZE_MOD)
         self.target.pos = pos
@@ -99,8 +102,8 @@ class View(Widget):
         self.ids.map.remove_widget(self.target)
         self.ids.map.add_widget(self.target)
         self.target.color = [1, 1, 1, 1]
-        anim = Animation(pos=pos, duration=self.ANIM_DUR, t=self.MOVE_ANIM)
-        anim.start(self.target)
+        self.target_anim = Animation(pos=pos, duration=self.ANIM_DUR, t=self.MOVE_ANIM)
+        self.target_anim.start(self.target)
 
     def unset_target(self):
         anim = Animation(color=[1, 1, 1, 0], duration=self.ANIM_DUR)

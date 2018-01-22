@@ -50,16 +50,6 @@ class Visual(Actor):
 
         self.end_turn()
 
-    def path_to(self, x, y):
-        super().path_to(x, y)
-        if self.walk_path:
-            if self.troop_target:
-                self.view.move_target(int(x), int(y))
-            else:
-                self.view.set_target(int(x), int(y))
-        else:
-            self.view.unset_target()
-
     def move(self, pos):
         if not self.entity.troop.units:
             return
@@ -69,13 +59,15 @@ class Visual(Actor):
         mx, my = ax - self.view.ids.map.x, ay - self.view.ids.map.y
         # target position
         tx, ty = mx / assets.SIZE_MOD, my / assets.SIZE_MOD
-        if not self.troop_target:
-            troops = list(filter(
-                lambda t: t.pos == (int(tx), int(ty)) and t.id != self.entity.troop.id and t.units,
-                self.perception.troops.values()
-            ))
-            if troops:
-                self.troop_target = troops[0]
+
+        super().stop_troop(self.entity.troop.id)
+        troops = list(filter(
+            lambda t: t.pos == (int(tx), int(ty)) and t.id != self.entity.troop.id and t.units,
+            self.perception.troops.values()
+        ))
+        if troops:
+            self.troop_target = troops[0]
+        self.view.set_target(int(tx), int(ty))
         self.path_to(tx, ty)
 
     def quit(self):
@@ -87,6 +79,8 @@ class Visual(Actor):
     def move_troop(self, troop_id, x, y):
         super().move_troop(troop_id, x, y)
         self.view.move_troop(troop_id, x, y)
+        if self.troop_target and self.troop_target.id == troop_id:
+            self.view.move_target(x, y)
 
         if troop_id == self.entity.troop.id:
             self.view.focus_center = self.entity.troop.pos
@@ -101,3 +95,4 @@ class Visual(Actor):
         troop = self.perception.troops[troop_id]
         if not troop.units:
             self.view.remove_troop(troop_id)
+            self.stop_troop(troop_id)
