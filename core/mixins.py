@@ -12,7 +12,7 @@ class EventResponseMixin:
             troop = self.perception.troops[troop_id]
         except KeyError:
             return
-        else:
+        if troop.units:
             troop.x, troop.y = x, y
 
     def change_troop_unit_amount(self, troop_id, amount):
