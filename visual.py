@@ -17,7 +17,8 @@ class GameApp(App):
             'tiles': load_map('islands'),
             'actors': [
                 actor
-            ]
+            ],
+            'seed': 555
         }
         world = World(setup)
         world.assign_entities_to_actors()

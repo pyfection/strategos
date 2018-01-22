@@ -56,10 +56,7 @@ class Actor(EventResponseMixin):
         if self.walk_path:
             troop = self.entity.troop
             x, y = self.walk_path.pop(0)
-            if (x, y) in [troop.pos for troop in self.perception.troops.values()]:
-                self.stop_troop(self.entity.troop.id)
-            else:
-                self.action = Move(troop.id, x, y)
+            self.action = Move(troop.id, x, y)
 
     def path_to(self, x, y):
         def get_neighbors(x, y):

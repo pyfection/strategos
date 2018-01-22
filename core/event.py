@@ -20,7 +20,7 @@ class Move(Event):
         self.y = y
 
     def trigger(self, actor):
-        if (self.x, self.y) in [troop.pos for troop in actor.perception.troops.values()]:
+        if (self.x, self.y) in [troop.pos for troop in actor.perception.troops.values() if troop.units]:
             actor.stop_troop(self.troop_id)
             return False
         actor.move_troop(self.troop_id, self.x, self.y)
