@@ -38,7 +38,7 @@ class Attack(Event):
     def trigger(self, actor):
         attacker = actor.perception.troops[self.attacker_id]
         defender = actor.perception.troops[self.defender_id]
-        if defender.units == 0:
+        if defender.units == 0 or attacker.units == 0:
             return
 
         base = attacker.units * self.STRENGTH_MOD
