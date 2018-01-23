@@ -21,7 +21,6 @@ class Move(Event):
 
     def trigger(self, actor):
         if (self.x, self.y) in [troop.pos for troop in actor.perception.troops.values() if troop.units]:
-            actor.stop_troop(self.troop_id)
             return False
         actor.move_troop(self.troop_id, self.x, self.y)
 
@@ -42,7 +41,6 @@ class Attack(Event):
         attacker = actor.perception.troops[self.attacker_id]
         defender = actor.perception.troops[self.defender_id]
         if defender.units == 0 or attacker.units == 0:
-            actor.stop_troop(self.attacker_id)
             return False
 
         base = attacker.units * self.STRENGTH_MOD

@@ -63,7 +63,7 @@ class Visual(Actor):
         if (tx, ty) == self.troop.pos:
             return
 
-        super().stop_troop(self.troop.id)
+        super().stop_troop()
         troops = list(filter(
             lambda t: t.pos == (tx, ty) and t.id != self.troop.id and t.units,
             self.perception.troops.values()
@@ -91,9 +91,9 @@ class Visual(Actor):
             if not self.walk_path and not self.troop_target:
                 self.view.unset_target()
 
-    def stop_troop(self, troop_id):
+    def stop_troop(self):
         self.view.unset_target()
-        super().stop_troop(troop_id)
+        super().stop_troop()
 
     def change_troop_unit_amount(self, troop_id, amount):
         super().change_troop_unit_amount(troop_id, amount)
@@ -102,4 +102,3 @@ class Visual(Actor):
         self.view.change_troop_unit_amount(troop_id, amount)
         if not troop.units:
             self.view.remove_troop(troop_id)
-            self.stop_troop(troop_id)

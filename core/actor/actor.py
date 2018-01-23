@@ -46,6 +46,9 @@ class Actor(EventResponseMixin):
         self.events.clear()
 
     def end_turn(self):
+        if self.troop and not self.troop.units:
+            self.stop_troop()
+            return
         if self.troop_target:
             if not self.troop_target.units:
                 self.troop_target = None
@@ -60,7 +63,10 @@ class Actor(EventResponseMixin):
         if self.walk_path:
             troop = self.troop
             x, y = self.walk_path.pop(0)
-            self.action = Move(troop.id, x, y)
+            if (x, y) in [t.pos for t in self.perception.troops.values() if t.units]:
+                self.stop_troop()
+            else:
+                self.action = Move(troop.id, x, y)
 
     def path_to(self, x, y):
         def get_neighbors(x, y):
