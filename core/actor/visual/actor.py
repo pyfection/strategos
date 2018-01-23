@@ -35,8 +35,8 @@ class Visual(Actor):
         super().show_troop(troop, **distortions)
         if troop.units:
             self.view.add_troop(troop)
-        if self.entity.troop and troop.id == self.entity.troop.id:
-            self.view.focus_center = self.entity.troop.pos
+        if self.troop and troop.id == self.troop.id:
+            self.view.focus_center = self.troop.pos
             self.view.center_camera()
 
     def do_turn(self, turn, events):
@@ -51,7 +51,7 @@ class Visual(Actor):
         self.end_turn()
 
     def move(self, pos):
-        if not self.entity.troop.units:
+        if not self.troop.units:
             return
         # absolute position in window
         ax, ay = pos
@@ -60,12 +60,12 @@ class Visual(Actor):
         # target position
         tx, ty = int(mx / assets.SIZE_MOD), int(my / assets.SIZE_MOD)
 
-        if (tx, ty) == self.entity.troop.pos:
+        if (tx, ty) == self.troop.pos:
             return
 
-        super().stop_troop(self.entity.troop.id)
+        super().stop_troop(self.troop.id)
         troops = list(filter(
-            lambda t: t.pos == (tx, ty) and t.id != self.entity.troop.id and t.units,
+            lambda t: t.pos == (tx, ty) and t.id != self.troop.id and t.units,
             self.perception.troops.values()
         ))
         if troops:
@@ -85,8 +85,8 @@ class Visual(Actor):
         if self.troop_target and self.troop_target.id == troop_id:
             self.view.move_target(x, y)
 
-        if troop_id == self.entity.troop.id:
-            self.view.focus_center = self.entity.troop.pos
+        if troop_id == self.troop.id:
+            self.view.focus_center = self.troop.pos
             self.view.center_camera()
             if not self.walk_path and not self.troop_target:
                 self.view.unset_target()

@@ -22,7 +22,7 @@ class Terminal(Actor):
 
     def move(self, x, y):
         try:
-            troop_id = self.entity.troop.id
+            troop_id = self.troop.id
         except AttributeError:
             print("Does not lead a troop")
         else:

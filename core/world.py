@@ -145,7 +145,7 @@ class World(EventResponseMixin):
 
     def assign_troops_to_actors(self):
         for actor in self.actors:
-            if actor.entity.troop:
+            if actor.troop:
                 continue
             visible_tiles = list(actor.perception.tiles.values())
             try:

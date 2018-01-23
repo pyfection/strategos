@@ -10,8 +10,8 @@ class AI(Actor):
     def do_turn(self, turn, events):
         super().do_turn(turn, events)
 
-        if self.entity.troop.units:
-            troop = self.entity.troop
+        if self.troop.units:
+            troop = self.troop
             targets = sorted(
                 filter(
                     lambda t: t.id != troop.id and t.units,

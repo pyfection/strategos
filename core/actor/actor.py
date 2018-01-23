@@ -23,8 +23,12 @@ class Actor(EventResponseMixin):
     def entity(self):
         if self.perception:
             return self.perception.entities.get(self.entity_id)
-        else:
-            return None
+
+    @property
+    def troop(self):
+        entity = self.entity
+        if entity:
+            return entity.troop
 
     def show_entity(self, entity, **distortions):
         self.perception.show_entity(entity, **distortions)
@@ -47,14 +51,14 @@ class Actor(EventResponseMixin):
                 self.troop_target = None
             else:
                 pos = self.troop_target.pos
-                distance = maths.distance(pos, self.entity.troop.pos)
+                distance = maths.distance(pos, self.troop.pos)
                 if math.ceil(distance) == 1:
                     self.walk_path.clear()
-                    self.action = Attack(self.entity.troop.id, self.troop_target.id)
+                    self.action = Attack(self.troop.id, self.troop_target.id)
                 else:
                     self.path_to(*pos)
         if self.walk_path:
-            troop = self.entity.troop
+            troop = self.troop
             x, y = self.walk_path.pop(0)
             self.action = Move(troop.id, x, y)
 
@@ -66,7 +70,7 @@ class Actor(EventResponseMixin):
                         continue
                     yield x + a, y + b
 
-        troop = self.entity.troop
+        troop = self.troop
         start_pos = troop.x, troop.y
         end_pos = int(x), int(y)
         coord = pos_to_coord(*end_pos)
