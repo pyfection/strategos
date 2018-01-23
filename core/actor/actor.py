@@ -83,10 +83,10 @@ class Actor(EventResponseMixin):
         try:
             tile = self.perception.tiles[coord]
         except KeyError:
-            self.walk_path.clear()
+            self.stop_troop()
             return
         if not tile.passable(troop):
-            self.walk_path.clear()
+            self.stop_troop()
             return
 
         open = {
