@@ -62,6 +62,9 @@ class Visual(Actor):
 
         if (tx, ty) == self.troop.pos:
             return
+        elif (tx, ty) not in [t.pos for t in self.perception.tiles.values() if t.passable(self.troop)]:
+            self.stop_troop()
+            return
 
         super().stop_troop()
         troops = list(filter(
