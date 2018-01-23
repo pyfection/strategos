@@ -100,7 +100,8 @@ class Actor(EventResponseMixin):
 
         while True:
             if not open:
-                break
+                self.stop_troop()
+                return
             current = sorted(
                 sorted(
                     open.items(),
