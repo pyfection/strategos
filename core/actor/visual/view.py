@@ -24,11 +24,11 @@ class View(Widget):
         self.troops = {}
         self.focus_center = (0, 0)
 
-        # self.console = Console()
+        self.console = Console(pos=self.pos, height=self.height, width=100, size_hint=(None, None))
         self.target = assets.Target((0, 0))
         self.target_anim = None
 
-        # self.add_widget(self.console)
+        self.add_widget(self.console)
 
         self._keyboard = Window.request_keyboard(
             self._keyboard_closed, self, 'text')
