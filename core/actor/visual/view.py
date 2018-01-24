@@ -10,6 +10,7 @@ from kivy.uix.label import Label
 from kivy.clock import Clock
 
 from . import assets
+from lib.widgets.console import Console
 
 
 class View(Widget):
@@ -19,15 +20,22 @@ class View(Widget):
     def __init__(self):
         kv_path = os.path.join(os.path.dirname(__file__), 'view.kv')
         Builder.load_file(kv_path)
+        super().__init__()
         self.troops = {}
         self.focus_center = (0, 0)
-        super().__init__()
+
+        # self.console = Console()
         self.target = assets.Target((0, 0))
         self.target_anim = None
+
+        # self.add_widget(self.console)
+
         self._keyboard = Window.request_keyboard(
             self._keyboard_closed, self, 'text')
+
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
         self.bind(size=self.on_size)
+
         Clock.schedule_once(lambda dt: self.center_camera())
 
     def _keyboard_closed(self):
@@ -43,10 +51,15 @@ class View(Widget):
             self.ids.map.y -= 10
         elif keycode[1] == 'down':
             self.ids.map.y += 10
+        elif keycode[1] == '$':
+            self.toggle_console()
         return True
 
     def on_size(self, inst, value):
         self.center_camera()
+
+    def toggle_console(self):
+        pass
 
     def add_tile(self, c_tile):
         Tile = assets.tiles[c_tile.type]

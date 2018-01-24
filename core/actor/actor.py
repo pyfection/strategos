@@ -47,7 +47,7 @@ class Actor(EventResponseMixin):
 
     def end_turn(self):
         if self.troop and not self.troop.units:
-            self.stop_troop()
+            self.stop_actions()
             return
         if self.troop_target:
             if not self.troop_target.units:
@@ -64,7 +64,7 @@ class Actor(EventResponseMixin):
             troop = self.troop
             x, y = self.walk_path.pop(0)
             if (x, y) in [t.pos for t in self.perception.troops.values() if t.units]:
-                self.stop_troop()
+                self.stop_actions()
             else:
                 self.action = Move(troop.id, x, y)
 
@@ -83,10 +83,10 @@ class Actor(EventResponseMixin):
         try:
             tile = self.perception.tiles[coord]
         except KeyError:
-            self.stop_troop()
+            self.stop_actions()
             return
         if not tile.passable(troop):
-            self.stop_troop()
+            self.stop_actions()
             return
 
         open = {
@@ -100,7 +100,7 @@ class Actor(EventResponseMixin):
 
         while True:
             if not open:
-                self.stop_troop()
+                self.stop_actions()
                 return
             current = sorted(
                 sorted(

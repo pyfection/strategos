@@ -17,7 +17,7 @@ class EventResponseMixin:
         if troop.units:
             troop.x, troop.y = x, y
 
-    def stop_troop(self):
+    def stop_actions(self):
         self.troop_target = None
         self.walk_path.clear()
 
@@ -27,6 +27,6 @@ class EventResponseMixin:
         if troop.units <= 0:
             troop.units = 0
             if self.troop_target and troop_id == self.troop_target.id:
-                self.stop_troop()
+                self.stop_actions()
             elif self.troop and troop_id == self.troop.id:
-                self.stop_troop()
+                self.stop_actions()
