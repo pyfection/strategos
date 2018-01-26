@@ -12,8 +12,8 @@ from . import assets
 
 
 class Visual(Actor):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         Window.bind(on_close=lambda inst: self.quit())
         self.run = True

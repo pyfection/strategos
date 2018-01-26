@@ -48,9 +48,9 @@ class Perception:
             self.factions[faction_id] = faction
 
         for entity_id, entity in self.entities.items():
-            troop_id = dictionary['entities'][entity_id]['troop']
-            entity.troop = self.troops[troop_id]
-            ruler_id = dictionary['entities'][entity_id]['ruler']
+            troop_id = dictionary['entities'][entity_id].get('troop')
+            entity.troop = self.troops.get(troop_id)
+            ruler_id = dictionary['entities'][entity_id].get('ruler')
             entity.ruler = self.entities.get(ruler_id)
 
         return self

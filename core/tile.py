@@ -3,6 +3,7 @@
 class Tile:
     type = 'tile'
     color = '#ffffff'
+
     def __init__(self, x, y, z=0, owner=None):
         self.x = x
         self.y = y
@@ -11,7 +12,7 @@ class Tile:
 
     @property
     def pos(self):
-        return (self.x, self.y)
+        return self.x, self.y
 
     def copy(self, **kwargs):
         d = self.__dict__.copy()
@@ -65,6 +66,7 @@ class WoodBridge(Tile):
 class River(Tile):
     type = 'river'
     color = '#1886ab'
+
     def passable(self, by):
         return False
 

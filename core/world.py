@@ -17,11 +17,11 @@ from core.mixins import EventResponseMixin
 class World(EventResponseMixin):
     def __init__(self, setup):
         self.seed = setup.get('seed')
+        random.seed(self.seed)
         self.actors = setup.get('actors', [])
         self.current_turn = setup.get('current_turn', 0)
         self.perception = Perception.load(setup)
         logging.info(f"Worldseed: {self.seed}")
-        random.seed(self.seed)
 
     @property
     def is_running(self):
@@ -108,7 +108,10 @@ class World(EventResponseMixin):
 
     def assign_entities_to_actors(self):
         entities = list(self.perception.entities.values())
+        entities = list(filter(lambda e: e.id not in [a.entity_id for a in self.actors], entities))
         for actor in self.actors:
+            if actor.entity:
+                continue
             try:
                 entity = random.choice(entities)
             except IndexError:
