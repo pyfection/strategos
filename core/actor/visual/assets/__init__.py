@@ -5,6 +5,9 @@ import os
 from kivy.uix.image import Image
 
 
+print("Warning: this module will be removed in future")
+
+
 ASSET_PATH = os.path.dirname(__file__)
 SIZE_MOD = 32
 

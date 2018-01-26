@@ -34,7 +34,7 @@ class Visual(Actor):
     def show_troop(self, troop, **distortions):
         super().show_troop(troop, **distortions)
         if troop.units:
-            self.view.add_troop(troop)
+            self.view.add_troop('bavaria', troop)  # ToDo: replace static "bavaria" with the faction that the troop belongs to
         if self.troop and troop.id == self.troop.id:
             self.view.focus_center = self.troop.pos
             self.view.center_camera()
