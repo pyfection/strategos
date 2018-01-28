@@ -98,7 +98,7 @@ class View(Widget):
     def add_troop(self, faction_name, c_troop):
         if c_troop.id in self.troops or not c_troop.units:
             return
-        troop = Troop(faction=faction_name, pos=c_troop.pos)
+        troop = Troop(faction=faction_name, pos=(c_troop.x * self.SIZE_MOD, c_troop.y * self.SIZE_MOD))
         self.ids.map.add_widget(troop)
         self.troops[c_troop.id] = troop
 

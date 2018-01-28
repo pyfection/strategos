@@ -31,13 +31,15 @@ class Visual(Actor):
         super().show_tile(tile, **distortions)
         self.view.add_tile(tile)
 
+    def assign_troop(self, troop):
+        super().assign_troop(troop)
+        self.view.focus_center = self.troop.pos
+        self.view.center_camera()
+
     def show_troop(self, troop, **distortions):
         super().show_troop(troop, **distortions)
         if troop.units:
             self.view.add_troop('bavaria', troop)  # ToDo: replace static "bavaria" with the faction that the troop belongs to
-        if self.troop and troop.id == self.troop.id:
-            self.view.focus_center = self.troop.pos
-            self.view.center_camera()
 
     def do_turn(self, turn, events):
         super().do_turn(turn, events)

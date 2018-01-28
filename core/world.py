@@ -158,8 +158,7 @@ class World(EventResponseMixin):
                 raise IndexError(f"Actor {actor.name} has no visible tiles")
             troop = Troop(name=f"{actor.entity.name}'s Host", x=tile.x, y=tile.y, units=10)
             self.perception.troops[troop.id] = troop
-            actor.show_troop(troop)
-            actor.entity.troop = actor.perception.troops[troop.id]
+            actor.assign_troop(troop)
 
     def reveal_all_tiles(self):
         for actor in self.actors:

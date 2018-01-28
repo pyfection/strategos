@@ -30,6 +30,10 @@ class Actor(EventResponseMixin):
         if entity:
             return entity.troop
 
+    def assign_troop(self, troop):
+        self.show_troop(troop)
+        self.entity.troop = self.perception.troops[troop.id]
+
     def show_entity(self, entity, **distortions):
         self.perception.show_entity(entity, **distortions)
 
