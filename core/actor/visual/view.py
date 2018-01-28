@@ -85,8 +85,12 @@ class View(Widget):
         )
         self.ids.map.add_widget(tile)
         if c_tile.population > 0:
+            try:
+                faction = c_tile.owner.faction.name
+            except AttributeError:
+                faction = 'default'
             settlement = Settlement(
-                faction='default',  # ToDo: remove static "default" and replace it with the owner's faction
+                faction=faction,
                 size=c_tile.population,
                 pos=pos
             )
@@ -98,7 +102,10 @@ class View(Widget):
     def add_troop(self, faction_name, c_troop):
         if c_troop.id in self.troops or not c_troop.units:
             return
-        troop = Troop(faction=faction_name, pos=(c_troop.x * self.SIZE_MOD, c_troop.y * self.SIZE_MOD))
+        troop = Troop(
+            faction=faction_name or 'default',
+            pos=(c_troop.x * self.SIZE_MOD, c_troop.y * self.SIZE_MOD)
+        )
         self.ids.map.add_widget(troop)
         self.troops[c_troop.id] = troop
 

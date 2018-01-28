@@ -28,7 +28,11 @@ class Visual(Actor):
         for tile in self.perception.tiles.values():
             self.view.add_tile(tile)
         for troop in self.perception.troops.values():
-            self.view.add_troop('bavaria', troop)
+            if troop.leader and troop.leader.faction:
+                faction = troop.leader.faction.name
+            else:
+                faction = None
+            self.view.add_troop(faction, troop)
 
     def toggle_pause(self):
         self.paused = not self.paused
@@ -45,7 +49,11 @@ class Visual(Actor):
     def show_troop(self, troop, **distortions):
         super().show_troop(troop, **distortions)
         if troop.units:
-            self.view.add_troop('bavaria', troop)  # ToDo: replace static "bavaria" with the faction that the troop belongs to
+            if troop.leader and troop.leader.faction:
+                faction = troop.leader.faction.name
+            else:
+                faction = None
+            self.view.add_troop(faction, troop)
 
     def do_turn(self, turn, events):
         super().do_turn(turn, events)
