@@ -19,6 +19,9 @@ class Actor(EventResponseMixin):
         self.walk_path = []
         self.troop_target = None  # troop target
 
+    def setup(self):
+        return
+
     @property
     def entity(self):
         if self.perception:

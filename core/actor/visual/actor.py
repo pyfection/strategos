@@ -24,6 +24,12 @@ class Visual(Actor):
         self.view.ids.pause.bind(on_press=lambda inst: self.toggle_pause())
         self.view.ids.map.bind(on_touch_down=lambda inst, touch: self.move(touch.pos))
 
+    def setup(self):
+        for tile in self.perception.tiles.values():
+            self.view.add_tile(tile)
+        for troop in self.perception.troops.values():
+            self.view.add_troop('bavaria', troop)
+
     def toggle_pause(self):
         self.paused = not self.paused
 
@@ -87,7 +93,7 @@ class Visual(Actor):
         if self.troop_target and self.troop_target.id == troop_id:
             self.view.move_target(x, y)
 
-        if troop_id == self.troop.id:
+        if self.troop and troop_id == self.troop.id:
             self.view.focus_center = self.troop.pos
             self.view.center_camera()
             if not self.walk_path and not self.troop_target:

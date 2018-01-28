@@ -7,8 +7,6 @@ import logging
 
 import logging_conf
 from core.actor.ai import AI
-from core.entity import Entity
-from core.troop import Troop
 from core.perception import Perception
 from helpers.loader import save_game
 from core.mixins import EventResponseMixin
@@ -21,6 +19,9 @@ class World(EventResponseMixin):
         self.actors = setup.get('actors', [])
         self.current_turn = setup.get('current_turn', 0)
         self.perception = Perception.load(setup)
+        for actor in self.actors:
+            actor.perception = Perception.load(setup)
+            actor.setup()
         logging.info(f"Worldseed: {self.seed}")
 
     @property
@@ -105,74 +106,6 @@ class World(EventResponseMixin):
 
     def get_ais(self):
         return [a for a in self.actors if isinstance(a, AI)]
-
-    def assign_entities_to_actors(self):
-        entities = list(self.perception.entities.values())
-        entities = list(filter(lambda e: e.id not in [a.entity_id for a in self.actors], entities))
-        for actor in self.actors:
-            if actor.entity:
-                continue
-            try:
-                entity = random.choice(entities)
-            except IndexError:
-                perception = Perception()
-                entity = Entity(perception=perception)
-                actor.entity_id = entity.id
-                actor.perception = perception
-                actor.show_entity(entity)
-                self.perception.show_entity(entity)
-            else:
-                entities.remove(entity)
-                actor.perception = entity.perception
-
-    def distribute_settlements(self):
-        raise NotImplementedError("This needs to be reworked because of the change in how settlements work")
-        homeless = [a for a in self.actors if a.entity]
-        for coord, tile in self.perception.tiles.items():
-            if tile.type != 'settlement':
-                continue
-            settlement = tile
-            try:
-                actor = homeless.pop(0)
-            except IndexError:
-                perception = Perception()
-                entity = Entity(perception=perception)
-                actor = AI(str(uuid4()), entity_id=entity.id)
-                actor.perception = perception
-                actor.show_entity(entity)
-                self.perception.show_entity(entity)
-                self.actors.append(actor)
-            entity_id = actor.entity.id
-            entity = self.perception.entities[entity_id]
-            settlement.owner = entity
-            actor.show_tile(settlement, owner=actor.entity)
-
-    def assign_troops_to_actors(self):
-        for actor in self.actors:
-            if actor.troop:
-                continue
-            visible_tiles = list(actor.perception.tiles.values())
-            try:
-                tile = random.choice(visible_tiles)
-            except IndexError:
-                raise IndexError(f"Actor {actor.name} has no visible tiles")
-            troop = Troop(name=f"{actor.entity.name}'s Host", x=tile.x, y=tile.y, units=10)
-            self.perception.troops[troop.id] = troop
-            actor.assign_troop(troop)
-
-    def reveal_all_tiles(self):
-        for actor in self.actors:
-            if not actor.entity:
-                continue
-            for tile in self.perception.tiles.values():
-                actor.show_tile(tile)
-
-    def reveal_all_troops(self):
-        for actor in self.actors:
-            if not actor.entity:
-                continue
-            for troop in self.perception.troops.values():
-                actor.show_troop(troop)
 
     def update(self):
         threads = []
