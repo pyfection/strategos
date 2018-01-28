@@ -1,7 +1,7 @@
 
 
 from threading import Thread
-from uuid import uuid4
+import ujson
 
 from kivy.app import App
 
@@ -14,49 +14,18 @@ from core.actor.ai import AI
 
 class GameApp(App):
     def build(self):
-        entity_id = uuid4()
-        troop_id = uuid4()
+        with open('scenarios/rise_of_bavaria/setup.json') as f:
+            setup = ujson.load(f)
         actor = Observer(name='observer')
-        ai = AI(name='testplayer', entity_id=entity_id)
-        tiles = load_map('2playertest')
-        tiles['18|27']['population'] = 100
-        tiles['30|24']['population'] = 100
-        setup = {
-            'tiles': tiles,
+        ai = AI(name='observer', entity_id=list(setup['entities'].keys())[0])
+        setup.update({
             'actors': [
                 actor,
                 ai
             ],
-            'entities': {
-                entity_id: {
-                    'name': 'testentity',
-                    'ruler': None,
-                    'troop': troop_id,
-                }
-            },
-            'factions': {
-                uuid4(): {
-                    'name': 'testfaction',
-                    'leader': entity_id,
-                }
-            },
-            'troops': {
-                troop_id: {
-                    'name': 'testtroop',
-                    'units': 10,
-                    'experience': 1,
-                    'x': 18,
-                    'y': 28
-                }
-            },
             'seed': 555
-        }
+        })
         world = World(setup)
-        # world.assign_entities_to_actors()
-        # world.distribute_settlements()
-        # world.reveal_all_tiles()
-        # world.assign_troops_to_actors()
-        # world.reveal_all_troops()
         view = actor.view
         t = Thread(target=world.run)
         t.start()
