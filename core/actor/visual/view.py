@@ -13,6 +13,7 @@ from lib.widgets.console import Console
 from lib.widgets.tile import Tile
 from lib.widgets.overlay import Target
 from lib.widgets.troop import Troop
+from lib.widgets.building import Settlement
 
 
 class View(Widget):
@@ -65,11 +66,19 @@ class View(Widget):
         pass
 
     def add_tile(self, c_tile):
+        pos = (c_tile.x * self.SIZE_MOD, c_tile.y * self.SIZE_MOD)
         tile = Tile(
             name=c_tile.type,
-            pos=(c_tile.x * self.SIZE_MOD, c_tile.y * self.SIZE_MOD),
+            pos=pos,
         )
         self.ids.map.add_widget(tile)
+        if c_tile.population > 0:
+            settlement = Settlement(
+                faction='default',  # ToDo: remove static "default" and replace it with the owner's faction
+                size=c_tile.population,
+                pos=pos
+            )
+            self.ids.map.add_widget(settlement)
         for troop in self.troops.values():  # ToDo: this is not very performant, find a better solution
             self.ids.map.remove_widget(troop)
             self.ids.map.add_widget(troop)

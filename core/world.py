@@ -126,6 +126,7 @@ class World(EventResponseMixin):
                 actor.perception = entity.perception
 
     def distribute_settlements(self):
+        raise NotImplementedError("This needs to be reworked because of the change in how settlements work")
         homeless = [a for a in self.actors if a.entity]
         for coord, tile in self.perception.tiles.items():
             if tile.type != 'settlement':

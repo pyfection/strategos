@@ -15,8 +15,11 @@ class GameApp(App):
     def build(self):
         entity_id = uuid4()
         actor = Visual(name='testplayer', entity_id=entity_id)
+        tiles = load_map('2playertest')
+        tiles['18|27']['population'] = 100
+        tiles['30|24']['population'] = 100
         setup = {
-            'tiles': load_map('islands'),
+            'tiles': tiles,
             'actors': [
                 actor
             ],
@@ -39,7 +42,7 @@ class GameApp(App):
         world.assign_entities_to_actors()
         world.reveal_all_tiles()
         world.reveal_all_troops()
-        world.distribute_settlements()
+        # world.distribute_settlements()
         world.assign_troops_to_actors()
         view = actor.view
         t = Thread(target=world.run)

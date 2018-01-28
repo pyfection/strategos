@@ -31,7 +31,7 @@ class Perception:
             owner_id = tile_dict.get('owner')
             owner = self.entities.get(owner_id)
             Tile = TILE_TYPES[tile_dict.get('type', 'grass')]
-            tile = Tile(x=x, y=y, z=tile_dict.get('z', 0), owner=owner)
+            tile = Tile(x=x, y=y, z=tile_dict.get('z', 0), owner=owner, population=tile_dict.get('population', 0))
             self.tiles[tile_coord] = tile
 
         for troop_id, troop_dict in dictionary.get('troops', dict()).items():
@@ -43,7 +43,8 @@ class Perception:
             faction = Faction(
                 id=faction_id,
                 name=faction_dict['name'],
-                leader=leader
+                leader=leader,
+                capital=faction_dict.get('capital')
             )
             self.factions[faction_id] = faction
 

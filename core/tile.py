@@ -4,11 +4,12 @@ class Tile:
     type = 'tile'
     color = '#ffffff'
 
-    def __init__(self, x, y, z=0, owner=None):
+    def __init__(self, x, y, z=0, owner=None, population=0):
         self.x = x
         self.y = y
         self.z = z
         self.owner = owner
+        self.population = population
 
     @property
     def pos(self):
@@ -36,11 +37,6 @@ class Tile:
 class Grass(Tile):
     type = 'grass'
     color = '#3b7c27'
-
-
-class Settlement(Tile):
-    type = 'settlement'
-    color = '#740000'
 
 
 class Forest(Tile):
@@ -74,7 +70,6 @@ class River(Tile):
 TILE_TYPES = {
     Tile.type: Tile,
     Grass.type: Grass,
-    Settlement.type: Settlement,
     Forest.type: Forest,
     Hill.type: Hill,
     Mountain.type: Mountain,
