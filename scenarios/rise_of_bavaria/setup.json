@@ -3,7 +3,8 @@
     "7a7fecff-18b1-43a8-b520-44e56ea783c9": {
       "name": "Ignatius Trozza",
       "ruler": null,
-      "troop": "16afc757-c602-4ce4-b3cd-d3606ddac42c"
+      "troop": "16afc757-c602-4ce4-b3cd-d3606ddac42c",
+      "faction": "5f2115db-2aa1-441c-b53b-db38af52f642"
     }
   },
   "factions": {
@@ -15,6 +16,7 @@
   "troops": {
     "16afc757-c602-4ce4-b3cd-d3606ddac42c": {
       "name": "Legio III Italica",
+      "leader": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
       "units": 10,
       "experience": 1,
       "x": 158,

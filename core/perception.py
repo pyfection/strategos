@@ -35,6 +35,7 @@ class Perception:
             self.tiles[tile_coord] = tile
 
         for troop_id, troop_dict in dictionary.get('troops', dict()).items():
+            troop_dict = troop_dict.copy()
             leader_id = troop_dict.pop('leader', None)
             leader = self.entities.get(leader_id)
             troop = Troop(id=troop_id, leader=leader, **troop_dict)
@@ -56,8 +57,8 @@ class Perception:
             entity.troop = self.troops.get(troop_id)
             ruler_id = dictionary['entities'][entity_id].get('ruler')
             entity.ruler = self.entities.get(ruler_id)
-            faction_name = dictionary['entities'][entity_id].get('faction')
-            entity.faction = self.factions.get(faction_name)
+            faction_id = dictionary['entities'][entity_id].get('faction')
+            entity.faction = self.factions.get(faction_id)
 
         return self
 
