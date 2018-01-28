@@ -29,18 +29,26 @@ class View(Widget):
         self.focus_center = (0, 0)
 
         self.console = Console(pos=self.pos, height=self.height, width=100, size_hint=(None, None))
+        self.console.commands['exit'] = self.toggle_console
         self.target = Target(pos=(0, 0))
         self.target_anim = None
 
-        self.add_widget(self.console)
+        self.bind(size=self.on_size)
+        self.console.ids.input.bind(focus=self._con_open_keyboard)
 
+        self._open_keyboard()
+
+        Clock.schedule_once(lambda dt: self.center_camera())
+
+    def _con_open_keyboard(self, inst, value):
+        if value is False:
+            self._open_keyboard()
+
+    def _open_keyboard(self):
         self._keyboard = Window.request_keyboard(
             self._keyboard_closed, self, 'text')
 
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
-        self.bind(size=self.on_size)
-
-        Clock.schedule_once(lambda dt: self.center_camera())
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
@@ -63,7 +71,11 @@ class View(Widget):
         self.center_camera()
 
     def toggle_console(self):
-        pass
+        if self.console in self.children:
+            self.remove_widget(self.console)
+        else:
+            self.add_widget(self.console)
+            self.console.ids.input.focus = True
 
     def add_tile(self, c_tile):
         pos = (c_tile.x * self.SIZE_MOD, c_tile.y * self.SIZE_MOD)

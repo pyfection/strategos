@@ -1,17 +1,40 @@
 
 
+from kivy.lang import Builder
+from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
+
+
+kv = """
+<Console>:
+    size_hint: (None, None)
+    size: (500, 500)
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgba: 0, 0, 0, .5
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    ScrollView:
+        BoxLayout:
+            id: history
+            orientation: 'vertical'
+    TextInput:
+        id: input
+        text: root.PROMPT
+        multiline: False
+        size_hint_y: None
+        height: 30
+"""
+
+Builder.load_string(kv)
 
 
 class Console(BoxLayout):
     PROMPT = '>>> '
-    HELP_TEXT = """
-        Following commands are available:
-        {commands}
-    """
+    HELP_TEXT = """Following commands are available:{commands}"""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -22,32 +45,35 @@ class Console(BoxLayout):
         self.results = []
         self.current = None
 
-        self._scroll = ScrollView()
-        self.past = BoxLayout()
-        self.input = TextInput(text=self.PROMPT, multiline=False, height=30, size_hint_y=None)
-
-        self._scroll.add_widget(self.past)
-        self.add_widget(self._scroll)
-        self.add_widget(self.input)
-
-        self.input.bind(on_text_validate=self._on_text_validate)
+        self.ids.input.bind(on_text_validate=self._on_text_validate)
 
     def _on_text_validate(self, inst):
+        def _refocus(dt):
+            inst.focus = True
         self.add_history(inst.text)
         command = inst.text[len(self.PROMPT):]
         command, *args = command.split()
         self.execute_command(command, *args)
         inst.text = self.PROMPT
+        Clock.schedule_once(_refocus)
+
+    def _add_history_label(self, text):
+        def _on_size(inst, size):
+            inst.size = size
+
+        label = Label(text=text, size_hint=(None, None))
+        label.bind(texture_size=_on_size)
+        label.size = label.texture_size
+        self.ids.history.add_widget(label)
+        return label
 
     def add_history(self, text):
-        label = Label(text=text)
+        label = self._add_history_label(text)
         self.history.append(label)
-        self.past.add_widget(label)
 
     def add_result(self, text):
-        label = Label(text=text)
+        label = self._add_history_label(text)
         self.results.append(label)
-        self.past.add_widget(label)
 
     def execute_command(self, command, *args):
         try:
@@ -60,7 +86,7 @@ class Console(BoxLayout):
     def help(self, command=None):
         if not command:
             text = self.HELP_TEXT.format(
-                commands='\n'.join(self.commands.keys())
+                commands='\n    '.join([''] + list(self.commands.keys()))
             )
             self.add_result(text)
             return
