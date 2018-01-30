@@ -17,11 +17,13 @@ class GameApp(App):
         with open('scenarios/rise_of_bavaria/setup.json') as f:
             setup = ujson.load(f)
         actor = Observer(name='observer')
-        ai = AI(name='observer', entity_id=list(setup['entities'].keys())[0])
+        ai1 = AI(name='testai1', entity_id=list(setup['entities'].keys())[0])
+        ai2 = AI(name='testai2', entity_id=list(setup['entities'].keys())[1])
         setup.update({
             'actors': [
                 actor,
-                ai
+                ai1,
+                ai2
             ],
             'seed': 555
         })
