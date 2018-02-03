@@ -29,7 +29,7 @@ class Terminal(Actor):
             self.events.append(Move(troop_id, x, y))
 
     def quit(self):
-        self.action = Quit(self)
+        self.actions.append(Quit(self))
         self.end_turn()
 
     def quit_actor(self, actor):

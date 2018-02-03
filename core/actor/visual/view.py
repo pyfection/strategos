@@ -7,7 +7,7 @@ from kivy.lang.builder import Builder
 from kivy.animation import Animation
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 
 from lib.widgets.console import Console
 from lib.widgets.tile import Tile
@@ -21,15 +21,17 @@ class View(Widget):
     ANIM_DUR = .7
     SIZE_MOD = 32
 
-    def __init__(self):
+    def __init__(self, actor):
         kv_path = os.path.join(os.path.dirname(__file__), 'view.kv')
         Builder.load_file(kv_path)
         super().__init__()
+        self.actor = actor
         self.troops = {}
         self.focus_center = (0, 0)
 
         self.console = Console(pos=self.pos, height=self.height, width=100, size_hint=(None, None))
         self.console.commands['exit'] = self.toggle_console
+        self.console.commands['spawn_troop'] = self.actor.spawn_troop
         self.target = Target(pos=(0, 0))
         self.target_anim = None
 
@@ -99,6 +101,7 @@ class View(Widget):
             self.ids.map.remove_widget(troop)
             self.ids.map.add_widget(troop)
 
+    @mainthread
     def add_troop(self, faction_name, c_troop):
         if c_troop.id in self.troops or not c_troop.units:
             return

@@ -14,8 +14,7 @@ class Actor(EventResponseMixin):
         self.entity_id = entity_id
         self.perception = perception
         self.events = events or []  # events coming from outside
-        self.pre_processing = []  # events caused by self
-        self.action = None  # the one action self can do per turn
+        self.actions = []  # ToDo: this needs to replace self.action
         self.walk_path = []
         self.troop_target = None  # troop target
 
@@ -64,7 +63,7 @@ class Actor(EventResponseMixin):
                 distance = maths.distance(pos, self.troop.pos)
                 if math.ceil(distance) == 1:
                     self.walk_path.clear()
-                    self.action = Attack(self.troop.id, self.troop_target.id)
+                    self.actions.append(Attack(self.troop.id, self.troop_target.id))
                 else:
                     self.path_to(*pos)
         if self.walk_path:
@@ -73,7 +72,7 @@ class Actor(EventResponseMixin):
             if (x, y) in [t.pos for t in self.perception.troops.values() if t.units]:
                 self.stop_actions()
             else:
-                self.action = Move(troop.id, x, y)
+                self.actions.append(Move(troop.id, x, y))
 
     def path_to(self, x, y):
         def get_neighbors(x, y):

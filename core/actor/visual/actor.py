@@ -5,7 +5,7 @@ from time import time, sleep
 from kivy.app import App
 from kivy.core.window import Window
 
-from core.event import Quit
+from core.event import Quit, SpawnTroop
 from core.actor.actor import Actor
 from .view import View
 from . import assets
@@ -19,7 +19,7 @@ class Visual(Actor):
         self.run = True
         self.paused = False
         self.auto_end_turn_time = .8  # second
-        self.view = View()
+        self.view = View(self)
         self.view.ids.quit.bind(on_press=lambda inst: self.quit())
         self.view.ids.pause.bind(on_press=lambda inst: self.toggle_pause())
         self.view.ids.map.bind(on_touch_down=lambda inst, touch: self.move(touch.pos))
@@ -36,6 +36,16 @@ class Visual(Actor):
 
     def toggle_pause(self):
         self.paused = not self.paused
+
+    def spawn_troop(self, name, x=0, y=0, units=0, experience=0):
+        event = SpawnTroop(
+            name=name,
+            units=int(units),
+            experience=float(experience),
+            x=int(x),
+            y=int(y)
+        )
+        self.actions.append(event)
 
     def show_tile(self, tile, **distortions):
         super().show_tile(tile, **distortions)
@@ -90,7 +100,7 @@ class Visual(Actor):
         self.path_to(tx, ty)
 
     def quit(self):
-        self.pre_processing.append(Quit(self))
+        self.actions.append(Quit(self))
         self.run = False
         self.paused = False
         App.get_running_app().stop()

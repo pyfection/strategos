@@ -111,20 +111,18 @@ class World(EventResponseMixin):
         threads = []
 
         # Collect events from actors and trigger them on the world
-        events = sorted([event for actor in self.actors for event in actor.pre_processing], key=lambda k: k.PRIO)
-        actions = sorted([actor.action for actor in self.actors if actor.action], key=lambda k: k.PRIO)
-        events += actions
+        actions = sorted([event for actor in self.actors for event in actor.actions], key=lambda k: k.PRIO)
 
         for actor in self.actors:
-            actor.action = None
-            actor.pre_processing.clear()
-        for event in events.copy():
-            success = event.trigger(self)
+            actor.actions.clear()
+        for action in actions.copy():
+            success = action.trigger(self)
             if not success:
-                events.remove(event)
+                actions.remove(action)
 
         # Tell actors to update
         for actor in self.actors:
+            events = actions.copy()
             t = Thread(target=actor.do_turn, kwargs={'turn': self.current_turn, 'events': events})
             threads.append(t)
             t.start()
@@ -150,3 +148,6 @@ class World(EventResponseMixin):
             events=actor.events
         )
         self.actors.append(replacement)
+
+    def show_troop(self, troop):
+        self.perception.troops[troop.id] = troop

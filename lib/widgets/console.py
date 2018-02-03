@@ -81,7 +81,10 @@ class Console(BoxLayout):
         except KeyError:
             self.add_result(f"ERROR: command {command} is not valid")
             return
-        command(*args)
+        try:
+            command(*args)
+        except Exception as e:
+            self.add_result(str(e))
 
     def help(self, command=None):
         if not command:

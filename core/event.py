@@ -1,6 +1,9 @@
 
 
 import random
+from uuid import uuid4
+
+from core.troop import Troop
 
 
 class Event:
@@ -59,5 +62,30 @@ class Quit(Event):
 
     def trigger(self, actor):
         actor.quit_actor(self.actor)
+
+        return super().trigger(actor)
+
+
+class SpawnTroop(Event):
+    def __init__(self, id=None, name=None, leader=None, units=0, experience=.1, x=None, y=None):
+        self.id = id or uuid4()
+        self.name = name
+        self.leader = leader
+        self.units = units
+        self.experience = experience
+        self.x = x
+        self.y = y
+
+    def trigger(self, actor):
+        troop = Troop(
+            id=self.id,
+            name=self.name,
+            leader=self.leader,
+            units=self.units,
+            experience=self.experience,
+            x=self.x,
+            y=self.y,
+        )
+        actor.show_troop(troop)
 
         return super().trigger(actor)
