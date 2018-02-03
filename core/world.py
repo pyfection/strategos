@@ -21,6 +21,7 @@ class World(EventResponseMixin):
         self.actors = setup.get('actors', [])
         self.current_turn = setup.get('current_turn', 0)
         self.perception = Perception.load(setup)
+        setup.pop('tiles')
         for actor in self.actors:
             actor.perception = Perception.load(setup)
             actor.setup()

@@ -4,7 +4,7 @@ import math
 
 from helpers import maths
 from helpers.convert import pos_to_coord
-from core.event import Move, Attack
+from core.event import Move, Attack, Uncover
 from core.mixins import EventResponseMixin
 
 
@@ -18,8 +18,21 @@ class Actor(EventResponseMixin):
         self.walk_path = []
         self.troop_target = None  # troop target
 
+    def _discover(self):
+        for i in range(-5, 6):
+            for j in range(-5, 6):
+                x = self.troop.x + i
+                y = self.troop.y + j
+                distance = maths.distance(self.troop.pos, (x, y))
+                if distance > 5:
+                    continue
+                coord = pos_to_coord(x, y)
+                if coord not in self.perception.tiles:
+                    action = Uncover(x, y)
+                    self.actions.append(action)
+
     def setup(self):
-        return
+        self._discover()
 
     @property
     def entity(self):
@@ -73,6 +86,7 @@ class Actor(EventResponseMixin):
                 self.stop_actions()
             else:
                 self.actions.append(Move(troop.id, x, y))
+                self._discover()
 
     def path_to(self, x, y):
         def get_neighbors(x, y):

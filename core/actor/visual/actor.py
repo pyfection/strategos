@@ -25,6 +25,7 @@ class Visual(Actor):
         self.view.ids.map.bind(on_touch_down=lambda inst, touch: self.move(touch.pos))
 
     def setup(self):
+        super().setup()
         for tile in self.perception.tiles.values():
             self.view.add_tile(tile)
         for troop in self.perception.troops.values():

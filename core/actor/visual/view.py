@@ -79,6 +79,7 @@ class View(Widget):
             self.add_widget(self.console)
             self.console.ids.input.focus = True
 
+    @mainthread
     def add_tile(self, c_tile):
         pos = (c_tile.x * self.SIZE_MOD, c_tile.y * self.SIZE_MOD)
         tile = Tile(
