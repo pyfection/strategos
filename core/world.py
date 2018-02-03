@@ -116,7 +116,7 @@ class World(EventResponseMixin):
         for actor in self.actors:
             actor.actions.clear()
         for action in actions.copy():
-            success = action.trigger(self)
+            success = action.process(self)
             if not success:
                 actions.remove(action)
 
@@ -148,6 +148,3 @@ class World(EventResponseMixin):
             events=actor.events
         )
         self.actors.append(replacement)
-
-    def show_troop(self, troop):
-        self.perception.troops[troop.id] = troop

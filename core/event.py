@@ -9,6 +9,9 @@ from core.troop import Troop
 class Event:
     PRIO = 0
 
+    def process(self, world):
+        return True
+
     def trigger(self, actor):
         return True
 
@@ -21,6 +24,9 @@ class Move(Event):
         self.troop_id = troop_id
         self.x = x
         self.y = y
+
+    def process(self, world):
+        return self.trigger(world)
 
     def trigger(self, actor):
         if (self.x, self.y) in [troop.pos for troop in actor.perception.troops.values() if troop.units]:
@@ -39,10 +45,11 @@ class Attack(Event):
         self.attacker_id = attacker_id
         self.defender_id = defender_id
         self.effectiveness_modifier = round(random.uniform(.5, 2), 2)
+        self.reduce_amount = 0
 
-    def trigger(self, actor):
-        attacker = actor.perception.troops[self.attacker_id]
-        defender = actor.perception.troops[self.defender_id]
+    def process(self, world):
+        attacker = world.perception.troops[self.attacker_id]
+        defender = world.perception.troops[self.defender_id]
         if defender.units == 0 or attacker.units == 0:
             return False
 
@@ -51,7 +58,12 @@ class Attack(Event):
         exp_ratio = attacker.experience / defender.experience
         effect = self.effectiveness_modifier
         kills = round(max(base * unit_ratio * exp_ratio * effect, 1))
-        actor.change_troop_unit_amount(self.defender_id, -min(kills, defender.units))
+        self.reduce_amount = -min(kills, defender.units)
+
+        return self.trigger(world)
+
+    def trigger(self, actor):
+        actor.change_troop_unit_amount(self.defender_id, self.reduce_amount)
 
         return super().trigger(actor)
 
@@ -59,6 +71,9 @@ class Attack(Event):
 class Quit(Event):
     def __init__(self, actor):
         self.actor = actor  # actor to be quit
+
+    def process(self, world):
+        return self.trigger(world)
 
     def trigger(self, actor):
         actor.quit_actor(self.actor)
@@ -75,8 +90,9 @@ class SpawnTroop(Event):
         self.experience = experience
         self.x = x
         self.y = y
+        self.troop = None
 
-    def trigger(self, actor):
+    def process(self, world):
         troop = Troop(
             id=self.id,
             name=self.name,
@@ -86,6 +102,12 @@ class SpawnTroop(Event):
             x=self.x,
             y=self.y,
         )
-        actor.show_troop(troop)
+        world.perception.troops[self.id] = troop
+        self.troop = troop
+
+        return True
+
+    def trigger(self, actor):
+        actor.show_troop(self.troop)
 
         return super().trigger(actor)
