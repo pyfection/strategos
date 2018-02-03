@@ -111,3 +111,18 @@ class SpawnTroop(Event):
         actor.show_troop(self.troop)
 
         return super().trigger(actor)
+
+
+class Uncover(Event):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.tile = None
+
+    def process(self, world):
+        self.tile = world.get_tile(self.x, self.y)
+        return True
+
+    def trigger(self, actor):
+        actor.show_tile(self.tile)
+
+        return super().trigger(actor)

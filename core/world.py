@@ -8,8 +8,10 @@ import logging
 import logging_conf
 from core.actor.ai import AI
 from core.perception import Perception
-from helpers.loader import save_game
 from core.mixins import EventResponseMixin
+from core.tile import Grass
+from helpers.loader import save_game
+from helpers.convert import pos_to_coord
 
 
 class World(EventResponseMixin):
@@ -106,6 +108,15 @@ class World(EventResponseMixin):
 
     def get_ais(self):
         return [a for a in self.actors if isinstance(a, AI)]
+
+    def get_tile(self, x, y):
+        coord = pos_to_coord(x, y)
+        try:
+            tile = self.perception.tiles[coord]
+        except KeyError:
+            tile = Grass(x, y)
+            self.perception.tiles[coord] = tile
+        return tile
 
     def update(self):
         threads = []
