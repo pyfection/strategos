@@ -29,7 +29,7 @@ class Actor(EventResponseMixin):
                     continue
                 coord = pos_to_coord(x, y)
                 if coord not in self.perception.tiles:
-                    action = Uncover(x, y)
+                    action = Uncover(x, y, self)
                     self.actions.append(action)
 
     def setup(self):

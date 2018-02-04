@@ -119,6 +119,11 @@ class World(EventResponseMixin):
             self.perception.tiles[coord] = tile
         return tile
 
+    def get_troop(self, x, y):
+        for troop in self.perception.troops.values():
+            if troop.pos == (x, y):
+                return troop
+
     def update(self):
         threads = []
 

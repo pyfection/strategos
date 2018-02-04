@@ -114,16 +114,24 @@ class SpawnTroop(Event):
 
 
 class Uncover(Event):
-    def __init__(self, x, y):
+    def __init__(self, x, y, requester):
         self.x, self.y = x, y
+        self.requester = requester
         self.tile = None
+        self.troop = None
 
     def process(self, world):
         self.tile = world.get_tile(self.x, self.y)
+        self.troop = world.get_troop(self.x, self.y)
         return True
 
     def trigger(self, actor):
+        if actor.name is not self.requester.name:
+            return False
+
         actor.show_tile(self.tile)
+        if self.troop:
+            actor.show_troop(self.troop)
 
         return super().trigger(actor)
 
