@@ -3,15 +3,14 @@
 import math
 
 from helpers import maths
-from helpers.convert import pos_to_coord
-from core.event import Move, Attack, Uncover
+from helpers.convert import pos_to_coord, coord_to_pos
+from core.event import Move, Attack, Uncover, Discover
 from core.mixins import EventResponseMixin
 
 
 class Actor(EventResponseMixin):
-    def __init__(self, name, entity_id=None, perception=None, events=None):
+    def __init__(self, name, perception=None, events=None):
         self.name = name  # unique identifier / player/account name
-        self.entity_id = entity_id
         self.perception = perception
         self.events = events or []  # events coming from outside
         self.actions = []  # ToDo: this needs to replace self.action
@@ -19,6 +18,8 @@ class Actor(EventResponseMixin):
         self.troop_target = None  # troop target
 
     def _discover(self):
+        if not self.troop:
+            return
         for i in range(-5, 6):
             for j in range(-5, 6):
                 x = self.troop.x + i
@@ -37,7 +38,7 @@ class Actor(EventResponseMixin):
     @property
     def entity(self):
         if self.perception:
-            return self.perception.entities.get(self.entity_id)
+            return self.perception.entity
 
     @property
     def troop(self):

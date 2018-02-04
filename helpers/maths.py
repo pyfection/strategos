@@ -21,5 +21,16 @@ def mean(*numbers):
     return float(sum(numbers)) / max(len(numbers), 1)
 
 
+def positions_in_radius(pos, radius):
+    for i in range(-5, 6):
+        for j in range(-5, 6):
+            x = pos[0] + i
+            y = pos[1] + j
+            d = distance(pos, (x, y))
+            if d > radius:
+                continue
+            yield (x, y)
+
+
 if __name__ == '__main__':
     print(limit_distance((1, 1), (10, 15), 5))

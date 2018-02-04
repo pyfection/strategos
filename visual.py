@@ -16,8 +16,8 @@ class GameApp(App):
     def build(self):
         with open('scenarios/rise_of_bavaria/setup.json') as f:
             setup = ujson.load(f)
-        actor = Visual(name='observer', entity_id=list(setup['entities'].keys())[0])
-        ai1 = AI(name='testai1', entity_id=list(setup['entities'].keys())[1])
+        actor = Visual(name='observer')
+        ai1 = AI(name='testai1')
         # ai2 = AI(name='testai2', entity_id=list(setup['entities'].keys())[1])
         setup.update({
             'actors': [
@@ -25,6 +25,10 @@ class GameApp(App):
                 ai1,
                 # ai2
             ],
+            'actor_to_entity_mapping': {
+                actor.name: list(setup['entities'].keys())[0],
+                ai1.name: list(setup['entities'].keys())[1]
+            },
             'seed': 555
         })
         world = World(setup)

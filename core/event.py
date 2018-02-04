@@ -126,3 +126,18 @@ class Uncover(Event):
         actor.show_tile(self.tile)
 
         return super().trigger(actor)
+
+
+class Discover(Event):
+    def __init__(self, troop_id):
+        self.troop_id = troop_id
+        self.troop = None
+
+    def process(self, world):
+        self.troop = world.perception.troops[self.troop_id]
+        return True
+
+    def trigger(self, actor):
+        actor.show_troop(self.troop)
+
+        return super().trigger(actor)

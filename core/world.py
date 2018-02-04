@@ -21,9 +21,9 @@ class World(EventResponseMixin):
         self.actors = setup.get('actors', [])
         self.current_turn = setup.get('current_turn', 0)
         self.perception = Perception.load(setup)
-        setup.pop('tiles')
         for actor in self.actors:
-            actor.perception = Perception.load(setup)
+            entity_id = setup['actor_to_entity_mapping'][actor.name]
+            actor.perception = self.perception.entities[entity_id].perception
             actor.setup()
         logging.info(f"Worldseed: {self.seed}")
 
@@ -155,7 +155,6 @@ class World(EventResponseMixin):
         self.actors.remove(actor)
         replacement = AI(
             name=str(uuid4()),
-            entity_id=actor.entity_id,
             perception=actor.perception,
             events=actor.events
         )
