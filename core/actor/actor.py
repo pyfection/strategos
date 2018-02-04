@@ -17,14 +17,16 @@ class Actor(EventResponseMixin):
         self.walk_path = []
         self.troop_target = None  # troop target
 
-    def _discover(self):
+    def _discover(self, origin=None):
         if not self.troop:
             return
+        if not origin:
+            origin = self.troop.pos
         for i in range(-5, 6):
             for j in range(-5, 6):
-                x = self.troop.x + i
-                y = self.troop.y + j
-                distance = maths.distance(self.troop.pos, (x, y))
+                x = origin[0] + i
+                y = origin[1] + j
+                distance = maths.distance(origin, (x, y))
                 if distance > 5:
                     continue
                 coord = pos_to_coord(x, y)
@@ -87,7 +89,7 @@ class Actor(EventResponseMixin):
                 self.stop_actions()
             else:
                 self.actions.append(Move(troop.id, x, y))
-                self._discover()
+                self._discover((x, y))
 
     def path_to(self, x, y):
         def get_neighbors(x, y):

@@ -18,6 +18,7 @@ from lib.widgets.building import Settlement
 
 class View(Widget):
     MOVE_ANIM = 'in_out_cubic'
+    REVEAL_TILE_ANIM = 'in_quart'
     ANIM_DUR = .7
     SIZE_MOD = 32
 
@@ -81,12 +82,17 @@ class View(Widget):
 
     @mainthread
     def add_tile(self, c_tile):
-        pos = (c_tile.x * self.SIZE_MOD, c_tile.y * self.SIZE_MOD)
+        tx, ty = c_tile.x * self.SIZE_MOD, c_tile.y * self.SIZE_MOD
+        sx, sy = tx + int(self.SIZE_MOD / 2), ty + int(self.SIZE_MOD / 2)
         tile = Tile(
             name=c_tile.type,
-            pos=pos,
+            pos=(sx, sy),
+            size=(0, 0)
         )
         self.ids.map.add_widget(tile)
+        anim = Animation(
+            x=tx, y=ty, width=self.SIZE_MOD, height=self.SIZE_MOD, duration=self.ANIM_DUR, t=self.REVEAL_TILE_ANIM
+        )
         if c_tile.population > 0:
             try:
                 faction = c_tile.owner.faction.name
@@ -95,9 +101,14 @@ class View(Widget):
             settlement = Settlement(
                 faction=faction,
                 size=c_tile.population,
-                pos=pos
+                pos=(sx, sy),
+                width=0,
+                height=0
             )
             self.ids.map.add_widget(settlement)
+            anim.start(settlement)
+        anim.start(tile)
+
         for troop in self.troops.values():  # ToDo: this is not very performant, find a better solution
             self.ids.map.remove_widget(troop)
             self.ids.map.add_widget(troop)

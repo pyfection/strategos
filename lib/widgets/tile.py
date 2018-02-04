@@ -10,7 +10,7 @@ class Tile(Image):
         super().__init__(
             source=f'atlas://assets/tiles/{name}',
             size_hint=(None, None),
-            size=(self.SIZE, self.SIZE),
+            size=kwargs.pop('size', (self.SIZE, self.SIZE)),
             color=[1, 1, 1, 1],
             **kwargs
         )
