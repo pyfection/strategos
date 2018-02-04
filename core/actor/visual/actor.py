@@ -34,6 +34,8 @@ class Visual(Actor):
             else:
                 faction = None
             self.view.add_troop(faction, troop)
+            if self.troop and troop.id == self.troop.id:
+                self.view.focus_center = self.troop.pos
 
     def toggle_pause(self):
         self.paused = not self.paused
