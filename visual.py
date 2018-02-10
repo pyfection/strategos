@@ -13,6 +13,8 @@ from core.actor.ai import AI
 
 
 class GameApp(App):
+    title = "Strategos"
+
     def build(self):
         with open('scenarios/rise_of_bavaria/setup.json') as f:
             setup = ujson.load(f)
