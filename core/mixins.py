@@ -53,7 +53,7 @@ class EventDistortedResponseMixin(EventResponseMixin):
 
 class EventProcessMixin(EventResponseMixin):
     def add_event_to_actor(self, event, actor):
-        actor.events.append(event)
+        self.events.setdefault(actor.name, []).append(event)
 
     def quit_actor(self, event):
         from core.actor.ai import AI
@@ -65,9 +65,9 @@ class EventProcessMixin(EventResponseMixin):
             events=actor.events
         )
         self.actors.append(replacement)
-
+        event = Quit(actor)
         for actor in self.actors:
-            self.events.setdefault(actor.name, []).append(Quit(actor))
+            self.add_event_to_actor(event, actor)
 
     def move_troop(self, event):
         if (event.x, event.y) not in [troop.pos for troop in self.perception.troops.values() if troop.units]:

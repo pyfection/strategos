@@ -141,6 +141,7 @@ class World(EventProcessMixin):
             t = Thread(target=actor.do_turn, kwargs={'turn': self.current_turn, 'events': events})
             threads.append(t)
             t.start()
+        self.events.clear()
 
         # Wait for all actors to finish
         for thread in threads:
