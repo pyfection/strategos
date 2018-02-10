@@ -117,12 +117,20 @@ class View(Widget):
     def add_troop(self, faction_name, c_troop):
         if c_troop.id in self.troops or not c_troop.units:
             return
+        tx, ty = c_troop.x * self.SIZE_MOD, c_troop.y * self.SIZE_MOD
+        sx, sy = tx + int(self.SIZE_MOD / 2), ty + int(self.SIZE_MOD / 2)
         troop = Troop(
             faction=faction_name or 'default',
-            pos=(c_troop.x * self.SIZE_MOD, c_troop.y * self.SIZE_MOD)
+            pos=(sx, sy),
+            width=0,
+            height=0
         )
         self.ids.map.add_widget(troop)
         self.troops[c_troop.id] = troop
+        anim = Animation(
+            x=tx, y=ty, width=self.SIZE_MOD, height=self.SIZE_MOD, duration=self.ANIM_DUR, t=self.REVEAL_TILE_ANIM
+        )
+        anim.start(troop)
 
     def remove_troop(self, troop_id):
         troop = self.troops.pop(troop_id)
