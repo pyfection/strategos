@@ -22,12 +22,12 @@ class Actor(EventDistortedResponseMixin):
             return
         if not origin:
             origin = self.troop.pos
-        for i in range(-5, 6):
-            for j in range(-5, 6):
+        for i in range(-self.troop.view_range, self.troop.view_range+1):
+            for j in range(-self.troop.view_range, self.troop.view_range+1):
                 x = origin[0] + i
                 y = origin[1] + j
                 distance = maths.distance(origin, (x, y))
-                if distance > 5:
+                if distance > self.troop.view_range:
                     continue
                 coord = pos_to_coord(x, y)
                 if coord not in self.perception.tiles:

@@ -74,7 +74,7 @@ class EventProcessMixin(EventResponseMixin):
             super().move_troop(event)
             discover = Discover(troop=self.perception.troops[event.troop_id])
             for actor in self.actors:
-                if actor.troop and distance(actor.troop.pos, (event.x, event.y)) < 6:  # ToDo: replace with "in visible_tiles" or similar
+                if actor.troop and actor.troop.in_view_range(event.x, event.y):
                     if event.troop_id in actor.perception.troops:
                         self.add_event_to_actor(event, actor)
                     else:
@@ -94,7 +94,7 @@ class EventProcessMixin(EventResponseMixin):
         event.reduce_amount = -min(kills, defender.units)
 
         for actor in self.actors:
-            if actor.troop and distance(actor.troop.pos, (defender.x, defender.y)) < 6:  # ToDo: replace with "in visible_tiles" or similar
+            if actor.troop and actor.troop.in_view_range(defender.x, defender.y):
                 self.add_event_to_actor(event, actor)
 
     def discover_troop(self, event):

@@ -2,9 +2,11 @@
 
 from uuid import uuid4
 
+from helpers import maths
+
 
 class Troop:
-    def __init__(self, id=None, name=None, leader=None, units=0, experience=.1, x=None, y=None):
+    def __init__(self, id=None, name=None, leader=None, units=0, experience=.1, x=None, y=None, view_range=5):
         self.id = id or str(uuid4())
         self.name = name
         self.leader = leader
@@ -12,10 +14,14 @@ class Troop:
         self.experience = experience
         self.x = x
         self.y = y
+        self.view_range = view_range
 
     @property
     def pos(self):
         return (self.x, self.y)
+
+    def in_view_range(self, x, y):
+        return maths.distance(self.pos, (x, y)) <= self.view_range
 
     def copy(self, **kwargs):
         d = self.__dict__.copy()
