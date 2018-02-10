@@ -20,13 +20,16 @@ class ImageLoader:
             pixels = self.pixels_buffer[(base_x, base_y)]
             self.pixels_buffer.move_to_end((base_x, base_y))
         except KeyError:
-            image = Image.open(os.path.join('maps', self.map_name, f'{base_x}_{base_y}') + '.png')
+            try:
+                image = Image.open(os.path.join('maps', self.map_name, f'{base_x}|{base_y}') + '.png')
+            except FileNotFoundError:
+                return Grass(x, y)
             pixels = image.load()
             self.pixels_buffer[(base_x, base_y)] = pixels
             if len(self.pixels_buffer) > self.pixels_buffer_max_len:
                 self.pixels_buffer.popitem(last=False)
 
-        r, g, b = pixels[x, y]
+        r, g, b = pixels[x%64, 63-y%64]
         hex = "#{0:02x}{1:02x}{2:02x}".format(r, g, b)
         for TileType in TILE_TYPES.values():
             if TileType.color == hex:
