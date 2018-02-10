@@ -5,15 +5,15 @@ import math
 from helpers import maths
 from helpers.convert import pos_to_coord, coord_to_pos
 from core.event import Move, Attack, Uncover, Discover
-from core.mixins import EventResponseMixin
+from core.mixins import EventDistortedResponseMixin
 
 
-class Actor(EventResponseMixin):
+class Actor(EventDistortedResponseMixin):
     def __init__(self, name, perception=None, events=None):
         self.name = name  # unique identifier / player/account name
         self.perception = perception
         self.events = events or []  # events coming from outside
-        self.actions = []  # ToDo: this needs to replace self.action
+        self.actions = []  # actions (events) actor wants to do
         self.walk_path = []
         self.troop_target = None  # troop target
 

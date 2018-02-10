@@ -108,13 +108,13 @@ class Visual(Actor):
         self.paused = False
         App.get_running_app().stop()
 
-    def move_troop(self, troop_id, x, y):
-        super().move_troop(troop_id, x, y)
-        self.view.move_troop(troop_id, x, y)
-        if self.troop_target and self.troop_target.id == troop_id:
-            self.view.move_target(x, y)
+    def move_troop(self, event):
+        super().move_troop(event)
+        self.view.move_troop(event.troop_id, event.x, event.y)
+        if self.troop_target and self.troop_target.id == event.troop_id:
+            self.view.move_target(event.x, event.y)
 
-        if self.troop and troop_id == self.troop.id:
+        if self.troop and event.troop_id == self.troop.id:
             self.view.focus_center = self.troop.pos
             self.view.center_camera()
             if not self.walk_path and not self.troop_target:

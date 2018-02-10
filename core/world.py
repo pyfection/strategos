@@ -8,19 +8,20 @@ import logging
 import logging_conf
 from core.actor.ai import AI
 from core.perception import Perception
-from core.mixins import EventResponseMixin
+from core.mixins import EventProcessMixin
 from core.tile import Grass
 from helpers.loader import save_game
 from helpers.convert import pos_to_coord
 
 
-class World(EventResponseMixin):
+class World(EventProcessMixin):
     def __init__(self, setup):
         self.seed = setup.get('seed')
         random.seed(self.seed)
         self.actors = setup.get('actors', [])
         self.current_turn = setup.get('current_turn', 0)
         self.perception = Perception.load(setup)
+        self.events = {}
         for actor in self.actors:
             entity_id = setup['actor_to_entity_mapping'][actor.name]
             actor.perception = self.perception.entities[entity_id].perception
@@ -127,19 +128,16 @@ class World(EventResponseMixin):
     def update(self):
         threads = []
 
-        # Collect events from actors and trigger them on the world
         actions = sorted([event for actor in self.actors for event in actor.actions], key=lambda k: k.PRIO)
 
         for actor in self.actors:
             actor.actions.clear()
         for action in actions.copy():
-            success = action.process(self)
-            if not success:
-                actions.remove(action)
+            action.trigger(self)
 
         # Tell actors to update
         for actor in self.actors:
-            events = actions.copy()
+            events = self.events.get(actor.name, [])
             t = Thread(target=actor.do_turn, kwargs={'turn': self.current_turn, 'events': events})
             threads.append(t)
             t.start()
@@ -155,12 +153,3 @@ class World(EventResponseMixin):
         while self.is_running:
             self.update()
         logging.info("World is no longer running")
-
-    def quit_actor(self, actor):
-        self.actors.remove(actor)
-        replacement = AI(
-            name=str(uuid4()),
-            perception=actor.perception,
-            events=actor.events
-        )
-        self.actors.append(replacement)
