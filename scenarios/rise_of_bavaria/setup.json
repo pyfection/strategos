@@ -61,16 +61,16 @@
       "leader": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
       "units": 100,
       "experience": 1,
-      "x": 20,
-      "y": 37
+      "x": 30,
+      "y": 19
     },
     "a0d9b31a-4e48-415a-8f4b-ac3d7e361360": {
       "name": "Germanic Raiding Party",
       "leader": "cc7fcc7a-4299-4195-9b99-69f53a979ea8",
       "units": 100,
       "experience": 1,
-      "x": 20,
-      "y": 7
+      "x": 30,
+      "y": 43
     }
   },
   "tiles": {
