@@ -11,3 +11,5 @@ You control one character and have to try to maintain your domain.
 - send scouts to gain information of your surroundings (which may not always be as it really is)
 
 Please note that this game is very much still in progress. Concepts may change and a lot of the art style is still a subject to change.
+![screenshot1](https://github.com/pyfection/strategos/blob/master/misc/strategos_screenshot1.png)
+![screenshot2](https://github.com/pyfection/strategos/blob/master/misc/screenshot1.png)
