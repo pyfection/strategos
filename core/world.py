@@ -137,7 +137,7 @@ class World(EventProcessMixin):
 
         # Tell actors to update
         for actor in self.actors:
-            events = self.events.get(actor.name, [])
+            events = sorted(self.events.get(actor.name, []), key=lambda k: k.PRIO)
             t = Thread(target=actor.do_turn, kwargs={'turn': self.current_turn, 'events': events})
             threads.append(t)
             t.start()

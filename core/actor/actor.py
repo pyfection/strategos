@@ -69,7 +69,7 @@ class Actor(EventDistortedResponseMixin):
 
     def end_turn(self):
         if self.troop and not self.troop.units:
-            self.stop_actions()
+            self.stop_actions()  # ToDo: check if this could potentially be called every turn; if so it's not good
             return
         if self.troop_target:
             if not self.troop_target.units:

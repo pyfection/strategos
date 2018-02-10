@@ -27,7 +27,7 @@ class EventResponseMixin:
         self.change_troop_unit_amount(event.defender_id, event.reduce_amount)
 
     def discover_troop(self, event):
-        self.show_troop(self.troop)
+        self.show_troop(event.troop)
 
     def uncover_tile(self, event):
         self.show_tile(event.tile)
@@ -74,7 +74,7 @@ class EventProcessMixin(EventResponseMixin):
             super().move_troop(event)
             discover = Discover(troop=self.perception.troops[event.troop_id])
             for actor in self.actors:
-                if actor.troop and distance(actor.troop.pos, (event.x, event.y)) <= 6:
+                if actor.troop and distance(actor.troop.pos, (event.x, event.y)) < 6:  # ToDo: replace with "in visible_tiles"
                     if event.troop_id in actor.perception.troops:
                         self.add_event_to_actor(event, actor)
                     else:
