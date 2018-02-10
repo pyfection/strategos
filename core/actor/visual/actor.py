@@ -1,6 +1,7 @@
 
 
 from time import time, sleep
+from math import floor
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -87,7 +88,7 @@ class Visual(Actor):
         # position on map widget
         mx, my = ax - self.view.ids.map.x, ay - self.view.ids.map.y
         # target position
-        tx, ty = int(mx / assets.SIZE_MOD), int(my / assets.SIZE_MOD)
+        tx, ty = floor(mx / assets.SIZE_MOD), floor(my / assets.SIZE_MOD)
 
         if (tx, ty) == self.troop.pos:
             return
