@@ -103,3 +103,9 @@ class EventProcessMixin(EventResponseMixin):
     def uncover_tile(self, event):
         event.tile = self.get_tile(event.x, event.y)
         self.add_event_to_actor(event, event.requester)
+        for troop_id, troop in self.perception.troops.items():
+            if event.requester.troop and event.requester.troop.id == troop_id:
+                continue
+            if troop.pos == (event.x, event.y):
+                discover = Discover(troop=troop)
+                self.add_event_to_actor(discover, event.requester)
