@@ -5,7 +5,6 @@ import ujson
 
 from kivy.app import App
 
-from helpers.loader import load_map
 from core.world import World
 from core.actor.visual import Visual
 from core.actor.observer import Observer

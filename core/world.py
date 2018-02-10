@@ -10,6 +10,7 @@ from core.actor.ai import AI
 from core.perception import Perception
 from core.mixins import EventProcessMixin
 from core.tile import Grass
+from core.map_gen import GEN_TYPES
 from helpers.loader import save_game
 from helpers.convert import pos_to_coord
 
@@ -18,6 +19,7 @@ class World(EventProcessMixin):
     def __init__(self, setup):
         self.seed = setup.get('seed')
         random.seed(self.seed)
+        self.map_gen = GEN_TYPES[setup['map_gen']](setup['map_name'])
         self.actors = setup.get('actors', [])
         self.current_turn = setup.get('current_turn', 0)
         self.perception = Perception.load(setup)
@@ -116,8 +118,7 @@ class World(EventProcessMixin):
         try:
             tile = self.perception.tiles[coord]
         except KeyError:
-            tile = Grass(x, y)
-            self.perception.tiles[coord] = tile
+            tile = self.map_gen.get_tile(x, y)
         return tile
 
     def get_troop(self, x, y):
