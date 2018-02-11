@@ -1,8 +1,8 @@
 
 
-from .image_loader import ImageLoader
+from .random_gen import RandomGen
 
 
 GEN_TYPES = {
-    'image_loader': ImageLoader
+    'random': RandomGen
 }

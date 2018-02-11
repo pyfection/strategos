@@ -8,7 +8,7 @@ from PIL import Image
 from core.tile import TILE_TYPES, Grass
 
 
-class ImageLoader:
+class MapLoader:
     def __init__(self, map_name):
         self.map_name = map_name
         self.pixels_buffer = OrderedDict()
@@ -23,7 +23,7 @@ class ImageLoader:
             try:
                 image = Image.open(os.path.join('maps', self.map_name, f'{base_x}|{base_y}') + '.png')
             except FileNotFoundError:
-                return Grass(x, y)
+                return None
             pixels = image.load()
             self.pixels_buffer[(base_x, base_y)] = pixels
             if len(self.pixels_buffer) > self.pixels_buffer_max_len:
@@ -35,4 +35,4 @@ class ImageLoader:
             if TileType.color == hex:
                 return TileType(x, y)
 
-        return Grass(x, y)
+        return None

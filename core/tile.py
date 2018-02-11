@@ -68,7 +68,6 @@ class River(Tile):
 
 
 TILE_TYPES = {
-    Tile.type: Tile,
     Grass.type: Grass,
     Forest.type: Forest,
     Hill.type: Hill,

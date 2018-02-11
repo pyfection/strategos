@@ -1,6 +1,9 @@
 {
   "map_name": "bavaria",
-  "map_gen": "image_loader",
+  "map_gen": {
+    "name": "random",
+    "seed": 555
+  },
   "entities": {
     "7a7fecff-18b1-43a8-b520-44e56ea783c9": {
       "name": "Ignatius Trozza",
