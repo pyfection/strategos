@@ -9,6 +9,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.clock import Clock, mainthread
 
+from helpers.maths import distance
 from lib.widgets.console import Console
 from lib.widgets.tile import Tile
 from lib.widgets.overlay import Target
@@ -19,6 +20,7 @@ from lib.widgets.building import Settlement
 class View(Widget):
     MOVE_ANIM = 'in_out_cubic'
     REVEAL_TILE_ANIM = 'in_quart'
+    FOW_ANIM = 'in_cubic'
     ANIM_DUR = .7
     SIZE_MOD = 32
 
@@ -28,7 +30,9 @@ class View(Widget):
         super().__init__()
         self.actor = actor
         self.troops = {}
+        self.tiles = {}
         self.focus_center = (0, 0)
+        self.focus_radius = 5
 
         self.console = Console(pos=self.pos, height=self.height, width=100, size_hint=(None, None))
         self.console.commands['exit'] = self.toggle_console
@@ -89,6 +93,7 @@ class View(Widget):
             pos=(sx, sy),
             size=(0, 0)
         )
+        self.tiles[(c_tile.x, c_tile.y)] = tile
         self.ids.map.add_widget(tile)
         anim = Animation(
             x=tx, y=ty, width=self.SIZE_MOD, height=self.SIZE_MOD, duration=self.ANIM_DUR, t=self.REVEAL_TILE_ANIM
@@ -155,6 +160,15 @@ class View(Widget):
         # self.ids.map.center = (fx, fy)
         anim = Animation(x=fx, y=fy, duration=self.ANIM_DUR, t=self.MOVE_ANIM)
         anim.start(self.ids.map)
+
+        for pos, tile in self.tiles.items():
+            in_range = distance(pos, self.focus_center) <= self.focus_radius
+            if in_range and tile.color != [1, 1, 1, 1]:
+                anim = Animation(color=[1, 1, 1, 1], duration=self.ANIM_DUR, t=self.FOW_ANIM)
+                anim.start(tile)
+            elif not in_range and tile.color == [1, 1, 1, 1]:
+                anim = Animation(color=[.7, .7, .7, .7], duration=self.ANIM_DUR, t=self.FOW_ANIM)
+                anim.start(tile)
 
     def move_troop(self, troop_id, x, y):
         try:

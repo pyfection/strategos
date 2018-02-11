@@ -117,16 +117,12 @@ class World(EventProcessMixin):
 
     def get_tile(self, x, y):
         coord = pos_to_coord(x, y)
-        print(coord)
         try:
             tile = self.perception.tiles[coord]
-            print('perception')
         except KeyError:
             tile = self.map_loader.get_tile(x, y)
-            print('loader')
         if not tile:
             tile = self.map_gen.get_tile(x, y)
-            print('gen')
         return tile
 
     def get_troop(self, x, y):

@@ -37,6 +37,7 @@ class Visual(Actor):
             self.view.add_troop(faction, troop)
             if self.troop and troop.id == self.troop.id:
                 self.view.focus_center = self.troop.pos
+                self.view.focus_radius = self.troop.view_range
 
     def toggle_pause(self):
         self.paused = not self.paused
@@ -54,11 +55,6 @@ class Visual(Actor):
     def show_tile(self, tile, **distortions):
         super().show_tile(tile, **distortions)
         self.view.add_tile(tile)
-
-    def assign_troop(self, troop):
-        super().assign_troop(troop)
-        self.view.focus_center = self.troop.pos
-        self.view.center_camera()
 
     def show_troop(self, troop, **distortions):
         super().show_troop(troop, **distortions)
