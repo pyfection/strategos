@@ -1,6 +1,6 @@
 #:kivy 1.10.0
 
-<MainMenu>:
+<GameSetup>:
     canvas:
         Color:
             rgb: .1, .13, .18
@@ -11,10 +11,6 @@
         id: menus
         orientation: "vertical"
         Button:
-            id: game_setup
-            text: "New Game"
-            on_press: app.screenmanager.current = "game_setup"
-        Button:
-            id: quit
-            text: "Quit"
-            on_press: app.stop()
+            id: back
+            text: "Back"
+            on_press: app.screenmanager.current = "main_menu"
