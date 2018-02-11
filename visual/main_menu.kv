@@ -1,0 +1,16 @@
+#:kivy 1.10.0
+
+<MainMenu>:
+    canvas:
+        Color:
+            rgb: .1, .13, .18
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    BoxLayout:
+        id: menus
+        orientation: "vertical"
+        Button:
+            id: quit
+            text: "Quit"
+            on_press: app.stop()
