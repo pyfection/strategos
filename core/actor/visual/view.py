@@ -2,19 +2,19 @@
 
 import os
 
+from kivy.animation import Animation
+from kivy.clock import Clock, mainthread
 from kivy.core.window import Window
 from kivy.lang.builder import Builder
-from kivy.animation import Animation
-from kivy.uix.widget import Widget
 from kivy.uix.label import Label
-from kivy.clock import Clock, mainthread
+from kivy.uix.widget import Widget
+from visual.building import Settlement
+from visual.overlay import Target
+from visual.tile import Tile
+from visual.troop import Troop
 
 from helpers.maths import distance
-from lib.widgets.console import Console
-from lib.widgets.tile import Tile
-from lib.widgets.overlay import Target
-from lib.widgets.troop import Troop
-from lib.widgets.building import Settlement
+from visual.console import Console
 
 
 class View(Widget):
