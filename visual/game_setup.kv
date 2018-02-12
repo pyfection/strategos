@@ -10,6 +10,30 @@
     BoxLayout:
         id: menus
         orientation: "vertical"
+        TabbedPanel:
+            default_tab: player_panel
+            TabbedPanelItem:
+                id: player_panel
+                text: "Players"
+                GridLayout:
+                    id: players
+                    cols: 2
+            TabbedPanelItem:
+                text: "Options"
+                GridLayout:
+                    cols: 2
+                    Label:
+                        text: "Seed"
+                    TextInput:
+                        id: seed
+                    Label:
+                        text: "Map Gen"
+                    TextInput:
+                        id: map_gen
+                    Label:
+                        text: "Map"
+                    TextInput:
+                        id: map
         Button:
             id: back
             text: "Back"
