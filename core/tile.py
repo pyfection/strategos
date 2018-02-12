@@ -1,19 +1,25 @@
 
 
 class Tile:
+    DEFAULT_FERTILITY = 0
     type = 'tile'
     color = '#ffffff'
 
-    def __init__(self, x, y, z=0, owner=None, population=0):
+    def __init__(self, x, y, z=0, owner=None, population=0, base_fertility=0):
         self.x = x
         self.y = y
         self.z = z
         self.owner = owner
         self.population = population
+        self.base_fertility = base_fertility or self.DEFAULT_FERTILITY
 
     @property
     def pos(self):
         return self.x, self.y
+
+    @property
+    def fertility(self):
+        return self.base_fertility
 
     def copy(self, **kwargs):
         d = self.__dict__.copy()
@@ -35,16 +41,19 @@ class Tile:
 
 
 class Grass(Tile):
+    DEFAULT_FERTILITY = 10
     type = 'grass'
     color = '#3b7c27'
 
 
 class Forest(Tile):
+    DEFAULT_FERTILITY = 5
     type = 'forest'
     color = '#1c3c16'
 
 
 class Hill(Tile):
+    DEFAULT_FERTILITY = 5
     type = 'hill'
     color = '#928f34'
 
