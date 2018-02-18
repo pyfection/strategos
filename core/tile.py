@@ -5,11 +5,11 @@ class Tile:
     type = 'tile'
     color = '#ffffff'
 
-    def __init__(self, x, y, z=0, owner=None, population=0, base_fertility=0):
+    def __init__(self, x, y, z=0, dominion=None, population=0, base_fertility=0):
         self.x = x
         self.y = y
         self.z = z
-        self.owner = owner
+        self.dominion = dominion
         self.population = population
         self.base_fertility = base_fertility or self.DEFAULT_FERTILITY
 
