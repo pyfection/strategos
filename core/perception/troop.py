@@ -3,9 +3,10 @@
 from uuid import uuid4
 
 from helpers import maths
+from .mixins import CopyMixin
 
 
-class Troop:
+class Troop(CopyMixin):
     def __init__(
             self, perception, id=None, name=None, leader=None, units=0, experience=.1, x=None, y=None, view_range=5):
         self._perception = perception

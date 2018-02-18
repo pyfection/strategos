@@ -1,6 +1,9 @@
 
 
-class Tile:
+from .mixins import CopyMixin
+
+
+class Tile(CopyMixin):
     DEFAULT_FERTILITY = 0
     type = 'tile'
     color = '#ffffff'

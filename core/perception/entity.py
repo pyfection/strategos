@@ -2,8 +2,10 @@
 
 from uuid import uuid4
 
+from .mixins import CopyMixin
 
-class Entity:
+
+class Entity(CopyMixin):
     def __init__(self, perception, id=None, name=None, ruler=None, troop=None, faction=None):
         self._perception = perception
         self.id = id or str(uuid4())
