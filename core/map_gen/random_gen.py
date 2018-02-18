@@ -2,7 +2,7 @@
 
 from random import Random
 
-from core.tile import TILE_TYPES
+from core.perception.tile import TILE_TYPES
 
 
 class RandomGen:

@@ -1,19 +1,16 @@
 
 
+import logging
 import random
 from threading import Thread
-from uuid import uuid4
-import logging
 
-import logging_conf
 from core.actor.ai import AI
-from core.perception import Perception
-from core.mixins import EventProcessMixin
-from core.tile import Grass
 from core.map_gen import GEN_TYPES
-from maps import MapLoader
-from helpers.loader import save_game
+from core.mixins import EventProcessMixin
+from core.perception import Perception
 from helpers.convert import pos_to_coord
+from helpers.loader import save_game
+from maps import MapLoader
 
 
 class World(EventProcessMixin):

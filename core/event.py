@@ -3,7 +3,7 @@
 import random
 from uuid import uuid4
 
-from core.troop import Troop
+from core.perception.troop import Troop
 
 
 class Event:

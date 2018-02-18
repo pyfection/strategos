@@ -1,10 +1,10 @@
 
 
+from core.perception.entity import Entity
+from core.perception.faction import Faction
+from core.perception.tile import TILE_TYPES
+from core.perception.troop import Troop
 from helpers.convert import pos_to_coord, coord_to_pos
-from core.entity import Entity
-from core.tile import TILE_TYPES
-from core.troop import Troop
-from core.faction import Faction
 
 
 class Perception:

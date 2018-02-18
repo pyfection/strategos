@@ -5,7 +5,7 @@ from collections import OrderedDict
 
 from PIL import Image
 
-from core.tile import TILE_TYPES, Grass
+from core.perception.tile import TILE_TYPES
 
 
 class MapLoader:

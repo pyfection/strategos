@@ -5,7 +5,8 @@ class Tile:
     type = 'tile'
     color = '#ffffff'
 
-    def __init__(self, x, y, z=0, dominion=None, population=0, base_fertility=0):
+    def __init__(self, perception, x, y, z=0, dominion=None, population=0, base_fertility=0):
+        self._perception = perception
         self.x = x
         self.y = y
         self.z = z
