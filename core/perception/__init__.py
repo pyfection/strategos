@@ -47,19 +47,19 @@ class Perception:
 
         return self
 
-    def show_tile(self, tile, **distortions):
-        self.tiles[pos_to_coord(tile.x, tile.y)] = tile.copy(**distortions)
+    def show_tile(self, tile):
+        self.tiles[pos_to_coord(tile.x, tile.y)] = tile.copy(self)
 
-    def show_entity(self, entity, **distortions):
-        self.entities[entity.id] = entity.copy(**distortions)
+    def show_entity(self, entity):
+        self.entities[entity.id] = entity.copy(self)
 
-    def show_troop(self, troop, **distortions):
+    def show_troop(self, troop):
         try:
             old_troop = self.troops[troop.id]
         except KeyError:
-            self.troops[troop.id] = troop.copy(**distortions)
+            self.troops[troop.id] = troop.copy(self)
         else:
-            old_troop.update(troop, **distortions)
+            old_troop.update(troop)
 
-    def show_faction(self, faction, **distortions):
-        self.factions[faction.id] = faction.copy(**distortions)
+    def show_faction(self, faction):
+        self.factions[faction.id] = faction.copy(self)

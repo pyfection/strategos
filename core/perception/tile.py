@@ -32,16 +32,6 @@ class Tile(CopyMixin):
     def dominion(self):
         return self._perception.dominions[self._dominion]
 
-    def copy(self, **kwargs):
-        d = self.__dict__.copy()
-        d.update(kwargs)
-        inst = self.__class__(d.pop('x'), d.pop('y'))
-        for key, value in d.items():
-            setattr(inst, key, value)
-        if inst.owner:
-            inst.owner = kwargs.get('owner') or self.owner.copy()
-        return inst
-
     def passable(self, by):
         """
         check if tile is passable by "by"
