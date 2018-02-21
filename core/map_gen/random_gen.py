@@ -13,6 +13,5 @@ class RandomGen:
 
     def get_tile(self, x, y):
         Tile = self.random.choice(list(TILE_TYPES.values()))
-        tile = Tile(x, y)
 
-        return tile
+        return Tile, (x, y)
