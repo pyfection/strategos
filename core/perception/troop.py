@@ -19,6 +19,8 @@ class Troop(CopyMixin):
         self.view_range = view_range
         self._leader = leader
 
+        perception.troops[id] = self
+
     @property
     def pos(self):
         return (self.x, self.y)

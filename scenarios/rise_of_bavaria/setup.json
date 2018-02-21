@@ -4,12 +4,16 @@
     "name": "random",
     "seed": 555
   },
-  "entities": {
+  "perceptions": {
     "7a7fecff-18b1-43a8-b520-44e56ea783c9": {
-      "name": "Ignatius Trozza",
-      "ruler": null,
-      "troop": "16afc757-c602-4ce4-b3cd-d3606ddac42c",
-      "faction": "5f2115db-2aa1-441c-b53b-db38af52f642",
+      "entities": {
+        "7a7fecff-18b1-43a8-b520-44e56ea783c9": {
+          "name": "Ignatius Trozza",
+          "ruler": null,
+          "troop": "16afc757-c602-4ce4-b3cd-d3606ddac42c",
+          "faction": "5f2115db-2aa1-441c-b53b-db38af52f642"
+        }
+      },
       "factions": {
         "5f2115db-2aa1-441c-b53b-db38af52f642": {
           "name": "trozza",
@@ -28,13 +32,19 @@
       }
     },
     "cc7fcc7a-4299-4195-9b99-69f53a979ea8": {
-      "name": "Marbodus",
-      "ruler": null,
-      "troop": "a0d9b31a-4e48-415a-8f4b-ac3d7e361360",
-      "faction": "a8bc9487-eeaa-409a-99e1-9db34c3a76a8",
+      "entities": {
+        "cc7fcc7a-4299-4195-9b99-69f53a979ea8": {
+          "name": "Marbodus",
+          "ruler": null,
+          "troop": "a0d9b31a-4e48-415a-8f4b-ac3d7e361360",
+          "faction": "a8bc9487-eeaa-409a-99e1-9db34c3a76a8"
+        }
+      },
+      "factions": {
         "a8bc9487-eeaa-409a-99e1-9db34c3a76a8": {
-        "name": "marcomanni",
-        "leader": "cc7fcc7a-4299-4195-9b99-69f53a979ea8"
+          "name": "marcomanni",
+          "leader": "cc7fcc7a-4299-4195-9b99-69f53a979ea8"
+        }
       },
       "troops": {
         "a0d9b31a-4e48-415a-8f4b-ac3d7e361360": {
@@ -48,6 +58,20 @@
       }
     }
   },
+  "entities": {
+    "7a7fecff-18b1-43a8-b520-44e56ea783c9": {
+      "name": "Ignatius Trozza",
+      "ruler": null,
+      "troop": "16afc757-c602-4ce4-b3cd-d3606ddac42c",
+      "faction": "5f2115db-2aa1-441c-b53b-db38af52f642"
+    },
+    "cc7fcc7a-4299-4195-9b99-69f53a979ea8": {
+      "name": "Marbodus",
+      "ruler": null,
+      "troop": "a0d9b31a-4e48-415a-8f4b-ac3d7e361360",
+      "faction": "a8bc9487-eeaa-409a-99e1-9db34c3a76a8"
+    }
+  },
   "factions": {
     "5f2115db-2aa1-441c-b53b-db38af52f642": {
       "name": "trozza",
@@ -56,6 +80,13 @@
     "a8bc9487-eeaa-409a-99e1-9db34c3a76a8": {
       "name": "marcomanni",
       "leader": "cc7fcc7a-4299-4195-9b99-69f53a979ea8"
+    }
+  },
+  "dominions": {
+    "12838234-d270-4578-9faa-6b0f197e7736": {
+      "name": "Ratisbona",
+      "ruler": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
+      "capital": "30|19"
     }
   },
   "troops": {

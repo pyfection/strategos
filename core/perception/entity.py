@@ -14,6 +14,12 @@ class Entity(CopyMixin):
         self._troop = troop
         self._faction = faction
 
+        perception.entities[id] = self
+
+    @property
+    def perception(self):
+        return self._perception
+
     @property
     def ruler(self):
         return self._perception.entities[self._ruler]

@@ -1,6 +1,7 @@
 
 
 from .mixins import CopyMixin
+from helpers.convert import pos_to_coord
 
 
 class Tile(CopyMixin):
@@ -13,9 +14,11 @@ class Tile(CopyMixin):
         self.x = x
         self.y = y
         self.z = z
-        self.dominion = dominion
         self.population = population
         self.base_fertility = base_fertility or self.DEFAULT_FERTILITY
+        self._dominion = dominion
+
+        perception.tiles[pos_to_coord(x, y)] = self
 
     @property
     def pos(self):
@@ -24,6 +27,10 @@ class Tile(CopyMixin):
     @property
     def fertility(self):
         return self.base_fertility
+
+    @property
+    def dominion(self):
+        return self._perception.dominions[self._dominion]
 
     def copy(self, **kwargs):
         d = self.__dict__.copy()

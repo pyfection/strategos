@@ -22,10 +22,14 @@ class World(EventProcessMixin):
         self.actors = setup.get('actors', [])
         self.current_turn = setup.get('current_turn', 0)
         self.perception = Perception.load(setup)
+        self.perceptions = {
+            id: Perception.load(perception, id)
+            for id, perception in setup.get('perceptions', {}).items()
+        }
         self.events = {}
         for actor in self.actors:
             entity_id = setup['actor_to_entity_mapping'][actor.name]
-            actor.perception = self.perception.entities[entity_id].perception
+            actor.perception = self.perceptions[entity_id]
             actor.setup()
         logging.info(f"Worldseed: {self.seed}")
 

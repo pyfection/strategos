@@ -4,6 +4,7 @@ from core.perception.entity import Entity
 from core.perception.faction import Faction
 from core.perception.tile import TILE_TYPES
 from core.perception.troop import Troop
+from core.perception.dominion import Dominion
 from helpers.convert import pos_to_coord, coord_to_pos
 
 
@@ -14,6 +15,7 @@ class Perception:
         self.tiles = {}
         self.troops = {}
         self.factions = {}
+        self.dominions = {}
 
     @property
     def entity(self):
@@ -24,54 +26,24 @@ class Perception:
         self = cls(entity_id)
 
         for entity_id, entity_dict in dictionary.get('entities', dict()).items():
-            perception = cls.load(entity_dict, entity_id)
-            entity = Entity(
-                id=entity_id,
-                name=entity_dict.get('name'),
-                perception=perception
-            )
-            self.entities[entity_id] = entity
+            Entity(self, id=entity_id, **entity_dict)
+
         if self.entity_id and self.entity_id not in self.entities:
-            self.entities[self.entity_id] = Entity(
-                id=self.entity_id,
-                name=dictionary['name']
-            )
+            raise KeyError("The entity of the perception is not in its perceived entities")
 
         for tile_coord, tile_dict in dictionary.get('tiles', dict()).items():
             x, y = coord_to_pos(tile_coord)
-            owner_id = tile_dict.get('owner')
-            owner = self.entities.get(owner_id)
-            Tile = TILE_TYPES[tile_dict.get('type', 'grass')]
-            tile = Tile(x=x, y=y, z=tile_dict.get('z', 0), owner=owner, population=tile_dict.get('population', 0))
-            self.tiles[tile_coord] = tile
+            Tile = TILE_TYPES[tile_dict.pop('type', 'grass')]
+            Tile(self, x=x, y=y, **tile_dict)
 
         for troop_id, troop_dict in dictionary.get('troops', dict()).items():
-            troop_dict = troop_dict.copy()
-            leader_id = troop_dict.pop('leader', None)
-            leader = self.entities.get(leader_id)
-            troop = Troop(id=troop_id, leader=leader, **troop_dict)
-            leader.troop = troop
-            self.troops[troop_id] = troop
+            Troop(self, id=troop_id, **troop_dict)
 
         for faction_id, faction_dict in dictionary.get('factions', dict()).items():
-            leader = self.entities[faction_dict['leader']]
-            faction = Faction(
-                id=faction_id,
-                name=faction_dict['name'],
-                leader=leader,
-                capital=faction_dict.get('capital')
-            )
-            self.factions[faction_id] = faction
-            leader.faction = faction
+            Faction(self, id=faction_id, **faction_dict)
 
-        # for entity_id, entity in self.entities.items():
-        #     entities = dictionary.get('entities')
-        #     troop_id = dictionary['entities'][entity_id].get('troop')
-        #     entity.troop = self.troops.get(troop_id)
-        #     ruler_id = dictionary['entities'][entity_id].get('ruler')
-        #     entity.ruler = self.entities.get(ruler_id)
-        #     faction_id = dictionary['entities'][entity_id].get('faction')
-        #     entity.faction = self.factions.get(faction_id)
+        for dominion_id, dominion_dict in dictionary.get('dominions', dict()).items():
+            Dominion(self, id=dominion_id, **dominion_dict)
 
         return self
 

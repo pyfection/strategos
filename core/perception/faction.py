@@ -13,6 +13,8 @@ class Faction(CopyMixin):
         self._leader = leader
         self._capital = capital  # (x, y)
 
+        perception.factions[id] = self
+
     @property
     def leader(self):
         return self._perception.entities[self._leader]
