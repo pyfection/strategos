@@ -1,19 +1,16 @@
 
 
+import logging
 import random
 from threading import Thread
-from uuid import uuid4
-import logging
 
-import logging_conf
 from core.actor.ai import AI
-from core.perception import Perception
-from core.mixins import EventProcessMixin
-from core.tile import Grass
 from core.map_gen import GEN_TYPES
-from maps import MapLoader
-from helpers.loader import save_game
+from core.mixins import EventProcessMixin
+from core.perception import Perception
 from helpers.convert import pos_to_coord
+from helpers.loader import save_game
+from maps import MapLoader
 
 
 class World(EventProcessMixin):
@@ -25,10 +22,14 @@ class World(EventProcessMixin):
         self.actors = setup.get('actors', [])
         self.current_turn = setup.get('current_turn', 0)
         self.perception = Perception.load(setup)
+        self.perceptions = {
+            id: Perception.load(perception, id)
+            for id, perception in setup.get('perceptions', {}).items()
+        }
         self.events = {}
         for actor in self.actors:
             entity_id = setup['actor_to_entity_mapping'][actor.name]
-            actor.perception = self.perception.entities[entity_id].perception
+            actor.perception = self.perceptions[entity_id]
             actor.setup()
         logging.info(f"Worldseed: {self.seed}")
 
@@ -120,9 +121,12 @@ class World(EventProcessMixin):
         try:
             tile = self.perception.tiles[coord]
         except KeyError:
-            tile = self.map_loader.get_tile(x, y)
-        if not tile:
-            tile = self.map_gen.get_tile(x, y)
+            try:
+                TileType, pos = self.map_loader.get_tile(x, y)
+                tile = TileType(self.perception, *pos)
+            except TypeError:
+                TileType, pos = self.map_gen.get_tile(x, y)
+                tile = TileType(self.perception, *pos)
         return tile
 
     def get_troop(self, x, y):

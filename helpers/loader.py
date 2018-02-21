@@ -1,11 +1,11 @@
 
 
+import json
 import os
 
 from PIL import Image
-import json
 
-from core.tile import TILE_TYPES
+from core.perception.tile import TILE_TYPES
 from helpers.convert import pos_to_coord
 
 

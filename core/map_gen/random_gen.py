@@ -2,7 +2,7 @@
 
 from random import Random
 
-from core.tile import TILE_TYPES
+from core.perception.tile import TILE_TYPES
 
 
 class RandomGen:
@@ -13,6 +13,5 @@ class RandomGen:
 
     def get_tile(self, x, y):
         Tile = self.random.choice(list(TILE_TYPES.values()))
-        tile = Tile(x, y)
 
-        return tile
+        return Tile, (x, y)

@@ -5,7 +5,7 @@ from collections import OrderedDict
 
 from PIL import Image
 
-from core.tile import TILE_TYPES, Grass
+from core.perception.tile import TILE_TYPES
 
 
 class MapLoader:
@@ -33,6 +33,6 @@ class MapLoader:
         hex = "#{0:02x}{1:02x}{2:02x}".format(r, g, b)
         for TileType in TILE_TYPES.values():
             if TileType.color == hex:
-                return TileType(x, y)
+                return TileType, (x, y)
 
         return None

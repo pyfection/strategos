@@ -1,17 +1,24 @@
 
 
-class Tile:
+from .mixins import CopyMixin
+from helpers.convert import pos_to_coord
+
+
+class Tile(CopyMixin):
     DEFAULT_FERTILITY = 0
     type = 'tile'
     color = '#ffffff'
 
-    def __init__(self, x, y, z=0, owner=None, population=0, base_fertility=0):
+    def __init__(self, perception, x, y, z=0, dominion=None, population=0, base_fertility=0):
+        self._perception = perception
         self.x = x
         self.y = y
         self.z = z
-        self.owner = owner
         self.population = population
         self.base_fertility = base_fertility or self.DEFAULT_FERTILITY
+        self._dominion = dominion
+
+        perception.tiles[pos_to_coord(x, y)] = self
 
     @property
     def pos(self):
@@ -21,15 +28,9 @@ class Tile:
     def fertility(self):
         return self.base_fertility
 
-    def copy(self, **kwargs):
-        d = self.__dict__.copy()
-        d.update(kwargs)
-        inst = self.__class__(d.pop('x'), d.pop('y'))
-        for key, value in d.items():
-            setattr(inst, key, value)
-        if inst.owner:
-            inst.owner = kwargs.get('owner') or self.owner.copy()
-        return inst
+    @property
+    def dominion(self):
+        return self._perception.dominions[self._dominion]
 
     def passable(self, by):
         """
