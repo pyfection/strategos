@@ -7,7 +7,6 @@ from helpers.convert import pos_to_coord
 class Tile(CopyMixin):
     DEFAULT_FERTILITY = 0
     type = 'tile'
-    color = '#ffffff'
 
     def __init__(self, perception, x, y, z=0, dominion=None, population=0, base_fertility=0):
         self._perception = perception
@@ -44,34 +43,28 @@ class Tile(CopyMixin):
 class Grass(Tile):
     DEFAULT_FERTILITY = 10
     type = 'grass'
-    color = '#3b7c27'
 
 
 class Forest(Tile):
     DEFAULT_FERTILITY = 5
     type = 'forest'
-    color = '#1c3c16'
 
 
 class Hill(Tile):
     DEFAULT_FERTILITY = 5
     type = 'hill'
-    color = '#928f34'
 
 
 class Mountain(Tile):
     type = 'mountain'
-    color = '#586069'
 
 
 class WoodBridge(Tile):
     type = 'wood_bridge'
-    color = '#966a44'
 
 
 class River(Tile):
     type = 'river'
-    color = '#1886ab'
 
     def passable(self, by):
         return False

@@ -1,0 +1,7 @@
+{
+  "probabilities": {
+    "forest": 0.5,
+    "river": 0.1
+  },
+  "default": "grass"
+}

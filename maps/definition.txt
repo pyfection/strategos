@@ -1,0 +1,37 @@
+
+This file describes how maps are structured.
+
+Please be aware that all maps which are not of this format are not valid anymore and are solely legacy.
+They will be removed once their content has been fully ported over to the current mapping system.
+
+
+Every folder in the "maps" directory is one map.
+
+Each map should have a "default.cnk" file, which describes what happens if a certain chunk is requested, but not existent.
+
+There can also be files in the format "<x chunk>|<y chunk>.cnk", which represent one chunk of 64x64 tiles.
+The number used in the name is the number of the x and y coordinates of a tile divided by 64 with the rest cut off.
+So, given the coordinates x=10 and y=64, the name of the file should be "0|1.cnk".
+
+Both the default and the specific chunks have following JSON structure:
+{
+    "probabilities": {
+        "forest": 0.5,
+        "river": 0.1
+    },
+    "default": "grass"
+}
+The "probabilities" is optional and defines how likely it is for the generator to use that specific tile.
+If the generator did not choose any of them, it will use the tile specified in "default".
+
+Furthermore in the chunk files only (not the default.cnk) single tiles can be specified:
+{
+    "0|0": {
+        "type": "grass",
+        "population": 100,
+        "base_fertility": 10
+    }
+}
+All of the attributes are optional, except for the "type".
+
+For more examples, look at the maps.
