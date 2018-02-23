@@ -161,7 +161,7 @@ class View(Widget):
         anim = Animation(x=fx, y=fy, duration=self.ANIM_DUR, t=self.MOVE_ANIM)
         anim.start(self.ids.map)
 
-        for pos, tile in self.tiles.items():
+        for pos, tile in list(self.tiles.items()):
             in_range = distance(pos, self.focus_center) <= self.focus_radius
             if in_range and tile.color != [1, 1, 1, 1]:
                 anim = Animation(color=[1, 1, 1, 1], duration=self.ANIM_DUR, t=self.FOW_ANIM)

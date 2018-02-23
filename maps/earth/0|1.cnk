@@ -1,698 +1,761 @@
 {
-  "0|97":{
-    "type":"grass"
+  "22|65":{
+    "type":"river"
+  },
+  "22|64":{
+    "type":"river"
+  },
+  "23|66":{
+    "type":"river"
+  },
+  "23|65":{
+    "type":"river"
+  },
+  "23|64":{
+    "type":"river"
+  },
+  "24|66":{
+    "type":"river"
+  },
+  "24|65":{
+    "type":"river"
+  },
+  "25|67":{
+    "type":"river"
+  },
+  "25|66":{
+    "type":"river"
+  },
+  "25|65":{
+    "type":"river"
+  },
+  "26|68":{
+    "type":"river"
+  },
+  "26|67":{
+    "type":"river"
+  },
+  "26|66":{
+    "type":"river"
+  },
+  "27|68":{
+    "type":"river"
+  },
+  "27|67":{
+    "type":"river"
+  },
+  "28|69":{
+    "type":"river"
+  },
+  "28|68":{
+    "type":"river"
   },
-  "0|96":{
-    "type":"grass"
+  "28|67":{
+    "type":"river"
+  },
+  "29|69":{
+    "type":"river"
+  },
+  "29|68":{
+    "type":"river"
+  },
+  "29|64":{
+    "type":"river"
+  },
+  "30|70":{
+    "type":"river"
+  },
+  "30|69":{
+    "type":"river"
   },
-  "0|95":{
-    "type":"grass"
+  "30|68":{
+    "type":"river"
   },
-  "0|94":{
-    "type":"grass"
+  "30|65":{
+    "type":"river"
   },
-  "0|93":{
-    "type":"grass"
+  "30|64":{
+    "type":"river"
   },
-  "0|92":{
-    "type":"grass"
+  "31|70":{
+    "type":"river"
   },
-  "0|91":{
-    "type":"grass"
+  "31|69":{
+    "type":"river"
   },
-  "0|90":{
-    "type":"grass"
+  "31|67":{
+    "type":"river"
   },
-  "0|89":{
-    "type":"grass"
+  "31|66":{
+    "type":"river"
   },
-  "0|88":{
-    "type":"grass"
+  "31|65":{
+    "type":"river"
   },
-  "0|87":{
-    "type":"grass"
+  "31|64":{
+    "type":"river"
   },
-  "0|86":{
-    "type":"grass"
+  "32|70":{
+    "type":"river"
   },
-  "0|85":{
-    "type":"grass"
+  "32|69":{
+    "type":"river"
   },
-  "0|84":{
-    "type":"grass"
+  "32|68":{
+    "type":"river"
   },
-  "0|83":{
-    "type":"grass"
+  "32|67":{
+    "type":"river"
   },
-  "0|82":{
-    "type":"grass"
+  "32|66":{
+    "type":"river"
   },
-  "0|81":{
-    "type":"grass"
+  "32|65":{
+    "type":"river"
   },
-  "0|80":{
+  "32|64":{
     "type":"river"
   },
-  "0|79":{
+  "33|71":{
     "type":"river"
   },
-  "0|78":{
+  "33|70":{
     "type":"river"
   },
-  "0|77":{
+  "33|69":{
     "type":"river"
   },
-  "0|76":{
+  "33|68":{
     "type":"river"
   },
-  "0|75":{
+  "33|67":{
     "type":"river"
   },
-  "0|74":{
+  "33|66":{
     "type":"river"
   },
-  "0|73":{
+  "33|65":{
     "type":"river"
   },
-  "0|72":{
+  "33|64":{
     "type":"river"
   },
-  "0|71":{
-    "type":"grass"
+  "34|71":{
+    "type":"river"
   },
-  "0|70":{
-    "type":"grass"
+  "34|70":{
+    "type":"river"
   },
-  "0|69":{
-    "type":"grass"
+  "34|69":{
+    "type":"river"
   },
-  "0|68":{
-    "type":"grass"
+  "34|68":{
+    "type":"river"
   },
-  "0|67":{
-    "type":"grass"
+  "34|67":{
+    "type":"river"
   },
-  "0|66":{
-    "type":"grass"
+  "34|66":{
+    "type":"river"
   },
-  "0|65":{
-    "type":"grass"
+  "34|65":{
+    "type":"river"
   },
-  "0|64":{
-    "type":"grass"
+  "34|64":{
+    "type":"river"
   },
-  "1|97":{
-    "type":"grass"
+  "35|71":{
+    "type":"river"
   },
-  "1|96":{
-    "type":"grass"
+  "35|70":{
+    "type":"river"
   },
-  "1|95":{
-    "type":"grass"
+  "35|69":{
+    "type":"river"
   },
-  "1|94":{
-    "type":"grass"
+  "35|68":{
+    "type":"river"
   },
-  "1|93":{
-    "type":"grass"
+  "35|67":{
+    "type":"river"
   },
-  "1|92":{
-    "type":"grass"
+  "35|66":{
+    "type":"river"
   },
-  "1|91":{
-    "type":"grass"
+  "35|65":{
+    "type":"river"
   },
-  "1|90":{
-    "type":"grass"
+  "35|64":{
+    "type":"river"
   },
-  "1|89":{
-    "type":"grass"
+  "36|72":{
+    "type":"river"
   },
-  "1|88":{
-    "type":"grass"
+  "36|71":{
+    "type":"river"
   },
-  "1|87":{
-    "type":"grass"
+  "36|70":{
+    "type":"river"
   },
-  "1|86":{
-    "type":"grass"
+  "36|69":{
+    "type":"river"
   },
-  "1|85":{
-    "type":"grass"
+  "36|68":{
+    "type":"river"
   },
-  "1|84":{
-    "type":"grass"
+  "36|67":{
+    "type":"river"
   },
-  "1|83":{
-    "type":"grass"
+  "36|66":{
+    "type":"river"
   },
-  "1|82":{
+  "36|65":{
     "type":"river"
   },
-  "1|81":{
+  "36|64":{
     "type":"river"
   },
-  "1|80":{
+  "37|72":{
     "type":"river"
   },
-  "1|79":{
+  "37|71":{
     "type":"river"
   },
-  "1|78":{
+  "37|70":{
     "type":"river"
   },
-  "1|77":{
+  "37|69":{
     "type":"river"
   },
-  "1|76":{
+  "37|68":{
     "type":"river"
   },
-  "1|75":{
+  "37|67":{
     "type":"river"
   },
-  "1|74":{
+  "37|66":{
     "type":"river"
   },
-  "1|73":{
+  "37|65":{
     "type":"river"
   },
-  "1|72":{
+  "37|64":{
     "type":"river"
   },
-  "1|71":{
+  "38|73":{
     "type":"river"
   },
-  "1|70":{
+  "38|72":{
     "type":"river"
   },
-  "1|69":{
+  "38|71":{
     "type":"river"
   },
-  "1|68":{
-    "type":"grass"
+  "38|70":{
+    "type":"river"
   },
-  "1|67":{
-    "type":"grass"
+  "38|69":{
+    "type":"river"
   },
-  "1|66":{
-    "type":"grass"
+  "38|68":{
+    "type":"river"
   },
-  "1|65":{
-    "type":"grass"
+  "38|67":{
+    "type":"river"
   },
-  "1|64":{
-    "type":"grass"
+  "38|66":{
+    "type":"river"
   },
-  "2|97":{
-    "type":"grass"
+  "38|65":{
+    "type":"river"
   },
-  "2|96":{
-    "type":"grass"
+  "39|73":{
+    "type":"river"
   },
-  "2|95":{
-    "type":"grass"
+  "39|72":{
+    "type":"river"
   },
-  "2|94":{
-    "type":"grass"
+  "39|71":{
+    "type":"river"
   },
-  "2|93":{
-    "type":"grass"
+  "39|70":{
+    "type":"river"
   },
-  "2|92":{
-    "type":"grass"
+  "39|69":{
+    "type":"river"
   },
-  "2|91":{
-    "type":"grass"
+  "39|68":{
+    "type":"river"
   },
-  "2|90":{
-    "type":"grass"
+  "39|67":{
+    "type":"river"
   },
-  "2|89":{
-    "type":"grass"
+  "39|66":{
+    "type":"river"
   },
-  "2|88":{
-    "type":"grass"
+  "40|74":{
+    "type":"river"
   },
-  "2|87":{
-    "type":"grass"
+  "40|73":{
+    "type":"river"
   },
-  "2|86":{
+  "40|72":{
     "type":"river"
   },
-  "2|85":{
+  "40|71":{
     "type":"river"
   },
-  "2|84":{
+  "40|70":{
     "type":"river"
   },
-  "2|83":{
+  "40|69":{
     "type":"river"
   },
-  "2|82":{
+  "40|68":{
     "type":"river"
   },
-  "2|81":{
+  "40|67":{
     "type":"river"
   },
-  "2|80":{
+  "41|75":{
     "type":"river"
   },
-  "2|79":{
+  "41|74":{
     "type":"river"
   },
-  "2|78":{
+  "41|73":{
     "type":"river"
   },
-  "2|77":{
+  "41|72":{
     "type":"river"
   },
-  "2|76":{
+  "41|71":{
     "type":"river"
   },
-  "2|75":{
+  "41|70":{
     "type":"river"
   },
-  "2|74":{
+  "41|69":{
     "type":"river"
   },
-  "2|73":{
+  "41|68":{
     "type":"river"
   },
-  "2|72":{
+  "42|75":{
     "type":"river"
   },
-  "2|71":{
+  "42|74":{
     "type":"river"
   },
-  "2|70":{
+  "42|73":{
     "type":"river"
   },
-  "2|69":{
+  "42|72":{
     "type":"river"
   },
-  "2|68":{
+  "42|71":{
     "type":"river"
   },
-  "2|67":{
+  "42|70":{
     "type":"river"
   },
-  "2|66":{
-    "type":"grass"
+  "42|69":{
+    "type":"river"
   },
-  "2|65":{
-    "type":"grass"
+  "43|76":{
+    "type":"river"
   },
-  "2|64":{
-    "type":"grass"
+  "43|75":{
+    "type":"river"
   },
-  "3|97":{
-    "type":"grass"
+  "43|74":{
+    "type":"river"
   },
-  "3|96":{
-    "type":"grass"
+  "43|73":{
+    "type":"river"
   },
-  "3|95":{
-    "type":"grass"
+  "43|72":{
+    "type":"river"
   },
-  "3|94":{
-    "type":"grass"
+  "43|71":{
+    "type":"river"
   },
-  "3|93":{
-    "type":"grass"
+  "43|70":{
+    "type":"river"
   },
-  "3|92":{
-    "type":"grass"
+  "44|77":{
+    "type":"river"
   },
-  "3|91":{
-    "type":"grass"
+  "44|76":{
+    "type":"river"
   },
-  "3|90":{
-    "type":"grass"
+  "44|75":{
+    "type":"river"
   },
-  "3|89":{
-    "type":"grass"
+  "44|74":{
+    "type":"river"
   },
-  "3|88":{
+  "44|73":{
     "type":"river"
   },
-  "3|87":{
+  "44|72":{
     "type":"river"
   },
-  "3|86":{
+  "44|71":{
     "type":"river"
   },
-  "3|85":{
+  "45|78":{
     "type":"river"
   },
-  "3|84":{
+  "45|77":{
     "type":"river"
   },
-  "3|83":{
+  "45|76":{
     "type":"river"
   },
-  "3|82":{
+  "45|75":{
     "type":"river"
   },
-  "3|81":{
+  "45|74":{
     "type":"river"
   },
-  "3|80":{
+  "45|73":{
     "type":"river"
   },
-  "3|79":{
+  "45|72":{
     "type":"river"
   },
-  "3|78":{
+  "46|79":{
     "type":"river"
   },
-  "3|72":{
+  "46|78":{
     "type":"river"
   },
-  "3|71":{
+  "46|77":{
     "type":"river"
   },
-  "3|70":{
+  "46|76":{
     "type":"river"
   },
-  "3|69":{
+  "46|75":{
     "type":"river"
   },
-  "3|68":{
+  "46|74":{
     "type":"river"
   },
-  "3|67":{
+  "46|73":{
     "type":"river"
   },
-  "3|66":{
+  "47|79":{
     "type":"river"
   },
-  "3|65":{
-    "type":"grass"
+  "47|78":{
+    "type":"river"
   },
-  "3|64":{
-    "type":"grass"
+  "47|77":{
+    "type":"river"
   },
-  "4|97":{
-    "type":"grass"
+  "47|76":{
+    "type":"river"
   },
-  "4|96":{
-    "type":"grass"
+  "47|75":{
+    "type":"river"
   },
-  "4|95":{
-    "type":"grass"
+  "47|74":{
+    "type":"river"
   },
-  "4|94":{
-    "type":"grass"
+  "48|80":{
+    "type":"river"
   },
-  "4|93":{
-    "type":"grass"
+  "48|79":{
+    "type":"river"
   },
-  "4|92":{
-    "type":"grass"
+  "48|78":{
+    "type":"river"
   },
-  "4|91":{
-    "type":"grass"
+  "48|77":{
+    "type":"river"
   },
-  "4|90":{
+  "48|76":{
     "type":"river"
   },
-  "4|89":{
+  "48|75":{
     "type":"river"
   },
-  "4|88":{
+  "49|81":{
     "type":"river"
   },
-  "4|87":{
+  "49|80":{
     "type":"river"
   },
-  "4|86":{
+  "49|79":{
     "type":"river"
   },
-  "4|85":{
+  "49|78":{
     "type":"river"
   },
-  "4|84":{
+  "49|77":{
     "type":"river"
   },
-  "4|83":{
+  "49|76":{
     "type":"river"
   },
-  "4|82":{
+  "50|82":{
     "type":"river"
   },
-  "4|70":{
+  "50|81":{
     "type":"river"
   },
-  "4|69":{
+  "50|80":{
     "type":"river"
   },
-  "4|68":{
+  "50|79":{
     "type":"river"
   },
-  "4|67":{
+  "50|78":{
     "type":"river"
   },
-  "4|66":{
+  "50|77":{
     "type":"river"
   },
-  "4|65":{
+  "51|83":{
     "type":"river"
   },
-  "4|64":{
+  "51|82":{
     "type":"river"
   },
-  "5|97":{
-    "type":"grass"
+  "51|81":{
+    "type":"river"
   },
-  "5|96":{
-    "type":"grass"
+  "51|80":{
+    "type":"river"
   },
-  "5|95":{
-    "type":"grass"
+  "51|79":{
+    "type":"river"
   },
-  "5|94":{
-    "type":"grass"
+  "51|78":{
+    "type":"river"
   },
-  "5|93":{
-    "type":"grass"
+  "51|77":{
+    "type":"river"
   },
-  "5|92":{
+  "52|83":{
     "type":"river"
   },
-  "5|91":{
+  "52|82":{
     "type":"river"
   },
-  "5|90":{
+  "52|81":{
     "type":"river"
   },
-  "5|89":{
+  "52|80":{
     "type":"river"
   },
-  "5|88":{
+  "52|79":{
     "type":"river"
   },
-  "5|87":{
+  "52|78":{
     "type":"river"
   },
-  "5|86":{
+  "53|84":{
     "type":"river"
   },
-  "5|85":{
+  "53|83":{
     "type":"river"
   },
-  "5|68":{
+  "53|82":{
     "type":"river"
   },
-  "5|67":{
+  "53|81":{
     "type":"river"
   },
-  "5|66":{
+  "53|80":{
     "type":"river"
   },
-  "5|65":{
+  "53|79":{
     "type":"river"
   },
-  "5|64":{
+  "53|78":{
     "type":"river"
   },
-  "6|97":{
-    "type":"grass"
+  "54|84":{
+    "type":"river"
   },
-  "6|96":{
-    "type":"grass"
+  "54|83":{
+    "type":"river"
   },
-  "6|95":{
-    "type":"grass"
+  "54|82":{
+    "type":"river"
   },
-  "6|94":{
-    "type":"grass"
+  "54|81":{
+    "type":"river"
   },
-  "6|93":{
+  "54|80":{
     "type":"river"
   },
-  "6|92":{
+  "54|79":{
     "type":"river"
   },
-  "6|91":{
+  "55|85":{
     "type":"river"
   },
-  "6|90":{
+  "55|84":{
     "type":"river"
   },
-  "6|89":{
+  "55|83":{
     "type":"river"
   },
-  "6|88":{
+  "55|82":{
     "type":"river"
   },
-  "6|87":{
+  "55|81":{
     "type":"river"
   },
-  "6|86":{
+  "55|80":{
     "type":"river"
   },
-  "6|66":{
+  "56|86":{
     "type":"river"
   },
-  "6|65":{
+  "56|85":{
     "type":"river"
   },
-  "6|64":{
+  "56|84":{
     "type":"river"
   },
-  "7|97":{
-    "type":"grass"
+  "56|83":{
+    "type":"river"
   },
-  "7|96":{
-    "type":"grass"
+  "56|82":{
+    "type":"river"
   },
-  "7|95":{
-    "type":"grass"
+  "56|81":{
+    "type":"river"
   },
-  "7|94":{
+  "57|86":{
     "type":"river"
   },
-  "7|93":{
+  "57|85":{
     "type":"river"
   },
-  "7|92":{
+  "57|84":{
     "type":"river"
   },
-  "7|91":{
+  "57|83":{
     "type":"river"
   },
-  "7|90":{
+  "57|82":{
     "type":"river"
   },
-  "7|89":{
+  "57|81":{
     "type":"river"
   },
-  "7|88":{
+  "58|87":{
     "type":"river"
   },
-  "7|65":{
+  "58|86":{
     "type":"river"
   },
-  "7|64":{
+  "58|85":{
     "type":"river"
   },
-  "8|97":{
-    "type":"grass"
+  "58|84":{
+    "type":"river"
   },
-  "8|96":{
-    "type":"grass"
+  "58|83":{
+    "type":"river"
   },
-  "8|95":{
+  "58|82":{
     "type":"river"
   },
-  "8|94":{
+  "59|88":{
     "type":"river"
   },
-  "8|93":{
+  "59|87":{
     "type":"river"
   },
-  "8|92":{
+  "59|86":{
     "type":"river"
   },
-  "8|91":{
+  "59|85":{
     "type":"river"
   },
-  "8|90":{
+  "59|84":{
     "type":"river"
   },
-  "8|64":{
+  "59|83":{
     "type":"river"
   },
-  "9|97":{
+  "60|88":{
     "type":"river"
   },
-  "9|96":{
+  "60|87":{
     "type":"river"
   },
-  "9|95":{
+  "60|86":{
     "type":"river"
   },
-  "9|94":{
+  "60|85":{
     "type":"river"
   },
-  "9|93":{
+  "60|84":{
     "type":"river"
   },
-  "9|92":{
+  "60|83":{
     "type":"river"
   },
-  "9|91":{
+  "61|89":{
     "type":"river"
   },
-  "10|97":{
+  "61|88":{
     "type":"river"
   },
-  "10|96":{
+  "61|87":{
     "type":"river"
   },
-  "10|95":{
+  "61|86":{
     "type":"river"
   },
-  "10|94":{
+  "61|85":{
     "type":"river"
   },
-  "10|93":{
+  "61|84":{
     "type":"river"
   },
-  "10|92":{
+  "62|89":{
     "type":"river"
   },
-  "11|97":{
+  "62|88":{
     "type":"river"
   },
-  "11|96":{
+  "62|87":{
     "type":"river"
   },
-  "11|95":{
+  "62|86":{
     "type":"river"
   },
-  "11|94":{
+  "62|85":{
     "type":"river"
   },
-  "12|97":{
+  "62|84":{
     "type":"river"
   },
-  "12|96":{
+  "63|90":{
     "type":"river"
   },
-  "12|95":{
+  "63|89":{
     "type":"river"
   },
-  "13|97":{
+  "63|88":{
     "type":"river"
   },
-  "13|96":{
+  "63|87":{
     "type":"river"
   },
-  "13|95":{
+  "63|86":{
     "type":"river"
   },
-  "14|97":{
+  "63|85":{
     "type":"river"
   },
   "default":"forest"
