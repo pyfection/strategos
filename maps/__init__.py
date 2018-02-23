@@ -18,7 +18,7 @@ class MapLoader:
 
     def get_tile(self, x, y):
         base_x, base_y = x//64, y//64
-        self.random.seed(f'{self.seed}-x-y')
+        self.random.seed(f'{self.seed}-{x}-{y}')
 
         tile = {'x': x, 'y': y}
         try:
@@ -33,11 +33,10 @@ class MapLoader:
         except (FileNotFoundError, KeyError):
             with open(os.path.join('maps', self.map_name, 'default.cnk'), 'r') as f:
                 json = ujson.load(f)
-            probabilities = sorted(json['probabilities'].items(), key=lambda k: k[1])
-            print(probabilities)
+            probabilities = sorted(json['probabilities'].items(), key=lambda k: k[1], reverse=True)
+
             for tile_type, probability in probabilities:
                 r = self.random.random()
-                print(r, probability)
                 if r <= probability:
                     break
             else:
