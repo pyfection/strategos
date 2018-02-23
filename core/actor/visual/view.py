@@ -15,6 +15,7 @@ from visual.troop import Troop
 
 from helpers.maths import distance
 from visual.console import Console
+from helpers.convert import pos_to_coord
 
 
 class View(Widget):
@@ -151,6 +152,7 @@ class View(Widget):
         anim.bind(on_complete=lambda animation, widget: self.ids.map.remove_widget(widget))
 
     def center_camera(self):
+        self.ids.current_pos.text = pos_to_coord(*self.focus_center)
         x, y = self.focus_center[0] * self.SIZE_MOD, self.focus_center[1] * self.SIZE_MOD
         x, y = self.ids.map.x + x, self.ids.map.y + y
         offsetx = x - self.center[0]

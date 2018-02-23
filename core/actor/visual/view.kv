@@ -17,6 +17,8 @@
         scale_max: 16.0
     BoxLayout:
         id: menus
+        width: root.width / 2
+        height: 30
         Label:
             id: current_turn
             text: "placeholder"
@@ -26,3 +28,6 @@
         Button:
             id: quit
             text: "Quit"
+        Label:
+            id: current_pos
+            text: "0|0"
