@@ -17,8 +17,7 @@ class World(EventProcessMixin):
     def __init__(self, setup):
         self.seed = setup.get('seed')
         random.seed(self.seed)
-        self.map_loader = MapLoader(setup['map_name'])
-        self.map_gen = GEN_TYPES[setup['map_gen'].pop('name')](**setup['map_gen'])
+        self.map_loader = MapLoader(setup['map_name'], self.seed)
         self.actors = setup.get('actors', [])
         self.current_turn = setup.get('current_turn', 0)
         self.perception = Perception.load(setup)
@@ -121,12 +120,8 @@ class World(EventProcessMixin):
         try:
             tile = self.perception.tiles[coord]
         except KeyError:
-            try:
-                TileType, pos = self.map_loader.get_tile(x, y)
-                tile = TileType(self.perception, *pos)
-            except TypeError:
-                TileType, pos = self.map_gen.get_tile(x, y)
-                tile = TileType(self.perception, *pos)
+            TileType, kwargs = self.map_loader.get_tile(x, y)
+            tile = TileType(self.perception, **kwargs)
         return tile
 
     def get_troop(self, x, y):

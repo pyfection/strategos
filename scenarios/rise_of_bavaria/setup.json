@@ -1,9 +1,5 @@
 {
-  "map_name": "bavaria",
-  "map_gen": {
-    "name": "random",
-    "seed": 555
-  },
+  "map_name": "earth",
   "perceptions": {
     "7a7fecff-18b1-43a8-b520-44e56ea783c9": {
       "entities": {
@@ -26,8 +22,8 @@
           "leader": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
           "units": 100,
           "experience": 1,
-          "x": 30,
-          "y": 19
+          "x": 158,
+          "y": 20
         }
       }
     },
@@ -52,7 +48,7 @@
           "leader": "cc7fcc7a-4299-4195-9b99-69f53a979ea8",
           "units": 100,
           "experience": 1,
-          "x": 30,
+          "x": 158,
           "y": 43
         }
       }
@@ -86,7 +82,7 @@
     "12838234-d270-4578-9faa-6b0f197e7736": {
       "name": "Ratisbona",
       "ruler": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
-      "capital": "30|19"
+      "capital": "158|25"
     }
   },
   "troops": {
@@ -108,7 +104,7 @@
     }
   },
   "tiles": {
-    "30|19": {"type": "grass", "population": 100},
-    "30|43": {"type": "grass", "population": 100}
+    "158|20": {"type": "grass", "population": 100},
+    "158|43": {"type": "grass", "population": 100}
   }
 }

@@ -27,12 +27,12 @@ pixels = image.load()
 chunks = {}
 
 for x in range(image.size[0]):
-    for y in range(image.size[1]):
+    for y in range(image.size[1]-1, -1, -1):
         r, g, b = pixels[x, y]
         hex = "#{0:02x}{1:02x}{2:02x}".format(r, g, b)
         tile_type = COLORS_MAPPING[hex]
         chunk_coord = pos_to_coord(x//64, y//64)
-        coord = pos_to_coord(x, image.size[1]-1-y)
+        coord = pos_to_coord(x, y)
         chunks.setdefault(chunk_coord, {})
         chunks[chunk_coord][coord] = {
             'type': tile_type,

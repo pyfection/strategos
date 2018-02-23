@@ -1,38 +1,46 @@
 
 
 import os
+from random import Random
 from collections import OrderedDict
 
-from PIL import Image
+import ujson
 
 from core.perception.tile import TILE_TYPES
+from helpers.convert import pos_to_coord
 
 
 class MapLoader:
-    def __init__(self, map_name):
+    def __init__(self, map_name, seed):
         self.map_name = map_name
-        self.pixels_buffer = OrderedDict()
-        self.pixels_buffer_max_len = 6
+        self.seed = seed
+        self.random = Random()
 
     def get_tile(self, x, y):
-        base_x, base_y = int(x - x % 64), int(y - y % 64)
+        base_x, base_y = x//64, y//64
+        self.random.seed(f'{self.seed}-x-y')
+
+        tile = {'x': x, 'y': y}
         try:
-            pixels = self.pixels_buffer[(base_x, base_y)]
-            self.pixels_buffer.move_to_end((base_x, base_y))
-        except KeyError:
+            with open(os.path.join('maps', self.map_name, f'{base_x}|{base_y}.cnk'), 'r') as f:
+                json = ujson.load(f)
+            coord = pos_to_coord(x, y)
             try:
-                image = Image.open(os.path.join('maps', self.map_name, f'{base_x}|{base_y}') + '.png')
-            except FileNotFoundError:
-                return None
-            pixels = image.load()
-            self.pixels_buffer[(base_x, base_y)] = pixels
-            if len(self.pixels_buffer) > self.pixels_buffer_max_len:
-                self.pixels_buffer.popitem(last=False)
+                tile.update(json[coord])
+                tile_type = tile.pop('type')
+            except KeyError:
+                tile_type = json['default']
+        except (FileNotFoundError, KeyError):
+            with open(os.path.join('maps', self.map_name, 'default.cnk'), 'r') as f:
+                json = ujson.load(f)
+            probabilities = sorted(json['probabilities'].items(), key=lambda k: k[1])
+            print(probabilities)
+            for tile_type, probability in probabilities:
+                r = self.random.random()
+                print(r, probability)
+                if r <= probability:
+                    break
+            else:
+                tile_type = json['default']
 
-        r, g, b = pixels[x%64, 63-y%64]
-        hex = "#{0:02x}{1:02x}{2:02x}".format(r, g, b)
-        for TileType in TILE_TYPES.values():
-            if TileType.color == hex:
-                return TileType, (x, y)
-
-        return None
+        return TILE_TYPES[tile_type], tile
