@@ -152,10 +152,15 @@ class View(Widget):
             color = [0, 0, .5, .5]  # ToDo: make this color faction specific
             map_mode = MapMode(pos=(tx, ty), bg_color=color)
             self.map_modes['faction'][(c_tile.x, c_tile.y)] = map_mode
+            if self.current_map_mode == 'faction':
+                anim.bind(on_complete=lambda anim, widget: self.ids.map.add_widget(map_mode))
 
-        color = [0, .7, 0, 1]
-        map_mode = MapMode(pos=(tx, ty), color=color, text=str(c_tile.fertility))
-        self.map_modes['fertility'][(c_tile.x, c_tile.y)] = map_mode
+        if c_tile.fertility:
+            color = [0, .7, 0, 1]
+            map_mode = MapMode(pos=(tx, ty), color=color, text=str(c_tile.fertility))
+            self.map_modes['fertility'][(c_tile.x, c_tile.y)] = map_mode
+            if self.current_map_mode == 'fertility':
+                anim.bind(on_complete=lambda anim, widget: self.ids.map.add_widget(map_mode))
 
         self._ensure_troops_on_top()
 
