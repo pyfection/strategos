@@ -92,6 +92,7 @@ class EventProcessMixin(EventResponseMixin):
         effect = event.effectiveness_modifier
         kills = round(max(base * unit_ratio * exp_ratio * effect, 1))
         event.reduce_amount = -min(kills, defender.units)
+        defender.units += event.reduce_amount
 
         for actor in self.actors:
             if actor.troop and actor.troop.in_view_range(defender.x, defender.y):

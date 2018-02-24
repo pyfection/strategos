@@ -20,8 +20,8 @@
         "16afc757-c602-4ce4-b3cd-d3606ddac42c": {
           "name": "Legio III Italica",
           "leader": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
-          "units": 100,
-          "experience": 1,
+          "units": 500,
+          "experience": 10,
           "x": 158,
           "y": 54
         }
@@ -89,18 +89,18 @@
     "16afc757-c602-4ce4-b3cd-d3606ddac42c": {
       "name": "Legio III Italica",
       "leader": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
-      "units": 100,
-      "experience": 1,
-      "x": 30,
-      "y": 19
+      "units": 500,
+      "experience": 10,
+      "x": 158,
+      "y": 54
     },
     "a0d9b31a-4e48-415a-8f4b-ac3d7e361360": {
       "name": "Germanic Raiding Party",
       "leader": "cc7fcc7a-4299-4195-9b99-69f53a979ea8",
       "units": 100,
       "experience": 1,
-      "x": 30,
-      "y": 43
+      "x": 158,
+      "y": 77
     }
   },
   "tiles": {
