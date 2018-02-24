@@ -149,7 +149,7 @@ class View(Widget):
         except AttributeError:
             pass
         else:
-            color = [0, 0, .5, .5]  # ToDo: make this color faction specific
+            color = faction.color + [.5]
             map_mode = MapMode(pos=(tx, ty), bg_color=color)
             self.map_modes['faction'][(c_tile.x, c_tile.y)] = map_mode
             if self.current_map_mode == 'faction':

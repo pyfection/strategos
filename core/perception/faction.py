@@ -6,10 +6,11 @@ from .mixins import CopyMixin
 
 
 class Faction(CopyMixin):
-    def __init__(self, perception, id=None, name=None, leader=None, capital=None):
+    def __init__(self, perception, id=None, name=None, leader=None, capital=None, color=None):
         self._perception = perception
         self.id = id or str(uuid4())
         self.name = name
+        self.color = color or [1, 1, 1]
         self._leader = leader
         self._capital = capital  # (x, y)
 
