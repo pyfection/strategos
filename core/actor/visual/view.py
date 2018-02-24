@@ -33,7 +33,8 @@ class View(Widget):
         self.troops = {}
         self.tiles = {}
         self.map_modes = {
-            'faction': {}
+            'faction': {},
+            'fertility': {},
         }
         self.current_map_mode = None
         self.focus_center = (0, 0)
@@ -77,6 +78,8 @@ class View(Widget):
             self.ids.map.y += 10
         elif keycode[1] == 'f':
             self.toggle_map_mode('faction')
+        elif keycode[1] == 'd':
+            self.toggle_map_mode('fertility')
         elif keycode[1] == '$':
             self.toggle_console()
         return True
@@ -147,8 +150,12 @@ class View(Widget):
             pass
         else:
             color = [0, 0, .5, .5]  # ToDo: make this color faction specific
-            map_mode = MapMode(pos=(tx, ty), color=color)
+            map_mode = MapMode(pos=(tx, ty), bg_color=color)
             self.map_modes['faction'][(c_tile.x, c_tile.y)] = map_mode
+
+        color = [0, .7, 0, 1]
+        map_mode = MapMode(pos=(tx, ty), color=color, text=str(c_tile.fertility))
+        self.map_modes['fertility'][(c_tile.x, c_tile.y)] = map_mode
 
         self._ensure_troops_on_top()
 
