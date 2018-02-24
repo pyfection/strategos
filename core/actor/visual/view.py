@@ -9,7 +9,7 @@ from kivy.lang.builder import Builder
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from visual.building import Settlement
-from visual.overlay import Target
+from visual.overlay import Target, MapMode
 from visual.tile import Tile
 from visual.troop import Troop
 
@@ -32,6 +32,10 @@ class View(Widget):
         self.actor = actor
         self.troops = {}
         self.tiles = {}
+        self.map_modes = {
+            'faction': {}
+        }
+        self.current_map_mode = None
         self.focus_center = (0, 0)
         self.focus_radius = 5
 
@@ -71,9 +75,16 @@ class View(Widget):
             self.ids.map.y -= 10
         elif keycode[1] == 'down':
             self.ids.map.y += 10
+        elif keycode[1] == 'f':
+            self.toggle_map_mode('faction')
         elif keycode[1] == '$':
             self.toggle_console()
         return True
+
+    def _ensure_troops_on_top(self):
+        for troop in self.troops.values():  # ToDo: this is not very performant, find a better solution
+            self.ids.map.remove_widget(troop)
+            self.ids.map.add_widget(troop)
 
     def on_size(self, inst, value):
         self.center_camera()
@@ -84,6 +95,21 @@ class View(Widget):
         else:
             self.add_widget(self.console)
             self.console.ids.input.focus = True
+
+    def toggle_map_mode(self, mode_type):
+        if self.current_map_mode:
+            modes = self.map_modes[self.current_map_mode].values()
+            for mode in modes:
+                self.ids.map.remove_widget(mode)
+
+        if self.current_map_mode == mode_type:
+            self.current_map_mode = None
+        else:
+            modes = self.map_modes[mode_type].values()
+            for mode in modes:
+                self.ids.map.add_widget(mode)
+            self.current_map_mode = mode_type
+            self._ensure_troops_on_top()
 
     @mainthread
     def add_tile(self, c_tile):
@@ -115,9 +141,16 @@ class View(Widget):
             anim.start(settlement)
         anim.start(tile)
 
-        for troop in self.troops.values():  # ToDo: this is not very performant, find a better solution
-            self.ids.map.remove_widget(troop)
-            self.ids.map.add_widget(troop)
+        try:
+            faction = c_tile.dominion.ruler.faction
+        except AttributeError:
+            pass
+        else:
+            color = [0, 0, .5, .5]  # ToDo: make this color faction specific
+            map_mode = MapMode(pos=(tx, ty), color=color)
+            self.map_modes['faction'][(c_tile.x, c_tile.y)] = map_mode
+
+        self._ensure_troops_on_top()
 
     @mainthread
     def add_troop(self, faction_name, c_troop):

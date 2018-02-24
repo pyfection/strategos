@@ -104,7 +104,7 @@
     }
   },
   "tiles": {
-    "158|54": {"type": "grass", "population": 100},
+    "158|54": {"type": "grass", "population": 100, "dominion": "12838234-d270-4578-9faa-6b0f197e7736"},
     "158|77": {"type": "grass", "population": 100}
   }
 }

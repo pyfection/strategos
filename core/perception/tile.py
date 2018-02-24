@@ -5,7 +5,7 @@ from helpers.convert import pos_to_coord
 
 
 class Tile(CopyMixin):
-    DEFAULT_FERTILITY = 0
+    DEFAULT_FERTILITY = 0  # Number of people tile can sustain without modifiers
     type = 'tile'
 
     def __init__(self, perception, x, y, z=0, dominion=None, population=0, base_fertility=0):
@@ -29,7 +29,7 @@ class Tile(CopyMixin):
 
     @property
     def dominion(self):
-        return self._perception.dominions[self._dominion]
+        return self._perception.dominions.get(self._dominion)
 
     def passable(self, by):
         """
