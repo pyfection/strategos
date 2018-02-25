@@ -30,6 +30,10 @@ class Tile(CopyMixin):
     def dominion(self):
         return self._perception.dominions.get(self._dominion)
 
+    @dominion.setter
+    def dominion(self, dominion):
+        self._dominion = dominion.id
+
     def passable(self, by):
         """
         check if tile is passable by "by"

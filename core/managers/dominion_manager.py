@@ -43,6 +43,7 @@ class DominionManager:
             for tile in tiles:
                 settlers = tile.fertility - tile.population
                 tile.population += min(settlers, extra_population)
+                tile.dominion = dominion
                 extra_population = max(extra_population - settlers, 0)
                 if not extra_population:
                     break
