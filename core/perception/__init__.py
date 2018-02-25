@@ -5,7 +5,7 @@ from core.perception.faction import Faction
 from core.perception.tile import TILE_TYPES
 from core.perception.troop import Troop
 from core.perception.dominion import Dominion
-from helpers.convert import pos_to_coord, coord_to_pos
+from helpers.convert import coord_to_pos
 
 
 class Perception:
@@ -43,12 +43,13 @@ class Perception:
             Faction(self, id=faction_id, **faction_dict)
 
         for dominion_id, dominion_dict in dictionary.get('dominions', dict()).items():
-            Dominion(self, id=dominion_id, **dominion_dict)
+            capital = coord_to_pos(dominion_dict.pop('capital'))
+            Dominion(self, id=dominion_id, capital=capital, **dominion_dict)
 
         return self
 
     def show_tile(self, tile):
-        self.tiles[pos_to_coord(tile.x, tile.y)] = tile.copy(self)
+        self.tiles[tile.pos] = tile.copy(self)
 
     def show_entity(self, entity):
         self.entities[entity.id] = entity.copy(self)

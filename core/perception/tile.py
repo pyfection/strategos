@@ -1,7 +1,6 @@
 
 
 from .mixins import CopyMixin
-from helpers.convert import pos_to_coord
 
 
 class Tile(CopyMixin):
@@ -17,7 +16,7 @@ class Tile(CopyMixin):
         self.base_fertility = base_fertility or self.DEFAULT_FERTILITY
         self._dominion = dominion
 
-        perception.tiles[pos_to_coord(x, y)] = self
+        perception.tiles[(x, y)] = self
 
     @property
     def pos(self):

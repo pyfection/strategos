@@ -3,8 +3,7 @@
 import math
 
 from helpers import maths
-from helpers.convert import pos_to_coord, coord_to_pos
-from core.event import Move, Attack, Uncover, Discover
+from core.event import Move, Attack, Uncover
 from core.mixins import EventDistortedResponseMixin
 
 
@@ -29,8 +28,7 @@ class Actor(EventDistortedResponseMixin):
                 distance = maths.distance(origin, (x, y))
                 if distance > self.troop.view_range:
                     continue
-                coord = pos_to_coord(x, y)
-                if coord not in self.perception.tiles:
+                if (x, y) not in self.perception.tiles:
                     action = Uncover(x, y, self)
                     self.actions.append(action)
 
@@ -98,9 +96,8 @@ class Actor(EventDistortedResponseMixin):
         troop = self.troop
         start_pos = troop.x, troop.y
         end_pos = int(x), int(y)
-        coord = pos_to_coord(*end_pos)
         try:
-            tile = self.perception.tiles[coord]
+            tile = self.perception.tiles[end_pos]
         except KeyError:
             self.stop_actions()
             return
@@ -136,10 +133,9 @@ class Actor(EventDistortedResponseMixin):
 
             for pos in get_neighbors(*current):
                 g_cost = maths.distance(start_pos, pos)
-                coords = pos_to_coord(*pos)
-                if coords not in self.perception.tiles:
+                if pos not in self.perception.tiles:
                     continue
-                elif not self.perception.tiles[coords].passable(troop):
+                elif not self.perception.tiles[pos].passable(troop):
                     continue
                 elif pos in closed:
                     continue

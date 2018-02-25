@@ -5,10 +5,9 @@ import random
 from threading import Thread
 
 from core.actor.ai import AI
-from core.map_gen import GEN_TYPES
 from core.mixins import EventProcessMixin
 from core.perception import Perception
-from helpers.convert import pos_to_coord
+from core.managers.dominion_manager import DominionManager
 from helpers.loader import save_game
 from maps import MapLoader
 
@@ -26,6 +25,8 @@ class World(EventProcessMixin):
             for id, perception in setup.get('perceptions', {}).items()
         }
         self.events = {}
+        self.dominion_manager = DominionManager(self.perception)
+
         for actor in self.actors:
             entity_id = setup['actor_to_entity_mapping'][actor.name]
             actor.perception = self.perceptions[entity_id]
@@ -68,8 +69,8 @@ class World(EventProcessMixin):
                     'troops': {},
                     'factions': {}
                 }
-            for p_coord, p_tile in entity.tiles.items():
-                entity_dict['tiles'][p_coord] = {
+            for p_pos, p_tile in entity.tiles.items():
+                entity_dict['tiles'][p_pos] = {
                     'z': p_tile.z,
                     'type': p_tile.type,
                     'owner': p_tile.owner.id if p_tile.owner else None
@@ -89,8 +90,8 @@ class World(EventProcessMixin):
                 }
             game['entities'][id] = entity_dict
 
-        for coord, tile in self.tiles.items():
-            game['tiles'][coord] = {
+        for pos, tile in self.tiles.items():
+            game['tiles'][pos] = {
                 'z': tile.z,
                 'type': tile.type,
                 'owner': tile.owner.id if tile.owner else None
@@ -116,9 +117,8 @@ class World(EventProcessMixin):
         return [a for a in self.actors if isinstance(a, AI)]
 
     def get_tile(self, x, y):
-        coord = pos_to_coord(x, y)
         try:
-            tile = self.perception.tiles[coord]
+            tile = self.perception.tiles[(x, y)]
         except KeyError:
             TileType, kwargs = self.map_loader.get_tile(x, y)
             tile = TileType(self.perception, **kwargs)
@@ -138,6 +138,8 @@ class World(EventProcessMixin):
             actor.actions.clear()
         for action in actions.copy():
             action.trigger(self)
+
+        self.dominion_manager.do_turn()
 
         # Tell actors to update
         for actor in self.actors:
