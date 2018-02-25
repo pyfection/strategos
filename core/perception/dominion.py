@@ -22,3 +22,11 @@ class Dominion(CopyMixin):
     @property
     def capital(self):
         return self._perception.tiles[self._capital]
+
+    @property
+    def tiles(self):
+        return filter(lambda t: t._dominion == self.id, self._perception.tiles.values())
+
+    @property
+    def population(self):
+        return sum([t.population for t in self.tiles])
