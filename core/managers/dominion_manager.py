@@ -1,14 +1,29 @@
 
 
+import random
+
 from helpers.maths import closest_tiles
 
 
 class DominionManager:
+    BREED_MOD = .1
+
     def __init__(self, perception):
         self.perception = perception
 
     def do_turn(self):
+        self.breed()
         self.distribute_settlers()
+
+    def breed(self):
+        for dominion in self.perception.dominions.values():
+            for tile in dominion.tiles:
+                women = tile.population // 2
+                increase = 0
+                for b in range(women):
+                    if random.random() < self.BREED_MOD:
+                        increase += 1
+                tile.population += increase
 
     def distribute_settlers(self):
         for dominion in self.perception.dominions.values():
