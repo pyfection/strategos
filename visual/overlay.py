@@ -34,7 +34,8 @@ class MapMode(Label):
     SIZE = 32
     bg_color = ListProperty([0, 0, 0, 0])
 
-    def __init__(self, bg_color=None, **kwargs):
+    def __init__(self, mode_type, bg_color=None, **kwargs):
+        self.mode_type = mode_type
         super().__init__(size_hint=(None, None), size=(self.SIZE, self.SIZE), **kwargs)
         if bg_color:
             self.bg_color = bg_color

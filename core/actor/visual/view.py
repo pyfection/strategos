@@ -89,6 +89,10 @@ class View(Widget):
             self.ids.map.remove_widget(troop)
             self.ids.map.add_widget(troop)
 
+    def _add_map_mode(self, mode):
+        if self.current_map_mode == mode:
+            self.ids.map.add_widget(mode)
+
     def on_size(self, inst, value):
         self.center_camera()
 
@@ -150,17 +154,20 @@ class View(Widget):
             pass
         else:
             color = faction.color + [.5]
-            map_mode = MapMode(pos=(tx, ty), bg_color=color)
+            map_mode = MapMode('faction', pos=(tx, ty), bg_color=color)
             self.map_modes['faction'][(c_tile.x, c_tile.y)] = map_mode
             if self.current_map_mode == 'faction':
                 anim.bind(on_complete=lambda anim, widget: self.ids.map.add_widget(map_mode))
 
         if c_tile.fertility:
             color = [0, .7, 0, 1]
-            map_mode = MapMode(pos=(tx, ty), color=color, text=str(c_tile.fertility))
+            map_mode = MapMode('fertility', pos=(tx, ty), color=color, text=str(c_tile.fertility))
             self.map_modes['fertility'][(c_tile.x, c_tile.y)] = map_mode
             if self.current_map_mode == 'fertility':
-                anim.bind(on_complete=lambda anim, widget: self.ids.map.add_widget(map_mode))
+                def _add_fertility_map_mode(anim, widget, map_mode=map_mode):
+                    if self.current_map_mode == 'fertility':
+                        self.ids.map.add_widget(map_mode)
+                anim.bind(on_complete=lambda anim, widget, mode=map_mode: self._add_map_mode(mode))
 
         self._ensure_troops_on_top()
 
