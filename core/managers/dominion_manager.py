@@ -19,10 +19,7 @@ class DominionManager:
         for dominion in self.perception.dominions.values():
             for tile in dominion.tiles:
                 women = tile.population // 2
-                increase = 0
-                for b in range(women):
-                    if random.random() < self.BREED_MOD:
-                        increase += 1
+                increase = women * tile.breed_mod
                 tile.population += increase
 
     def distribute_settlers(self):

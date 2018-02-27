@@ -5,6 +5,7 @@ from .mixins import CopyMixin
 
 class Tile(CopyMixin):
     DEFAULT_FERTILITY = 0  # Number of people tile can sustain without modifiers
+    BREED_MOD = .1
     type = 'tile'
 
     def __init__(self, perception, x, y, z=0, dominion=None, population=0, base_fertility=0):
@@ -25,6 +26,11 @@ class Tile(CopyMixin):
     @property
     def fertility(self):
         return self.base_fertility
+
+    @property
+    def breed_mod(self):
+        remaining = max(self.fertility - self.population, 0)
+        return self.BREED_MOD * remaining
 
     @property
     def dominion(self):
