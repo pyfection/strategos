@@ -3,6 +3,7 @@
 import random
 
 from helpers.maths import closest_tiles
+from core.event import InformationUpdate
 
 
 class DominionManager:
@@ -10,6 +11,7 @@ class DominionManager:
 
     def __init__(self, perception):
         self.perception = perception
+        self.actions = []
 
     def do_turn(self):
         self.breed()
@@ -20,7 +22,15 @@ class DominionManager:
             for tile in dominion.tiles:
                 women = tile.population // 2
                 increase = women * tile.breed_mod
-                tile.population += increase
+                if not increase:
+                    continue
+                info_update = InformationUpdate(
+                    percept='tiles',
+                    id=tile.pos,
+                    updates={'population': tile.population + increase},
+                    pos=tile.pos
+                )
+                self.actions.append(info_update)
 
     def distribute_settlers(self):
         for dominion in self.perception.dominions.values():

@@ -132,7 +132,9 @@ class World(EventProcessMixin):
     def update(self):
         threads = []
 
-        actions = sorted([event for actor in self.actors for event in actor.actions], key=lambda k: k.PRIO)
+        actions = [event for actor in self.actors for event in actor.actions]
+        actions += self.dominion_manager.actions
+        actions = sorted(actions, key=lambda k: k.PRIO)
 
         for actor in self.actors:
             actor.actions.clear()

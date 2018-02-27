@@ -101,3 +101,14 @@ class Discover(Event):
 
     def trigger(self, actor):
         actor.discover_troop(self)
+
+
+class InformationUpdate(Event):
+    def __init__(self, percept, id, updates, pos):
+        self.percept = percept
+        self.id = id
+        self.updates = updates
+        self.x, self.y = pos
+
+    def trigger(self, actor):
+        actor.update_info(self)

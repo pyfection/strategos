@@ -36,6 +36,11 @@ class EventResponseMixin:
         self.troop_target = None
         self.walk_path.clear()
 
+    def update_info(self, event):
+        percept = getattr(self.perception, event.percept)
+        for name, value in event.updates.items():
+            setattr(percept[event.id], name, value)
+
     def change_troop_unit_amount(self, troop_id, amount):
         troop = self.perception.troops[troop_id]
         troop.units += amount
@@ -109,4 +114,10 @@ class EventProcessMixin(EventResponseMixin):
                 continue
             if troop.pos == (event.x, event.y):
                 discover = Discover(troop=troop)
-                self.add_event_to_actor(discover, event.requester)
+                self.add_event_to_actor(discover, event.requester)  # ToDo: does this not just add updates to the same actor multiple times?
+
+    def update_info(self, event):
+        for actor in self.actors:
+            troop = actor.troop
+            if troop.in_view_range(event.x, event.y):
+                self.add_event_to_actor(event, actor)

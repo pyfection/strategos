@@ -128,3 +128,13 @@ class Visual(Actor):
         self.view.change_troop_unit_amount(troop_id, amount)
         if not troop.units:
             self.view.remove_troop(troop_id)
+
+    def update_info(self, event):
+        super().update_info(event)
+        if event.percept == 'tiles':
+            try:
+                population = event.updates['population']
+            except KeyError:
+                pass
+            else:
+                print(f"Population in {event.id} changed to {population}")  # ToDo: update view
