@@ -2,7 +2,6 @@
 
 import random
 
-from helpers.maths import closest_tiles
 from core.event import InformationUpdate
 
 
@@ -49,9 +48,8 @@ class DominionManager:
             if not extra_population:
                 continue
 
-            tiles = closest_tiles(
+            tiles = self.perception.closest_tiles(
                 dominion.capital.pos,
-                self.perception.tiles,
                 lambda t: t.population <= int(t.fertility * .2)
             )
             for tile in tiles:

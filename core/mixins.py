@@ -107,7 +107,7 @@ class EventProcessMixin(EventResponseMixin):
         raise NotImplementedError("This event should not be triggered by a EventProcessMixin subclass")
 
     def uncover_tile(self, event):
-        event.tile = self.get_tile(event.x, event.y)
+        event.tile = self.perception.get_tile(event.x, event.y)
         self.add_event_to_actor(event, event.requester)
         for troop_id, troop in self.perception.troops.items():
             if event.requester.troop and event.requester.troop.id == troop_id:

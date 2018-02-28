@@ -2,10 +2,12 @@
 
 from core.perception.entity import Entity
 from core.perception.faction import Faction
-from core.perception.tile import TILE_TYPES
+from core.perception.tile import TILE_TYPES, Grass
 from core.perception.troop import Troop
 from core.perception.dominion import Dominion
+from maps import MapLoader
 from helpers.convert import coord_to_pos
+from helpers.maths import pos_neighbors
 
 
 class Perception:
@@ -16,6 +18,7 @@ class Perception:
         self.troops = {}
         self.factions = {}
         self.dominions = {}
+        self.map_loader = None
 
     @property
     def entity(self):
@@ -24,6 +27,8 @@ class Perception:
     @classmethod
     def load(cls, dictionary, entity_id=None):
         self = cls(entity_id)
+        if 'map_name' in dictionary:
+            self.map_loader = MapLoader(dictionary['map_name'], dictionary['seed'])
 
         for entity_id, entity_dict in dictionary.get('entities', dict()).items():
             Entity(self, id=entity_id, **entity_dict)
@@ -48,6 +53,17 @@ class Perception:
 
         return self
 
+    def get_tile(self, x, y):
+        try:
+            tile = self.tiles[(x, y)]
+        except KeyError:
+            if self.map_loader:
+                TileType, kwargs = self.map_loader.get_tile(x, y)
+                tile = TileType(self, **kwargs)
+            else:
+                raise AttributeError("This perception does not have a map loader")
+        return tile
+
     def show_tile(self, tile):
         self.tiles[tile.pos] = tile.copy(self)
 
@@ -64,3 +80,27 @@ class Perception:
 
     def show_faction(self, faction):
         self.factions[faction.id] = faction.copy(self)
+
+    def closest_tiles(self, start_pos, condition):
+        checked = []
+        current = set(pos_neighbors(start_pos))
+        next = set()
+        while True:
+            for pos in current:
+                if pos in checked:
+                    continue
+
+                checked.append(pos)
+
+                tile = self.get_tile(*pos)
+                if not tile.passable:
+                    continue
+
+                for neighbor in pos_neighbors(pos):
+                    next.add(neighbor)
+
+                if condition(tile):
+                    yield tile
+
+            current = next.copy()
+            next.clear()

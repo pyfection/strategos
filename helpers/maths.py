@@ -26,30 +26,5 @@ def pos_neighbors(pos):
     return [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
 
 
-def closest_tiles(start_pos, tiles, condition):
-    checked = []
-    current = set(pos_neighbors(start_pos))
-    next = set()
-    while True:
-        for pos in current:
-            if pos in checked:
-                continue
-
-            checked.append(pos)
-
-            tile = tiles[pos]
-            if not tile.passable:
-                continue
-
-            for neighbor in pos_neighbors(pos):
-                next.add(neighbor)
-
-            if condition(tile):
-                yield tile
-
-        current = next.copy()
-        next.clear()
-
-
 if __name__ == '__main__':
     print(limit_distance((1, 1), (10, 15), 5))

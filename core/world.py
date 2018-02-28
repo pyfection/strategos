@@ -9,14 +9,12 @@ from core.mixins import EventProcessMixin
 from core.perception import Perception
 from core.managers.dominion_manager import DominionManager
 from helpers.loader import save_game
-from maps import MapLoader
 
 
 class World(EventProcessMixin):
     def __init__(self, setup):
         self.seed = setup.get('seed')
         random.seed(self.seed)
-        self.map_loader = MapLoader(setup['map_name'], self.seed)
         self.actors = setup.get('actors', [])
         self.current_turn = setup.get('current_turn', 0)
         self.perception = Perception.load(setup)
@@ -115,14 +113,6 @@ class World(EventProcessMixin):
 
     def get_ais(self):
         return [a for a in self.actors if isinstance(a, AI)]
-
-    def get_tile(self, x, y):
-        try:
-            tile = self.perception.tiles[(x, y)]
-        except KeyError:
-            TileType, kwargs = self.map_loader.get_tile(x, y)
-            tile = TileType(self.perception, **kwargs)
-        return tile
 
     def get_troop(self, x, y):
         for troop in self.perception.troops.values():
