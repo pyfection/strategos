@@ -117,6 +117,7 @@ class EventProcessMixin(EventResponseMixin):
                 self.add_event_to_actor(discover, event.requester)  # ToDo: does this not just add updates to the same actor multiple times?
 
     def update_info(self, event):
+        super().update_info(event)
         for actor in self.actors:
             troop = actor.troop
             if troop.in_view_range(event.x, event.y):

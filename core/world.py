@@ -136,8 +136,10 @@ class World(EventProcessMixin):
         actions += self.dominion_manager.actions
         actions = sorted(actions, key=lambda k: k.PRIO)
 
+        self.dominion_manager.actions.clear()
         for actor in self.actors:
             actor.actions.clear()
+
         for action in actions.copy():
             action.trigger(self)
 
