@@ -196,7 +196,7 @@ class World(WorldEventResponseMixin):
 
         actions = [event for actor in self.actors for event in actor.actions]
         actions += self.dominion_manager.actions
-        actions = sorted(actions, key=lambda k: k.PRIO)
+        actions = sorted(actions, key=lambda k: k.importance)
 
         self.dominion_manager.actions.clear()
         for actor in self.actors:
@@ -209,7 +209,7 @@ class World(WorldEventResponseMixin):
 
         # Tell actors to update
         for actor in self.actors:
-            events = sorted(self.events.get(actor.name, []), key=lambda k: k.PRIO)
+            events = sorted(self.events.get(actor.name, []), key=lambda k: k.importance)
             t = Thread(target=actor.do_turn, kwargs={'turn': self.current_turn, 'events': events})
             threads.append(t)
             t.start()

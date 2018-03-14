@@ -7,11 +7,38 @@ from core.perception.troop import Troop
 
 
 class Event:
-    PRIO = 0
+    dependencies = ()
+
+    @property
+    def importance(self):
+        return max([d.importance for d in self.dependencies], default=0)
+
+
+class Quit(Event):
+    dependencies = ()
+
+    def __init__(self, actor):
+        self.actor = actor  # actor to be quit
+
+    def trigger(self, actor):
+        actor.quit_actor(self)
+
+
+class PerceptionUpdate(Event):
+    dependencies = ()
+
+    def __init__(self, percept, id, updates, pos):
+        self.percept = percept
+        self.id = id
+        self.updates = updates
+        self.x, self.y = pos
+
+    def trigger(self, actor):
+        actor.update_perception(self)
 
 
 class Move(Event):
-    PRIO = 3
+    dependencies = (Event,)
 
     def __init__(self, troop_id, x, y):
         super().__init__()
@@ -28,8 +55,8 @@ class Move(Event):
 
 
 class Attack(Event):
-    PRIO = 4
     STRENGTH_MOD = .1
+    dependencies = (Move,)
 
     def __init__(self, attacker_id, defender_id):
         super().__init__()
@@ -38,26 +65,3 @@ class Attack(Event):
 
     def trigger(self, actor):
         actor.attack_troop(self)
-
-
-class Quit(Event):
-    PRIO = 100
-
-    def __init__(self, actor):
-        self.actor = actor  # actor to be quit
-
-    def trigger(self, actor):
-        actor.quit_actor(self)
-
-
-class PerceptionUpdate(Event):
-    PRIO = 1
-
-    def __init__(self, percept, id, updates, pos):
-        self.percept = percept
-        self.id = id
-        self.updates = updates
-        self.x, self.y = pos
-
-    def trigger(self, actor):
-        actor.update_perception(self)
