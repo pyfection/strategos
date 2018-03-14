@@ -3,11 +3,28 @@
 import math
 
 from helpers import maths
-from core.event import Move, Attack, Uncover
-from core.mixins import EventDistortedResponseMixin
+from core.event import Move, Attack
+from core.mixins import EventResponseMixin
 
 
-class Actor(EventDistortedResponseMixin):
+class ActorEventResponseMixin(EventResponseMixin):
+    def update_perception(self, event):
+        if event.percept == 'troops':
+            for key, value in event.updates.items():
+                if key == 'units':
+                    self.on_troop_units_update(event.id, value)
+        super().update_perception(event)
+
+    def on_troop_units_update(self, id, value):
+        troop = self.perception.troops[id]
+        if troop.units <= 0:
+            if self.troop_target and id == self.troop_target.id:
+                self.stop_actions()
+            elif self.troop and id == self.troop.id:
+                self.stop_actions()
+
+
+class Actor(ActorEventResponseMixin):
     def __init__(self, name, perception=None, events=None):
         self.name = name  # unique identifier / player/account name
         self.perception = perception
@@ -16,24 +33,8 @@ class Actor(EventDistortedResponseMixin):
         self.walk_path = []
         self.troop_target = None  # troop target
 
-    def _discover(self, origin=None):
-        if not self.troop:
-            return
-        if not origin:
-            origin = self.troop.pos
-        for i in range(-self.troop.view_range, self.troop.view_range+1):
-            for j in range(-self.troop.view_range, self.troop.view_range+1):
-                x = origin[0] + i
-                y = origin[1] + j
-                distance = maths.distance(origin, (x, y))
-                if distance > self.troop.view_range:
-                    continue
-                if (x, y) not in self.perception.tiles:
-                    action = Uncover(x, y, self)
-                    self.actions.append(action)
-
     def setup(self):
-        self._discover()
+        pass
 
     @property
     def entity(self):
@@ -83,7 +84,6 @@ class Actor(EventDistortedResponseMixin):
                 self.stop_actions()
             else:
                 self.actions.append(Move(troop.id, x, y))
-                self._discover((x, y))
 
     def path_to(self, x, y):
         def get_neighbors(x, y):
@@ -155,3 +155,7 @@ class Actor(EventDistortedResponseMixin):
             current = closed[current]['parent']
 
         self.walk_path = path[::-1]
+
+    def stop_actions(self):
+        self.troop_target = None
+        self.walk_path.clear()

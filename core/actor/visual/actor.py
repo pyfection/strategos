@@ -6,7 +6,7 @@ from math import floor
 from kivy.app import App
 from kivy.core.window import Window
 
-from core.event import Quit, SpawnTroop
+from core.event import Quit
 from core.actor.actor import Actor
 from .view import View
 from . import assets
@@ -41,16 +41,6 @@ class Visual(Actor):
 
     def toggle_pause(self):
         self.paused = not self.paused
-
-    def spawn_troop(self, name, x=0, y=0, units=0, experience=0):
-        event = SpawnTroop(
-            name=name,
-            units=int(units),
-            experience=float(experience),
-            x=int(x),
-            y=int(y)
-        )
-        self.actions.append(event)
 
     def show_tile(self, tile, **distortions):
         super().show_tile(tile, **distortions)

@@ -6,13 +6,13 @@ from .mixins import CopyMixin
 
 
 class Entity(CopyMixin):
-    def __init__(self, perception, id=None, name=None, ruler=None, troop=None, faction=None):
+    def __init__(self, perception, id=None, name=None, ruler_id=None, troop_id=None, faction_id=None):
         self._perception = perception
         self.id = id or str(uuid4())
         self.name = name
-        self._ruler = ruler
-        self._troop = troop
-        self._faction = faction
+        self.ruler_id = ruler_id
+        self.troop_id = troop_id
+        self.faction_id = faction_id
 
         perception.entities[id] = self
 
@@ -22,12 +22,12 @@ class Entity(CopyMixin):
 
     @property
     def ruler(self):
-        return self._perception.entities[self._ruler]
+        return self._perception.entities[self.ruler_id]
 
     @property
     def troop(self):
-        return self._perception.troops[self._troop]
+        return self._perception.troops[self.troop_id]
 
     @property
     def faction(self):
-        return self._perception.factions[self._faction]
+        return self._perception.factions[self.faction_id]

@@ -42,7 +42,6 @@ class View(Widget):
 
         self.console = Console(pos=self.pos, height=self.height, width=100, size_hint=(None, None))
         self.console.commands['exit'] = self.toggle_console
-        self.console.commands['spawn_troop'] = self.actor.spawn_troop
         self.target = Target(pos=(0, 0))
         self.target_anim = None
 

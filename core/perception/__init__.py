@@ -48,8 +48,26 @@ class Perception:
             Faction(self, id=faction_id, **faction_dict)
 
         for dominion_id, dominion_dict in dictionary.get('dominions', dict()).items():
-            capital = coord_to_pos(dominion_dict.pop('capital'))
-            Dominion(self, id=dominion_id, capital=capital, **dominion_dict)
+            capital = coord_to_pos(dominion_dict.pop('capital_pos'))
+            Dominion(self, id=dominion_id, capital_pos=capital, **dominion_dict)
+
+        # ToDo: make sure that troop discovered tiles in view range; this should be a method
+        # Old code from actor which did that:
+        # def _discover(self, origin=None):
+        #     if not self.troop:
+        #         return
+        #     if not origin:
+        #         origin = self.troop.pos
+        #     for i in range(-self.troop.view_range, self.troop.view_range + 1):
+        #         for j in range(-self.troop.view_range, self.troop.view_range + 1):
+        #             x = origin[0] + i
+        #             y = origin[1] + j
+        #             distance = maths.distance(origin, (x, y))
+        #             if distance > self.troop.view_range:
+        #                 continue
+        #             if (x, y) not in self.perception.tiles:
+        #                 action = Uncover(x, y, self)
+        #                 self.actions.append(action)
 
         return self
 

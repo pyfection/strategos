@@ -3,15 +3,87 @@
 import logging
 import random
 from threading import Thread
+from uuid import uuid4
 
 from core.actor.ai import AI
-from core.mixins import EventProcessMixin
+from core.mixins import EventResponseMixin
+from core.event import Quit, PerceptionUpdate
 from core.perception import Perception
 from core.managers.dominion_manager import DominionManager
 from helpers.loader import save_game
 
 
-class World(EventProcessMixin):
+class WorldEventResponseMixin(EventResponseMixin):
+    def add_event_to_actor(self, event, actor):
+        self.events.setdefault(actor.name, []).append(event)
+
+    def quit_actor(self, event):
+        actor = event.actor
+        self.actors.remove(actor)
+        replacement = AI(
+            name=str(uuid4()),
+            perception=actor.perception,
+            events=actor.events
+        )
+        self.actors.append(replacement)
+        event = Quit(actor)
+        for actor in self.actors:
+            self.add_event_to_actor(event, actor)
+
+    def move_troop(self, event):
+        # ToDo: add tile discovery for new tiles in view range; perception will have a function for that
+        occupied_positions = (troop.pos for troop in self.perception.troops.values() if troop.units)
+        is_pos_occupied_by_other_troop = event.pos in occupied_positions
+        if not is_pos_occupied_by_other_troop:
+            troop = self.perception.troops[event.troop_id]
+            if troop.units:
+                troop.x, troop.y = event.x, event.y
+            for actor in self.actors:
+                if actor.troop and actor.troop.in_view_range(event.x, event.y):
+                    if event.troop_id in actor.perception.troops:
+                        move = PerceptionUpdate(
+                            percept='troops',
+                            id=event.troop_id,
+                            updates={'x': troop.x, 'y': troop.y},
+                            pos=troop.pos
+                        )
+                        self.add_event_to_actor(move, actor)
+                    else:
+                        discover = PerceptionUpdate(
+                            percept='troops',
+                            id=event.troop_id,
+                            updates=troop.to_dict(),
+                            pos=troop.pos
+                        )
+                        self.add_event_to_actor(discover, actor)
+
+    def attack_troop(self, event):
+        attacker = self.perception.troops[event.attacker_id]
+        defender = self.perception.troops[event.defender_id]
+        if defender.units == 0 or attacker.units == 0:
+            return
+
+        base = attacker.units * event.STRENGTH_MOD
+        unit_ratio = attacker.units / defender.units  # attacker to defender ratio
+        exp_ratio = attacker.experience / defender.experience
+        effectiveness_modifier = round(random.uniform(.5, 2), 2)
+        kills = round(max(base * unit_ratio * exp_ratio * effectiveness_modifier, 1))
+        amount = defender.units - min(kills, defender.units)
+        defender.units += amount
+
+        update = PerceptionUpdate(
+            percept='troops',
+            id=defender.id,
+            updates={'units': amount},
+            pos=defender.pos
+        )
+
+        for actor in self.actors:
+            if actor.troop and actor.troop.in_view_range(defender.x, defender.y):
+                self.add_event_to_actor(update, actor)
+
+
+class World(WorldEventResponseMixin):
     def __init__(self, setup):
         self.seed = setup.get('seed')
         random.seed(self.seed)

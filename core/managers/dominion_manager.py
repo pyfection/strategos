@@ -2,7 +2,7 @@
 
 import random
 
-from core.event import InformationUpdate
+from core.event import PerceptionUpdate
 
 
 class DominionManager:
@@ -23,7 +23,7 @@ class DominionManager:
                 increase = women * tile.breed_mod
                 if not increase:
                     continue
-                info_update = InformationUpdate(
+                info_update = PerceptionUpdate(
                     percept='tiles',
                     id=tile.pos,
                     updates={'population': tile.population + increase},
@@ -37,7 +37,7 @@ class DominionManager:
             for tile in dominion.tiles:
                 settlers = max(0, tile.population - int(tile.fertility * .7))
                 if settlers:
-                    info_update = InformationUpdate(
+                    info_update = PerceptionUpdate(
                         percept='tiles',
                         id=tile.pos,
                         updates={'population': tile.population - settlers},
@@ -56,7 +56,7 @@ class DominionManager:
                 possible_settlers = max(int(tile.fertility * .5) - tile.population, 0)
                 settlers = min(possible_settlers, extra_population)
                 if settlers:
-                    info_update = InformationUpdate(
+                    info_update = PerceptionUpdate(
                         percept='tiles',
                         id=tile.pos,
                         updates={

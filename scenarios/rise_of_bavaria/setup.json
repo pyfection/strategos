@@ -5,21 +5,21 @@
       "entities": {
         "7a7fecff-18b1-43a8-b520-44e56ea783c9": {
           "name": "Ignatius Trozza",
-          "ruler": null,
-          "troop": "16afc757-c602-4ce4-b3cd-d3606ddac42c",
-          "faction": "5f2115db-2aa1-441c-b53b-db38af52f642"
+          "ruler_id": null,
+          "troop_id": "16afc757-c602-4ce4-b3cd-d3606ddac42c",
+          "faction_id": "5f2115db-2aa1-441c-b53b-db38af52f642"
         }
       },
       "factions": {
         "5f2115db-2aa1-441c-b53b-db38af52f642": {
           "name": "trozza",
-          "leader": "7a7fecff-18b1-43a8-b520-44e56ea783c9"
+          "leader_id": "7a7fecff-18b1-43a8-b520-44e56ea783c9"
         }
       },
       "troops": {
         "16afc757-c602-4ce4-b3cd-d3606ddac42c": {
           "name": "Legio III Italica",
-          "leader": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
+          "leader_id": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
           "units": 500,
           "experience": 10,
           "x": 158,
@@ -31,21 +31,21 @@
       "entities": {
         "cc7fcc7a-4299-4195-9b99-69f53a979ea8": {
           "name": "Marbodus",
-          "ruler": null,
-          "troop": "a0d9b31a-4e48-415a-8f4b-ac3d7e361360",
-          "faction": "a8bc9487-eeaa-409a-99e1-9db34c3a76a8"
+          "ruler_id": null,
+          "troop_id": "a0d9b31a-4e48-415a-8f4b-ac3d7e361360",
+          "faction_id": "a8bc9487-eeaa-409a-99e1-9db34c3a76a8"
         }
       },
       "factions": {
         "a8bc9487-eeaa-409a-99e1-9db34c3a76a8": {
           "name": "marcomanni",
-          "leader": "cc7fcc7a-4299-4195-9b99-69f53a979ea8"
+          "leader_id": "cc7fcc7a-4299-4195-9b99-69f53a979ea8"
         }
       },
       "troops": {
         "a0d9b31a-4e48-415a-8f4b-ac3d7e361360": {
           "name": "Germanic Raiding Party",
-          "leader": "cc7fcc7a-4299-4195-9b99-69f53a979ea8",
+          "leader_id": "cc7fcc7a-4299-4195-9b99-69f53a979ea8",
           "units": 100,
           "experience": 1,
           "x": 158,
@@ -57,40 +57,40 @@
   "entities": {
     "7a7fecff-18b1-43a8-b520-44e56ea783c9": {
       "name": "Ignatius Trozza",
-      "ruler": null,
-      "troop": "16afc757-c602-4ce4-b3cd-d3606ddac42c",
-      "faction": "5f2115db-2aa1-441c-b53b-db38af52f642"
+      "ruler_id": null,
+      "troop_id": "16afc757-c602-4ce4-b3cd-d3606ddac42c",
+      "faction_id": "5f2115db-2aa1-441c-b53b-db38af52f642"
     },
     "cc7fcc7a-4299-4195-9b99-69f53a979ea8": {
       "name": "Marbodus",
-      "ruler": null,
-      "troop": "a0d9b31a-4e48-415a-8f4b-ac3d7e361360",
-      "faction": "a8bc9487-eeaa-409a-99e1-9db34c3a76a8"
+      "ruler_id": null,
+      "troop_id": "a0d9b31a-4e48-415a-8f4b-ac3d7e361360",
+      "faction_id": "a8bc9487-eeaa-409a-99e1-9db34c3a76a8"
     }
   },
   "factions": {
     "5f2115db-2aa1-441c-b53b-db38af52f642": {
       "name": "trozza",
-      "leader": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
+      "leader_id": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
       "color": [0.1, 0.4, 0.1]
     },
     "a8bc9487-eeaa-409a-99e1-9db34c3a76a8": {
       "name": "marcomanni",
-      "leader": "cc7fcc7a-4299-4195-9b99-69f53a979ea8",
+      "leader_id": "cc7fcc7a-4299-4195-9b99-69f53a979ea8",
       "color": [0.4, 0.1, 0.1]
     }
   },
   "dominions": {
     "12838234-d270-4578-9faa-6b0f197e7736": {
       "name": "Ratisbona",
-      "ruler": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
-      "capital": "158|54"
+      "ruler_id": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
+      "capital_pos": "158|54"
     }
   },
   "troops": {
     "16afc757-c602-4ce4-b3cd-d3606ddac42c": {
       "name": "Legio III Italica",
-      "leader": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
+      "leader_id": "7a7fecff-18b1-43a8-b520-44e56ea783c9",
       "units": 500,
       "experience": 10,
       "x": 158,
@@ -98,7 +98,7 @@
     },
     "a0d9b31a-4e48-415a-8f4b-ac3d7e361360": {
       "name": "Germanic Raiding Party",
-      "leader": "cc7fcc7a-4299-4195-9b99-69f53a979ea8",
+      "leader_id": "cc7fcc7a-4299-4195-9b99-69f53a979ea8",
       "units": 100,
       "experience": 1,
       "x": 158,
@@ -106,7 +106,7 @@
     }
   },
   "tiles": {
-    "158|54": {"type": "grass", "population": 100, "dominion": "12838234-d270-4578-9faa-6b0f197e7736"},
+    "158|54": {"type": "grass", "population": 100, "dominion_id": "12838234-d270-4578-9faa-6b0f197e7736"},
     "158|77": {"type": "grass", "population": 100}
   }
 }
