@@ -54,7 +54,7 @@ class Actor(ActorEventResponseMixin):
 
     @property
     def troop_target(self):
-        return self.troop_target_id
+        return self.perception.troops[self.troop_target_id]
 
     @troop_target.setter
     def troop_target(self, troop):
