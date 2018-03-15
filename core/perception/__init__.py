@@ -24,6 +24,12 @@ class Perception:
     def entity(self):
         return self.entities.get(self.entity_id)
 
+    @property
+    def troop(self):
+        entity = self.entity
+        if entity:
+            return entity.troop
+
     @classmethod
     def load(cls, dictionary, entity_id=None):
         self = cls(entity_id)
@@ -51,24 +57,6 @@ class Perception:
             capital = coord_to_pos(dominion_dict.pop('capital_pos'))
             Dominion(self, id=dominion_id, capital_pos=capital, **dominion_dict)
 
-        # ToDo: make sure that troop discovered tiles in view range; this should be a method
-        # Old code from actor which did that:
-        # def _discover(self, origin=None):
-        #     if not self.troop:
-        #         return
-        #     if not origin:
-        #         origin = self.troop.pos
-        #     for i in range(-self.troop.view_range, self.troop.view_range + 1):
-        #         for j in range(-self.troop.view_range, self.troop.view_range + 1):
-        #             x = origin[0] + i
-        #             y = origin[1] + j
-        #             distance = maths.distance(origin, (x, y))
-        #             if distance > self.troop.view_range:
-        #                 continue
-        #             if (x, y) not in self.perception.tiles:
-        #                 action = Uncover(x, y, self)
-        #                 self.actions.append(action)
-
         return self
 
     def get_tile(self, x, y):
@@ -81,23 +69,6 @@ class Perception:
             else:
                 raise AttributeError("This perception does not have a map loader")
         return tile
-
-    def show_tile(self, tile):
-        self.tiles[tile.pos] = tile.copy(self)
-
-    def show_entity(self, entity):
-        self.entities[entity.id] = entity.copy(self)
-
-    def show_troop(self, troop):
-        try:
-            old_troop = self.troops[troop.id]
-        except KeyError:
-            self.troops[troop.id] = troop.copy(self)
-        else:
-            old_troop.update(troop)
-
-    def show_faction(self, faction):
-        self.factions[faction.id] = faction.copy(self)
 
     def closest_tiles(self, start_pos, condition):
         checked = []
