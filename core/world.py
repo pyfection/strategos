@@ -11,11 +11,30 @@ from core.event import Quit, PerceptionUpdate
 from core.perception import Perception
 from core.managers.dominion_manager import DominionManager
 from helpers.loader import save_game
+from helpers import maths
 
 
 class WorldEventResponseMixin(EventResponseMixin):
-    def add_event_to_actor(self, event, actor):
+    def _add_event_to_actor(self, event, actor):
         self.events.setdefault(actor.name, []).append(event)
+
+    def _discover_tiles(self, actor):
+        troop = actor.troop
+        origin = troop.pos
+
+        tiles = []
+        for i in range(-troop.view_range, troop.view_range + 1):
+            for j in range(-troop.view_range, troop.view_range + 1):
+                x = origin[0] + i
+                y = origin[1] + j
+                distance = maths.distance(origin, (x, y))
+                if distance > troop.view_range:
+                    continue
+                if (x, y) not in actor.perception.tiles:
+                    tile = self.perception.get_tile(x, y)
+                    tiles.append(tile)
+
+        return tiles
 
     def quit_actor(self, event):
         actor = event.actor
@@ -28,10 +47,9 @@ class WorldEventResponseMixin(EventResponseMixin):
         self.actors.append(replacement)
         event = Quit(actor)
         for actor in self.actors:
-            self.add_event_to_actor(event, actor)
+            self._add_event_to_actor(event, actor)
 
     def move_troop(self, event):
-        # ToDo: add tile discovery for new tiles in view range; perception will have a function for that
         occupied_positions = (troop.pos for troop in self.perception.troops.values() if troop.units)
         is_pos_occupied_by_other_troop = event.pos in occupied_positions
         if not is_pos_occupied_by_other_troop:
@@ -39,23 +57,28 @@ class WorldEventResponseMixin(EventResponseMixin):
             if troop.units:
                 troop.x, troop.y = event.x, event.y
             for actor in self.actors:
-                if actor.troop and actor.troop.in_view_range(event.x, event.y):
-                    if event.troop_id in actor.perception.troops:
-                        move = PerceptionUpdate(
-                            percept='troops',
-                            id=event.troop_id,
-                            updates={'x': troop.x, 'y': troop.y},
-                            pos=troop.pos
-                        )
-                        self.add_event_to_actor(move, actor)
-                    else:
-                        discover = PerceptionUpdate(
-                            percept='troops',
-                            id=event.troop_id,
-                            updates=troop.to_dict(),
-                            pos=troop.pos
-                        )
-                        self.add_event_to_actor(discover, actor)
+                if actor.troop:
+                    actor_troop = actor.troop
+                    if actor_troop.in_view_range(event.x, event.y):
+                        if event.troop_id in actor.perception.troops:
+                            move = PerceptionUpdate(
+                                percept='troops',
+                                id=event.troop_id,
+                                updates={'x': troop.x, 'y': troop.y},
+                                pos=troop.pos
+                            )
+                            self._add_event_to_actor(move, actor)
+                        else:
+                            discover = PerceptionUpdate(
+                                percept='troops',
+                                id=event.troop_id,
+                                updates=troop.to_dict(),
+                                pos=troop.pos
+                            )
+                            self._add_event_to_actor(discover, actor)
+
+                    if actor_troop.id == event.troop_id:
+                        self._discover_tiles(actor)
 
     def attack_troop(self, event):
         attacker = self.perception.troops[event.attacker_id]
@@ -80,7 +103,7 @@ class WorldEventResponseMixin(EventResponseMixin):
 
         for actor in self.actors:
             if actor.troop and actor.troop.in_view_range(defender.x, defender.y):
-                self.add_event_to_actor(update, actor)
+                self._add_event_to_actor(update, actor)
 
 
 class World(WorldEventResponseMixin):
@@ -100,6 +123,9 @@ class World(WorldEventResponseMixin):
         for actor in self.actors:
             entity_id = setup['actor_to_entity_mapping'][actor.name]
             actor.perception = self.perceptions[entity_id]
+            tiles = self._discover_tiles(actor)
+            for tile in tiles:
+                actor.perception.tiles[tile.pos] = tile
             actor.setup()
         logging.info(f"Worldseed: {self.seed}")
 

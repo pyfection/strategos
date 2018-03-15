@@ -42,19 +42,6 @@ class Visual(Actor):
     def toggle_pause(self):
         self.paused = not self.paused
 
-    def show_tile(self, tile, **distortions):
-        super().show_tile(tile, **distortions)
-        self.view.add_tile(tile)
-
-    def show_troop(self, troop, **distortions):
-        super().show_troop(troop, **distortions)
-        if troop.units:
-            if troop.leader and troop.leader.faction:
-                faction = troop.leader.faction.name
-            else:
-                faction = None
-            self.view.add_troop(faction, troop)
-
     def do_turn(self, turn, events):
         super().do_turn(turn, events)
 

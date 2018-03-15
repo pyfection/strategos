@@ -10,10 +10,15 @@ from core.mixins import EventResponseMixin
 class ActorEventResponseMixin(EventResponseMixin):
     def update_perception(self, event):
         if event.percept == 'troops':
+            if event.id not in self.perception.troops:
+                self.on_troop_discover(event)
             for key, value in event.updates.items():
                 if key == 'units':
                     self.on_troop_units_update(event.id, value)
         super().update_perception(event)
+
+    def on_troop_discover(self, event):
+        return
 
     def on_troop_units_update(self, id, value):
         troop = self.perception.troops[id]
@@ -31,7 +36,7 @@ class Actor(ActorEventResponseMixin):
         self.events = events or []  # events coming from outside
         self.actions = []  # actions (events) actor wants to do
         self.walk_path = []
-        self.troop_target = None  # troop target
+        self.troop_target_id = None  # troop target
 
     def setup(self):
         pass
@@ -47,14 +52,16 @@ class Actor(ActorEventResponseMixin):
         if entity:
             return entity.troop
 
-    def show_entity(self, entity, **distortions):
-        self.perception.show_entity(entity, **distortions)
+    @property
+    def troop_target(self):
+        return self.troop_target_id
 
-    def show_tile(self, tile, **distortions):
-        self.perception.show_tile(tile, **distortions)
-
-    def show_troop(self, troop, **distortions):
-        self.perception.show_troop(troop, **distortions)
+    @troop_target.setter
+    def troop_target(self, troop):
+        if troop is None:
+            self.troop_target_id = None
+        else:
+            self.troop_target_id = troop.id
 
     def do_turn(self, turn, events):
         self.current_turn = turn

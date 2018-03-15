@@ -7,13 +7,11 @@ from core.actor.actor import Actor
 
 
 class AI(Actor):
+    def on_troop_discover(self, event):
+        if not self.troop_target:
+            self.troop_target_id = event.id
+
     def do_turn(self, turn, events):
         super().do_turn(turn, events)
 
         self.end_turn()
-
-    def show_troop(self, troop, **distortions):
-        super().show_troop(troop, **distortions)
-
-        if not self.troop_target:
-            self.troop_target = troop
