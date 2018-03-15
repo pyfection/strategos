@@ -5,13 +5,17 @@ from uuid import uuid4
 
 from core.perception.troop import Troop
 
+class classproperty(property):
+    def __get__(self, cls, owner):
+        return max([d.importance for d in owner.dependencies], default=0)
+
 
 class Event:
     dependencies = ()
 
-    @property
-    def importance(self):
-        return max([d.importance for d in self.dependencies], default=0)
+    @classproperty
+    def importance(cls):
+        return
 
 
 class Quit(Event):
