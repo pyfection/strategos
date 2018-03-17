@@ -94,6 +94,15 @@ class Visual(Actor):
         if not troop.units:
             self.view.remove_troop(troop_id)
 
+    def on_troop_discover(self, event):
+        super().on_troop_discover(event)
+        troop = self.perception.troops[event.id]
+        try:
+            faction = troop.leader.faction
+        except AttributeError:
+            faction = None
+        self.view.add_troop(faction, troop)
+
     def on_troop_pos_update(self, id, pos):
         super().on_troop_pos_update(id, pos)
 

@@ -8,6 +8,7 @@ from core.actor.actor import Actor
 
 class AI(Actor):
     def on_troop_discover(self, event):
+        super().on_troop_discover(event)
         if not self.troop_target:
             self.troop_target_id = event.id
 

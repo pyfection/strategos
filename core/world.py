@@ -50,6 +50,7 @@ class WorldEventResponseMixin(EventResponseMixin):
             self._add_event_to_actor(event, actor)
 
     def move_troop(self, event):
+        """What happens when an actor asked to move a troop"""
         occupied_positions = (troop.pos for troop in self.perception.troops.values() if troop.units)
         is_pos_occupied_by_other_troop = event.pos in occupied_positions
         if not is_pos_occupied_by_other_troop:
@@ -86,6 +87,18 @@ class WorldEventResponseMixin(EventResponseMixin):
                                 id=tile.pos,
                                 updates=tile.to_dict(),
                                 pos=tile.pos
+                            )
+                            self._add_event_to_actor(discover, actor)
+                        for other_troop in self.perception.troops.values():
+                            if other_troop.id == actor_troop.id or other_troop.id in actor.perception.troops:
+                                continue
+                            elif not other_troop.in_view_range(event.x, event.y):
+                                continue
+                            discover = PerceptionUpdate(
+                                percept='troops',
+                                id=other_troop.id,
+                                updates=other_troop.to_dict(),
+                                pos=other_troop.pos
                             )
                             self._add_event_to_actor(discover, actor)
 

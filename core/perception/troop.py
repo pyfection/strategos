@@ -31,7 +31,10 @@ class Troop(CopyMixin):
 
     @property
     def leader(self):
-        return self._perception.entities[self.leader_id]
+        try:
+            return self._perception.entities[self.leader_id]
+        except KeyError:
+            raise AttributeError("Troop does not have a leader")
 
     def in_view_range(self, x, y):
         return maths.distance(self.pos, (x, y)) <= self.view_range

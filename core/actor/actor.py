@@ -6,6 +6,7 @@ from helpers import maths
 from core.event import Move, Attack
 from core.mixins import EventResponseMixin
 from core.perception.tile import TILE_TYPES
+from core.perception.troop import Troop
 
 
 class ActorEventResponseMixin(EventResponseMixin):
@@ -13,14 +14,14 @@ class ActorEventResponseMixin(EventResponseMixin):
         if event.percept == 'troops':
             if event.id not in self.perception.troops:
                 self.on_troop_discover(event)
-
-            for key, value in event.updates.items():
-                if key == 'units':
-                    self.on_troop_units_update(event.id, value)
-                elif key == 'pos':
-                    self.on_troop_pos_update(event.id, value)
-                else:
-                    raise NotImplementedError(f"Update item '{key}' is unhandled")
+            else:
+                for key, value in event.updates.items():
+                    if key == 'units':
+                        self.on_troop_units_update(event.id, value)
+                    elif key == 'pos':
+                        self.on_troop_pos_update(event.id, value)
+                    else:
+                        raise NotImplementedError(f"Update item '{key}' is unhandled")
         elif event.percept == 'tiles':
             if event.id not in self.perception.tiles:
                 self.on_tile_discover(event)
@@ -29,7 +30,18 @@ class ActorEventResponseMixin(EventResponseMixin):
         super().update_perception(event)
 
     def on_troop_discover(self, event):
-        return
+        x, y = event.updates['pos']
+        troop = Troop(
+            perception=self.perception,
+            id=event.id,
+            name=event.updates.get('name'),
+            leader_id=event.updates.get('leader_id'),
+            units=event.updates.get('units', 0),
+            experience=event.updates.get('experience', .1),
+            x=x,
+            y=y,
+            view_range=event.updates.get('view_range', 5)
+        )
 
     def on_troop_units_update(self, id, value):
         troop = self.perception.troops[id]
