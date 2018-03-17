@@ -25,6 +25,10 @@ class Troop(CopyMixin):
     def pos(self):
         return (self.x, self.y)
 
+    @pos.setter
+    def pos(self, value):
+        self.x, self.y = value
+
     @property
     def leader(self):
         return self._perception.entities[self.leader_id]

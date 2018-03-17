@@ -12,9 +12,12 @@ class ActorEventResponseMixin(EventResponseMixin):
         if event.percept == 'troops':
             if event.id not in self.perception.troops:
                 self.on_troop_discover(event)
+
             for key, value in event.updates.items():
                 if key == 'units':
                     self.on_troop_units_update(event.id, value)
+                elif key == 'pos':
+                    self.on_troop_pos_update(event.id, value)
         super().update_perception(event)
 
     def on_troop_discover(self, event):
@@ -27,6 +30,10 @@ class ActorEventResponseMixin(EventResponseMixin):
                 self.stop_actions()
             elif self.troop and id == self.troop.id:
                 self.stop_actions()
+
+    def on_troop_pos_update(self, id, pos):
+        troop = self.perception.troops[id]
+        troop.pos = pos
 
 
 class Actor(ActorEventResponseMixin):
@@ -54,7 +61,10 @@ class Actor(ActorEventResponseMixin):
 
     @property
     def troop_target(self):
-        return self.perception.troops[self.troop_target_id]
+        try:
+            return self.perception.troops[self.troop_target_id]
+        except KeyError:
+            return None
 
     @troop_target.setter
     def troop_target(self, troop):

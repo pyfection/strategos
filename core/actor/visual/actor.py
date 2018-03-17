@@ -82,18 +82,6 @@ class Visual(Actor):
         self.paused = False
         App.get_running_app().stop()
 
-    def move_troop(self, event):
-        super().move_troop(event)
-        self.view.move_troop(event.troop_id, event.x, event.y)
-        if self.troop_target and self.troop_target.id == event.troop_id:
-            self.view.move_target(event.x, event.y)
-
-        if self.troop and event.troop_id == self.troop.id:
-            self.view.focus_center = self.troop.pos
-            self.view.center_camera()
-            if not self.walk_path and not self.troop_target:
-                self.view.unset_target()
-
     def stop_actions(self):
         self.view.unset_target()
         super().stop_actions()
@@ -106,12 +94,16 @@ class Visual(Actor):
         if not troop.units:
             self.view.remove_troop(troop_id)
 
-    def update_info(self, event):
-        super().update_info(event)
-        if event.percept == 'tiles':
-            try:
-                population = event.updates['population']
-            except KeyError:
-                pass
-            else:
-                print(f"Population in {event.id} changed to {population}")  # ToDo: update view
+    def on_troop_pos_update(self, id, pos):
+        super().on_troop_pos_update(id, pos)
+
+        self.view.move_troop(id, *pos)
+        if self.troop_target and self.troop_target.id == id:
+            self.view.move_target(*pos)
+
+        if self.troop and id == self.troop.id:
+            self.view.focus_center = self.troop.pos
+            self.view.center_camera()
+            if not self.walk_path and not self.troop_target:
+                self.view.unset_target()
+

@@ -54,8 +54,9 @@ class WorldEventResponseMixin(EventResponseMixin):
         is_pos_occupied_by_other_troop = event.pos in occupied_positions
         if not is_pos_occupied_by_other_troop:
             troop = self.perception.troops[event.troop_id]
-            if troop.units:
-                troop.x, troop.y = event.x, event.y
+            if not troop.units:
+                return
+            troop.x, troop.y = event.x, event.y
             for actor in self.actors:
                 if actor.troop:
                     actor_troop = actor.troop
@@ -64,7 +65,7 @@ class WorldEventResponseMixin(EventResponseMixin):
                             move = PerceptionUpdate(
                                 percept='troops',
                                 id=event.troop_id,
-                                updates={'x': troop.x, 'y': troop.y},
+                                updates={'pos': troop.pos},
                                 pos=troop.pos
                             )
                             self._add_event_to_actor(move, actor)
