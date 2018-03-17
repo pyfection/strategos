@@ -8,13 +8,13 @@ class Tile(CopyMixin):
     BREED_MOD = .1
     type = 'tile'
 
-    def __init__(self, perception, x, y, z=0, dominion_id=None, population=0, base_fertility=0):
+    def __init__(self, perception, x, y, z=0, dominion_id=None, population=0, base_fertility=None):
         self._perception = perception
         self.x = x
         self.y = y
         self.z = z
         self.population = population
-        self.base_fertility = base_fertility or self.DEFAULT_FERTILITY
+        self.base_fertility = self.DEFAULT_FERTILITY if base_fertility is None else base_fertility
         self.dominion_id = dominion_id
 
         perception.tiles[(x, y)] = self
@@ -22,6 +22,10 @@ class Tile(CopyMixin):
     @property
     def pos(self):
         return self.x, self.y
+
+    @pos.setter
+    def pos(self, value):
+        self.x, self.y = value
 
     @property
     def fertility(self):
@@ -39,6 +43,16 @@ class Tile(CopyMixin):
     @dominion.setter
     def dominion(self, dominion):
         self.dominion_id = dominion.id
+
+    def to_dict(self):
+        return {
+            'pos': (self.x, self.y),
+            'z': self.z,
+            'population': self.population,
+            'base_fertility': self.base_fertility,
+            'dominion_id': self.dominion_id,
+            'type': self.type
+        }
 
     def passable(self, by):
         """

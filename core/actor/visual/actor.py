@@ -107,3 +107,7 @@ class Visual(Actor):
             if not self.walk_path and not self.troop_target:
                 self.view.unset_target()
 
+    def on_tile_discover(self, event):
+        super().on_tile_discover(event)
+        tile = self.perception.tiles[event.id]
+        self.view.add_tile(tile)

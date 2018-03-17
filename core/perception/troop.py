@@ -41,8 +41,7 @@ class Troop(CopyMixin):
             'name': self.name,
             'units': self.units,
             'experience': self.experience,
-            'x': self.x,
-            'y': self.y,
+            'pos': (self.x, self.y),
             'view_range': self.view_range,
             'leader_id': self.leader_id
         }

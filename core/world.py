@@ -19,7 +19,7 @@ class WorldEventResponseMixin(EventResponseMixin):
         self.events.setdefault(actor.name, []).append(event)
 
     def _discover_tiles(self, actor):
-        troop = actor.troop
+        troop = self.perception.troops[actor.troop.id]
         origin = troop.pos
 
         tiles = []
@@ -79,7 +79,15 @@ class WorldEventResponseMixin(EventResponseMixin):
                             self._add_event_to_actor(discover, actor)
 
                     if actor_troop.id == event.troop_id:
-                        self._discover_tiles(actor)
+                        tiles = self._discover_tiles(actor)
+                        for tile in tiles:
+                            discover = PerceptionUpdate(
+                                percept='tiles',
+                                id=tile.pos,
+                                updates=tile.to_dict(),
+                                pos=tile.pos
+                            )
+                            self._add_event_to_actor(discover, actor)
 
     def attack_troop(self, event):
         attacker = self.perception.troops[event.attacker_id]

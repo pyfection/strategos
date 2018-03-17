@@ -5,6 +5,7 @@ import math
 from helpers import maths
 from core.event import Move, Attack
 from core.mixins import EventResponseMixin
+from core.perception.tile import TILE_TYPES
 
 
 class ActorEventResponseMixin(EventResponseMixin):
@@ -18,6 +19,13 @@ class ActorEventResponseMixin(EventResponseMixin):
                     self.on_troop_units_update(event.id, value)
                 elif key == 'pos':
                     self.on_troop_pos_update(event.id, value)
+                else:
+                    raise NotImplementedError(f"Update item '{key}' is unhandled")
+        elif event.percept == 'tiles':
+            if event.id not in self.perception.tiles:
+                self.on_tile_discover(event)
+        else:
+            raise NotImplementedError(f"Event had no effect because the percept '{event.percept}' is unhandled")
         super().update_perception(event)
 
     def on_troop_discover(self, event):
@@ -34,6 +42,18 @@ class ActorEventResponseMixin(EventResponseMixin):
     def on_troop_pos_update(self, id, pos):
         troop = self.perception.troops[id]
         troop.pos = pos
+
+    def on_tile_discover(self, event):
+        Tile = TILE_TYPES[event.updates['type']]
+        x, y = event.updates['pos']
+        tile = Tile(
+            perception=self.perception,
+            x=x,
+            y=y,
+            dominion_id=event.updates.get('dominion_id'),
+            population=event.updates.get('population', 0),
+            base_fertility=event.updates.get('base_fertility')
+        )
 
 
 class Actor(ActorEventResponseMixin):
