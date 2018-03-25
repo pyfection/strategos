@@ -1,8 +1,6 @@
 
 
-import random
-
-from core.event import PerceptionUpdate
+from core.event import TileEvent
 
 
 class DominionManager:
@@ -23,11 +21,9 @@ class DominionManager:
                 increase = women * tile.breed_mod
                 if not increase:
                     continue
-                info_update = PerceptionUpdate(
-                    percept='tiles',
-                    id=tile.pos,
-                    updates={'population': tile.population + increase},
-                    pos=tile.pos
+                info_update = TileEvent(
+                    pos=tile.pos,
+                    population=tile.population + increase
                 )
                 self.actions.append(info_update)
 
@@ -37,11 +33,9 @@ class DominionManager:
             for tile in dominion.tiles:
                 settlers = max(0, tile.population - int(tile.fertility * .7))
                 if settlers:
-                    info_update = PerceptionUpdate(
-                        percept='tiles',
-                        id=tile.pos,
-                        updates={'population': tile.population - settlers},
-                        pos=tile.pos
+                    info_update = TileEvent(
+                        pos=tile.pos,
+                        population=tile.population - settlers
                     )
                     self.actions.append(info_update)
                     extra_population += settlers
@@ -56,14 +50,10 @@ class DominionManager:
                 possible_settlers = max(int(tile.fertility * .5) - tile.population, 0)
                 settlers = min(possible_settlers, extra_population)
                 if settlers:
-                    info_update = PerceptionUpdate(
-                        percept='tiles',
-                        id=tile.pos,
-                        updates={
-                            'population': tile.population + settlers,
-                            'dominion': dominion
-                        },
-                        pos=tile.pos
+                    info_update = TileEvent(
+                        pos=tile.pos,
+                        population=tile.population + settlers,
+                        dominion_id=dominion.id
                     )
                     self.actions.append(info_update)
                     extra_population = extra_population - settlers

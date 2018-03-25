@@ -8,13 +8,59 @@ from kivy.core.window import Window
 
 from core.event import Quit
 from core.actor.actor import Actor
+from core.reactor import PerceptionReact
 from .view import View
 from . import assets
+
+
+class VisualReact(PerceptionReact):
+    def on_troop_update(self, event):
+        super().on_troop_update(event)
+        troop = self.actor.perception.troops[event.id]
+        if event.id not in self.actor.view.troops:
+            try:
+                faction = troop.leader.faction
+            except AttributeError:
+                faction = None
+            self.actor.view.add_troop(faction, troop)
+
+    def on_troop_pos(self, id, pos):
+        super().on_troop_pos(id, pos)
+        self.actor.view.move_troop(id, *pos)
+        if self.actor.troop_target and self.actor.troop_target.id == id:
+            self.actor.view.move_target(*pos)
+
+        if self.actor.troop and id == self.actor.troop.id:
+            self.actor.view.focus_center = self.actor.troop.pos
+            self.actor.view.center_camera()
+            if not self.actor.walk_path and not self.actor.troop_target:
+                self.actor.view.unset_target()
+
+    def on_troop_units(self, id, units):
+        troop = self.actor.perception.troops[id]
+        dif = units - troop.units
+        was_dead = troop.units == 0
+
+        super().on_troop_units(id, units)
+
+        if was_dead and units > 0:
+            return
+
+        self.actor.view.change_troop_unit_amount(id, dif)
+        if not troop.units:
+            self.actor.view.remove_troop(id)
+
+    def on_tile_update(self, event):
+        super().on_tile_update(event)
+        if event.pos not in self.actor.view.tiles:
+            tile = self.actor.perception.tiles[event.pos]
+            self.actor.view.add_tile(tile)
 
 
 class Visual(Actor):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.reactor = VisualReact(self)
 
         Window.bind(on_close=lambda inst: self.quit())
         self.run = True
@@ -85,38 +131,3 @@ class Visual(Actor):
     def stop_actions(self):
         self.view.unset_target()
         super().stop_actions()
-
-    def change_troop_unit_amount(self, troop_id, amount):
-        super().change_troop_unit_amount(troop_id, amount)
-        troop = self.perception.troops[troop_id]
-
-        self.view.change_troop_unit_amount(troop_id, amount)
-        if not troop.units:
-            self.view.remove_troop(troop_id)
-
-    def on_troop_discover(self, event):
-        super().on_troop_discover(event)
-        troop = self.perception.troops[event.id]
-        try:
-            faction = troop.leader.faction
-        except AttributeError:
-            faction = None
-        self.view.add_troop(faction, troop)
-
-    def on_troop_pos_update(self, id, pos):
-        super().on_troop_pos_update(id, pos)
-
-        self.view.move_troop(id, *pos)
-        if self.troop_target and self.troop_target.id == id:
-            self.view.move_target(*pos)
-
-        if self.troop and id == self.troop.id:
-            self.view.focus_center = self.troop.pos
-            self.view.center_camera()
-            if not self.walk_path and not self.troop_target:
-                self.view.unset_target()
-
-    def on_tile_discover(self, event):
-        super().on_tile_discover(event)
-        tile = self.perception.tiles[event.id]
-        self.view.add_tile(tile)

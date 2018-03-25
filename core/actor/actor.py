@@ -3,72 +3,11 @@
 import math
 
 from helpers import maths
-from core.event import Move, Attack
-from core.mixins import EventResponseMixin
-from core.perception.tile import TILE_TYPES
-from core.perception.troop import Troop
+from core.event import Attack, TroopEvent
+from core.reactor import PerceptionReact
 
 
-class ActorEventResponseMixin(EventResponseMixin):
-    def update_perception(self, event):
-        if event.percept == 'troops':
-            if event.id not in self.perception.troops:
-                self.on_troop_discover(event)
-            else:
-                for key, value in event.updates.items():
-                    if key == 'units':
-                        self.on_troop_units_update(event.id, value)
-                    elif key == 'pos':
-                        self.on_troop_pos_update(event.id, value)
-                    else:
-                        raise NotImplementedError(f"Update item '{key}' is unhandled")
-        elif event.percept == 'tiles':
-            if event.id not in self.perception.tiles:
-                self.on_tile_discover(event)
-        else:
-            raise NotImplementedError(f"Event had no effect because the percept '{event.percept}' is unhandled")
-        super().update_perception(event)
-
-    def on_troop_discover(self, event):
-        x, y = event.updates['pos']
-        troop = Troop(
-            perception=self.perception,
-            id=event.id,
-            name=event.updates.get('name'),
-            leader_id=event.updates.get('leader_id'),
-            units=event.updates.get('units', 0),
-            experience=event.updates.get('experience', .1),
-            x=x,
-            y=y,
-            view_range=event.updates.get('view_range', 5)
-        )
-
-    def on_troop_units_update(self, id, value):
-        troop = self.perception.troops[id]
-        if troop.units <= 0:
-            if self.troop_target and id == self.troop_target.id:
-                self.stop_actions()
-            elif self.troop and id == self.troop.id:
-                self.stop_actions()
-
-    def on_troop_pos_update(self, id, pos):
-        troop = self.perception.troops[id]
-        troop.pos = pos
-
-    def on_tile_discover(self, event):
-        Tile = TILE_TYPES[event.updates['type']]
-        x, y = event.updates['pos']
-        tile = Tile(
-            perception=self.perception,
-            x=x,
-            y=y,
-            dominion_id=event.updates.get('dominion_id'),
-            population=event.updates.get('population', 0),
-            base_fertility=event.updates.get('base_fertility')
-        )
-
-
-class Actor(ActorEventResponseMixin):
+class Actor:
     def __init__(self, name, perception=None, events=None):
         self.name = name  # unique identifier / player/account name
         self.perception = perception
@@ -76,6 +15,7 @@ class Actor(ActorEventResponseMixin):
         self.actions = []  # actions (events) actor wants to do
         self.walk_path = []
         self.troop_target_id = None  # troop target
+        self.reactor = PerceptionReact(self)
 
     def setup(self):
         pass
@@ -108,7 +48,7 @@ class Actor(ActorEventResponseMixin):
     def do_turn(self, turn, events):
         self.current_turn = turn
         for event in events:
-            event.trigger(self)
+            event.trigger(self.reactor)
         self.events.clear()
 
     def end_turn(self):
@@ -132,7 +72,7 @@ class Actor(ActorEventResponseMixin):
             if (x, y) in [t.pos for t in self.perception.troops.values() if t.units]:
                 self.stop_actions()
             else:
-                self.actions.append(Move(troop.id, x, y))
+                self.actions.append(TroopEvent(troop.id, pos=(x, y)))
 
     def path_to(self, x, y):
         def get_neighbors(x, y):
