@@ -77,9 +77,20 @@ class TileEvent(Event):
             reactor.on_tile_base_fertility(self.pos, self.base_fertility)
 
 
+class Move(Event):
+    dependencies = ()
+
+    def __init__(self, troop_id, pos):
+        self.troop_id = troop_id
+        self.pos = pos
+
+    def trigger(self, reactor):
+        reactor.on_troop_pos(self.troop_id, self.pos)
+
+
 class Attack(Event):
     STRENGTH_MOD = .1
-    dependencies = ()
+    dependencies = (Move,)
 
     def __init__(self, attacker_id, defender_id):
         super().__init__()

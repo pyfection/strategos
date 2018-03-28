@@ -3,7 +3,7 @@
 import math
 
 from helpers import maths
-from core.event import Attack, TroopEvent
+from core.event import Attack, Move
 from core.reactor import PerceptionReact
 
 
@@ -72,7 +72,7 @@ class Actor:
             if (x, y) in [t.pos for t in self.perception.troops.values() if t.units]:
                 self.stop_actions()
             else:
-                self.actions.append(TroopEvent(troop.id, pos=(x, y)))
+                self.actions.append(Move(troop.id, pos=(x, y)))
 
     def path_to(self, x, y):
         def get_neighbors(x, y):
