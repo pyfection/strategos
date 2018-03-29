@@ -45,13 +45,17 @@ class WorldReact(PerceptionReact):
         unit_ratio = attacker.units / defender.units  # attacker to defender ratio
         exp_ratio = attacker.experience / defender.experience
         effectiveness_modifier = round(random.uniform(.5, 2), 2)
-        kills = round(max(base * unit_ratio * exp_ratio * effectiveness_modifier, 1))
+        vigor_mod = attacker.vigor_ratio / defender.vigor_ratio
+        kills = round(max(base * unit_ratio * exp_ratio * effectiveness_modifier * vigor_mod, 1))
         amount = defender.units - min(kills, defender.units)
-        defender.units = amount
+        self.on_troop_units(defender_id, amount)
+
+        vigor = attacker.vigor - 1
 
         update = TroopEvent(
             id=defender.id,
-            units=amount
+            units=amount,
+            vigor=vigor
         )
 
         for actor in self.world.actors:
@@ -59,11 +63,45 @@ class WorldReact(PerceptionReact):
                 self._add_event_to_actor(update, actor)
         super().on_troop_attack(attacker_id, defender_id, strength_mod)
 
+    def on_troop_rest(self, id):
+        troop = self.world.perception.troops[id]
+        self.on_troop_vigor(id, troop.vigor + 1)
+
+        update = TroopEvent(
+            id=id,
+            vigor=troop.vigor+1
+        )
+        for actor in self.world.actors:
+            if actor.troop and actor.troop.in_view_range(troop.x, troop.y):
+                self._add_event_to_actor(update, actor)
+
     def on_troop_pos(self, id, pos):
-        occupied_positions = (troop.pos for troop in self.world.perception.troops.values() if troop.units)
+        troop = self.world.perception.troops[id]
+
+        vigor_required = 1
+        if troop.vigor < vigor_required:
+            self.on_troop_vigor(id, troop.vigor + vigor_required)
+            update = TroopEvent(
+                id=id,
+                vigor=troop.vigor - vigor_required
+            )
+            for actor in self.world.actors:
+                if actor.troop and actor.troop.in_view_range(troop.x, troop.y):
+                    self._add_event_to_actor(update, actor)
+            return
+        else:
+            self.on_troop_vigor(id, troop.vigor - vigor_required)
+            update = TroopEvent(
+                id=id,
+                vigor=troop.vigor - vigor_required
+            )
+            for actor in self.world.actors:
+                if actor.troop and actor.troop.in_view_range(troop.x, troop.y):
+                    self._add_event_to_actor(update, actor)
+
+        occupied_positions = (t.pos for t in self.world.perception.troops.values() if t.units)
         is_pos_occupied_by_other_troop = pos in occupied_positions
         if not is_pos_occupied_by_other_troop:
-            troop = self.world.perception.troops[id]
             if not troop.units:
                 return
             troop.x, troop.y = pos

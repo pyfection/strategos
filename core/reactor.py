@@ -14,7 +14,13 @@ class Reactor:
     def on_troop_update(self, id):
         return
 
+    def on_troop_move(self, troop_id, pos):
+        self.on_troop_pos(troop_id, pos)
+
     def on_troop_attack(self, attacker_id, defender_id, strength_mod):
+        return
+
+    def on_troop_rest(self, id):
         return
 
     def on_troop_pos(self, id, pos):
@@ -30,6 +36,9 @@ class Reactor:
         return
 
     def on_troop_experience(self, id, experience):
+        return
+
+    def on_troop_vigor(self, id, vigor):
         return
 
     def on_troop_view_range(self, id, view_range):
@@ -64,17 +73,21 @@ class PerceptionReact(Reactor):
         troop = self.actor.perception.troops[id]
         troop.name = name
 
-    def on_troop_units(self, id, units):
-        troop = self.actor.perception.troops[id]
-        troop.units = units
-
     def on_troop_leader_id(self, id, leader_id):
         troop = self.actor.perception.troops[id]
         troop.leader_id = leader_id
 
+    def on_troop_units(self, id, units):
+        troop = self.actor.perception.troops[id]
+        troop.units = units
+
     def on_troop_experience(self, id, experience):
         troop = self.actor.perception.troops[id]
         troop.experience = experience
+
+    def on_troop_vigor(self, id, vigor):
+        troop = self.actor.perception.troops[id]
+        troop.vigor = vigor
 
     def on_troop_view_range(self, id, view_range):
         troop = self.actor.perception.troops[id]

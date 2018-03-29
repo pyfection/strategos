@@ -5,6 +5,7 @@ from uuid import uuid4
 
 from core.perception.troop import Troop
 
+
 class classproperty(property):
     def __get__(self, cls, owner):
         return max([d.importance for d in owner.dependencies], default=0)
@@ -29,12 +30,18 @@ class Quit(Event):
 
 
 class TroopEvent(Event):
-    def __init__(self, id, name=None, leader_id=None, units=None, experience=None, pos=None, view_range=None):
+    def __init__(
+            self, id,
+            name=None, leader_id=None,
+            units=None, experience=None, vigor=None,
+            pos=None, view_range=None
+        ):
         self.id = id
         self.name = name
         self.leader_id = leader_id
         self.units = units
         self.experience = experience
+        self.vigor = vigor
         self.pos = pos
         self.view_range = view_range
 
@@ -81,11 +88,12 @@ class Move(Event):
     dependencies = ()
 
     def __init__(self, troop_id, pos):
+        super().__init__()
         self.troop_id = troop_id
         self.pos = pos
 
     def trigger(self, reactor):
-        reactor.on_troop_pos(self.troop_id, self.pos)
+        reactor.on_troop_move(self.troop_id, self.pos)
 
 
 class Attack(Event):
@@ -99,3 +107,13 @@ class Attack(Event):
 
     def trigger(self, reactor):
         reactor.on_troop_attack(self.attacker_id, self.defender_id, self.STRENGTH_MOD)
+
+
+class Rest(Event):
+    dependencies = (Attack,)
+
+    def __init__(self, troop_id):
+        self.troop_id = troop_id
+
+    def trigger(self, reactor):
+        reactor.on_troop_rest(self.troop_id)
