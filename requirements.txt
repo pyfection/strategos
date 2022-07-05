@@ -11,5 +11,5 @@ PySDL2==0.9.6
 requests==2.18.4
 SQLAlchemy==1.1.15
 tinydb==3.7.0
-ujson==1.35
+ujson==5.4.0
 urllib3==1.22
